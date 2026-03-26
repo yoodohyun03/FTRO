@@ -29,12 +29,14 @@ public class PlayerMove : MonoBehaviourPun
     {
         if (!photonView.IsMine) return;
 
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
         Vector3 moveDir = new Vector3(h, 0, v).normalized;
 
         if (moveDir.magnitude > 0)
         {
+
+            transform.forward = moveDir;
             transform.Translate(moveDir * speed * Time.deltaTime, Space.World);
             // ★ 요기! 이동 중일 때는 무조건 MoveSpeed를 1로 고정해서 덜덜거림 방지
             anim.SetFloat("MoveSpeed", 1.0f);
