@@ -13,21 +13,23 @@ public class TitleManager : MonoBehaviourPunCallbacks
     // 1. [createroom] 버튼을 누르면 실행!
     public void ClickCreateRoom()
     {
+        PhotonNetwork.ConnectUsingSettings();
         if (string.IsNullOrEmpty(nameInput.text)) return; // 이름 없으면 컷
 
         PhotonNetwork.NickName = nameInput.text;
         myChoice = "create"; // "난 방 만들 거임" 메모
-        PhotonNetwork.ConnectUsingSettings(); // 서버 접속!
+        
     }
 
     // 2. [entryroom] 버튼을 누르면 실행!
     public void ClickEntryRoom()
     {
+        PhotonNetwork.ConnectUsingSettings();
         if (string.IsNullOrEmpty(nameInput.text)) return;
 
         PhotonNetwork.NickName = nameInput.text;
         myChoice = "join"; // "난 남의 방 갈 거임" 메모
-        PhotonNetwork.ConnectUsingSettings(); // 서버 접속!
+        
     }
 
     // 3. 서버 접속이 성공하면 유니티가 자동으로 실행하는 곳

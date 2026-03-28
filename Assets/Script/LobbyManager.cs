@@ -11,11 +11,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         // [핵심★] 방장이 씬을 이동하면, 나머지 사람들도 강제로 똑같은 씬으로 끌려가게 만드는 마법의 스위치!
         PhotonNetwork.AutomaticallySyncScene = true;
-
+        
         // 1. 대기실 바닥에 내 캐릭터 소환
         if (PhotonNetwork.InRoom)
         {
-            Vector3 spawnPos = new Vector3(0, 3, 0);
+            Vector3 spawnPos = new Vector3(0, 5, 0);
             PhotonNetwork.Instantiate("male01_1", spawnPos, Quaternion.identity);
         }
 
