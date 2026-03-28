@@ -4,10 +4,11 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMove : MonoBehaviourPun
 {
-    public float speed = 5f;
-    private Animator anim;
+    // [수정 POINT★] 걷기와 뛰기 속도를 따로 나눴습니다! (입맛대로 조절하십쇼)
+    public float walkSpeed = 3f;
+    public float runSpeed = 7f;
 
-    // 카메라 부품들을 저장해둘 메모장!
+    private Animator anim;
     private Unity.Cinemachine.CinemachineCamera vcam;
     private Unity.Cinemachine.CinemachineOrbitalFollow orbitalRig;
 
@@ -23,8 +24,6 @@ public class PlayerMove : MonoBehaviourPun
             {
                 vcam.Follow = this.transform;
                 vcam.LookAt = this.transform;
-
-                // [핵심★] 카메라의 '궤도(Orbital)' 조종 장치를 미리 찾아둡니다.
                 orbitalRig = vcam.GetComponent<Unity.Cinemachine.CinemachineOrbitalFollow>();
 
                 Cursor.lockState = CursorLockMode.Locked;
@@ -48,13 +47,16 @@ public class PlayerMove : MonoBehaviourPun
 
         bool isAltLooking = Input.GetKey(KeyCode.LeftAlt);
 
-        // [1번 문제 해결★] Alt 키를 딱! 뗐을 때 실행되는 마법의 코드
+        // [추가 POINT★] 왼쪽 Shift 키를 누르고 있는지 감지!
+        bool isRunning = Input.GetKey(KeyCode.LeftShift);
+
+        // Alt 뗐을 때 카메라 복귀
         if (Input.GetKeyUp(KeyCode.LeftAlt) && orbitalRig != null)
         {
-            // 카메라의 가로 회전축(HorizontalAxis)을 현재 내 캐릭터가 바라보는 각도(y)로 강제 고정시킵니다!
             orbitalRig.HorizontalAxis.Value = transform.eulerAngles.y;
         }
 
+        // 키보드 입력이 있을 때 (이동 중일 때)
         if (h != 0 || v != 0)
         {
             if (Camera.main != null && SceneManager.GetActiveScene().name != "LobbyScene")
@@ -77,18 +79,23 @@ public class PlayerMove : MonoBehaviourPun
                 moveDir = new Vector3(h, 0, v).normalized;
             }
 
-            // Alt 안 누를 때만 몸통 회전!
+            // Alt 안 누를 때만 몸통 회전
             if (!isAltLooking)
             {
                 transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * 10f);
             }
 
-            transform.Translate(moveDir * speed * Time.deltaTime, Space.World);
+            // [핵심★] Shift 누르면 runSpeed(7), 안 누르면 walkSpeed(3)로 이동!
+            float currentSpeed = isRunning ? runSpeed : walkSpeed;
+            transform.Translate(moveDir * currentSpeed * Time.deltaTime, Space.World);
 
-            if (anim != null) anim.SetFloat("MoveSpeed", 1.0f);
+            // [핵심★] 애니메이터에 보내는 신호도 걷기(0.5)와 뛰기(1.0)로 나눠서 보냅니다!
+            float animValue = isRunning ? 1.0f : 0.5f;
+            if (anim != null) anim.SetFloat("MoveSpeed", animValue);
         }
         else
         {
+            // 가만히 있을 때 (정지)
             if (anim != null) anim.SetFloat("MoveSpeed", 0f);
         }
     }
