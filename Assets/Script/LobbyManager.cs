@@ -1,6 +1,8 @@
-using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
+using UnityEngine;
 using UnityEngine.UI; // UI(버튼)를 끄고 켜려면 필수!
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
@@ -33,10 +35,38 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     // 방장이 [게임 시작] 버튼을 누르면 실행될 함수
     public void ClickStartGame()
     {
-        Debug.Log("방장 명령 하달! 본 게임으로 이동합니다!");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log("방장 명령 하달! 제비뽑기를 시작합니다!");
 
-        // 어제 만든 메인 게임 씬으로 다 같이 납치!
-        
-        PhotonNetwork.LoadLevel("MainGameScene");
+            // 1. 현재 방에 있는 모든 플레이어 명단을 가져옵니다.
+            Player[] players = PhotonNetwork.PlayerList;
+
+            // 2. 0번부터 마지막 사람 중 랜덤으로 1명을 '술래'로 뽑습니다!
+            int seekerIndex = Random.Range(0, players.Length);
+
+            // 3. 한 명씩 이마에 포스트잇(직업)을 붙여줍니다.
+            for (int i = 0; i < players.Length; i++)
+            {
+                Hashtable props = new Hashtable(); // 새 포스트잇 한 장 꺼내기
+
+                if (i == seekerIndex)
+                {
+                    props.Add("Role", "Seeker"); // 술래 당첨!
+                    Debug.Log(players[i].NickName + " 님은 [술래] 입니다!");
+                }
+                else
+                {
+                    props.Add("Role", "Survivor"); // 생존자 당첨!
+                    Debug.Log(players[i].NickName + " 님은 [생존자] 입니다!");
+                }
+
+                // 플레이어 이마에 포스트잇 찰싹! 붙이기
+                players[i].SetCustomProperties(props);
+            }
+
+            // 4. 배정이 끝났으니 메인 게임 씬으로 다 같이 납치!
+            PhotonNetwork.LoadLevel("MainGameScene");
+        }
     }
 }

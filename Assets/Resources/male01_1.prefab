@@ -951,6 +951,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMove
   walkSpeed: 3
   runSpeed: 7
+  myRole: 
 --- !u!136 &4591711836902174258
 CapsuleCollider:
   m_ObjectHideFlags: 0
