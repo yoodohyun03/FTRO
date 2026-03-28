@@ -4,6 +4,7 @@ using Unity.Cinemachine;
 
 public class PlayerMove : MonoBehaviourPun
 {
+    
     public float speed = 5f;
 
     // ★ 애니메이터를 조종하기 위한 변수

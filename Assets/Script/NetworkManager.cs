@@ -5,6 +5,9 @@ using Photon.Realtime;  // 룸, 매치메이킹 관련 라이브러리
 // 주의: 서버의 응답(콜백)을 받기 위해 MonoBehaviour가 아니라 MonoBehaviourPunCallbacks를 상속받습니다.
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
+
+    public Transform[] spawnPoints;
+
     // Resources 폴더 안에 있는 내 캐릭터 프리팹의 이름을 똑같이 적어주세요!
     public string playerPrefabName = "MyLowPolyCharacter";
 
@@ -35,11 +38,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("방 입장 완료! 내 캐릭터를 소환합니다.");
 
+        int randomIndex = Random.Range(0, spawnPoints.Length);
+        Transform randomPoint = spawnPoints[randomIndex];
+
         // 광장 중앙(0, 0, 0) 근처에 내 캐릭터를 무작위 위치로 스폰합니다.
         // 위치가 겹치지 않게 X, Z 좌표에 약간의 랜덤 값을 줍니다.
         Vector3 randomSpawnPos = new Vector3(Random.Range(-3f, 3f), 0f, Random.Range(-3f, 3f));
 
         // ★핵심: Instantiate가 아니라 PhotonNetwork.Instantiate를 써야 모두의 화면에 보입니다!
-        PhotonNetwork.Instantiate(playerPrefabName, randomSpawnPos, Quaternion.identity);
+        PhotonNetwork.Instantiate("male01_1", randomPoint.position, randomPoint.rotation);
     }
 }
