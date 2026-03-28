@@ -16,6 +16,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         // 1. 게임 시작과 동시에 포톤 마스터 서버에 접속 시도
         Debug.Log("서버 접속 시도 중...");
         PhotonNetwork.ConnectUsingSettings();
+        if (PhotonNetwork.InRoom)
+        {
+            // 어제 짠 랜덤 스폰 마법의 코드 그대로 가져오기
+            int randomIndex = Random.Range(0, spawnPoints.Length);
+            Transform randomPoint = spawnPoints[randomIndex];
+
+            // 랜덤 위치에 내 캐릭터 쾅! 소환
+            PhotonNetwork.Instantiate("male01_1", randomPoint.position, randomPoint.rotation);
+        }
     }
 
     // 2. 마스터 서버 접속 성공 시 자동으로 실행되는 콜백 함수
@@ -34,18 +43,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     // 4. 방 입장(또는 생성) 성공 시 실행되는 최종 콜백 함수
-    public override void OnJoinedRoom()
-    {
-        Debug.Log("방 입장 완료! 내 캐릭터를 소환합니다.");
+    //public override void OnJoinedRoom()
+    //{
+    //    Debug.Log("방 입장 완료! 내 캐릭터를 소환합니다.");
 
-        int randomIndex = Random.Range(0, spawnPoints.Length);
-        Transform randomPoint = spawnPoints[randomIndex];
+    //    int randomIndex = Random.Range(0, spawnPoints.Length);
+    //    Transform randomPoint = spawnPoints[randomIndex];
 
-        // 광장 중앙(0, 0, 0) 근처에 내 캐릭터를 무작위 위치로 스폰합니다.
-        // 위치가 겹치지 않게 X, Z 좌표에 약간의 랜덤 값을 줍니다.
-        Vector3 randomSpawnPos = new Vector3(Random.Range(-3f, 3f), 0f, Random.Range(-3f, 3f));
+    //    // 광장 중앙(0, 0, 0) 근처에 내 캐릭터를 무작위 위치로 스폰합니다.
+    //    // 위치가 겹치지 않게 X, Z 좌표에 약간의 랜덤 값을 줍니다.
+    //    Vector3 randomSpawnPos = new Vector3(Random.Range(-3f, 3f), 0f, Random.Range(-3f, 3f));
 
-        // ★핵심: Instantiate가 아니라 PhotonNetwork.Instantiate를 써야 모두의 화면에 보입니다!
-        PhotonNetwork.Instantiate("male01_1", randomPoint.position, randomPoint.rotation);
-    }
+    //    // ★핵심: Instantiate가 아니라 PhotonNetwork.Instantiate를 써야 모두의 화면에 보입니다!
+    //    PhotonNetwork.Instantiate("male01_1", randomPoint.position, randomPoint.rotation);
+    //}
 }
