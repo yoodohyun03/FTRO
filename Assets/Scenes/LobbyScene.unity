@@ -973,6 +973,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: soccer field with environment
       objectReference: {fileID: 0}
+    - target: {fileID: 7254530699141128102, guid: f3059fe87515fa740afe2ac7e9819671, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 8971122523998631520, guid: f3059fe87515fa740afe2ac7e9819671, type: 3}
       propertyPath: m_RootOrder
       value: 2

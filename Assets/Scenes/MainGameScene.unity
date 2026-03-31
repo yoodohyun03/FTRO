@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 1840311}
   m_Layer: 0
   m_Name: sptp_street_concrete_02 (2)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -510,6 +510,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (64)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -843,6 +847,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (56)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 224
@@ -894,6 +902,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (35)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -978,6 +990,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (81)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -1547,6 +1563,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 167
@@ -1598,6 +1618,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (46)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -1822,6 +1846,10 @@ PrefabInstance:
     - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_07 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
@@ -2315,6 +2343,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 338
@@ -2615,6 +2647,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (24)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 189
@@ -2734,7 +2770,7 @@ GameObject:
   - component: {fileID: 62795948}
   m_Layer: 0
   m_Name: sptp_street_concrete_02 (5)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2930,6 +2966,10 @@ PrefabInstance:
     - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_02 (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 413820, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_RootOrder
@@ -3259,6 +3299,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (83)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 255
@@ -3459,6 +3503,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 340
@@ -3511,6 +3559,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_10 (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
       value: 250
@@ -3559,6 +3611,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 425058, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_RootOrder
       value: 49
@@ -3612,6 +3668,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
       value: 148
@@ -3788,6 +3848,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 156538, guid: 82dceca16d2bc274a861326e450f4c45, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484738, guid: 82dceca16d2bc274a861326e450f4c45, type: 3}
       propertyPath: m_RootOrder
       value: 126
@@ -3972,6 +4036,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (25)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 190
@@ -4111,7 +4179,7 @@ GameObject:
   - component: {fileID: 91358331}
   m_Layer: 0
   m_Name: sptp_street_concrete_02 (4)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4472,6 +4540,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_07 (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
       value: 198
@@ -4523,6 +4595,10 @@ PrefabInstance:
     - target: {fileID: 130656, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
       propertyPath: m_Name
       value: sptp_grass_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 130656, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 427188, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
       propertyPath: m_RootOrder
@@ -4615,6 +4691,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -4828,6 +4908,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_10 (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
       value: 292
@@ -5015,6 +5099,10 @@ PrefabInstance:
     - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_10 (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
@@ -5404,6 +5492,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (113)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 379
@@ -5572,6 +5664,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (41)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 374
@@ -5623,6 +5719,10 @@ PrefabInstance:
     - target: {fileID: 166132, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_05 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 166132, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467858, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
       propertyPath: m_RootOrder
@@ -6296,6 +6396,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (66)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 300
@@ -6347,6 +6451,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (104)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -6547,6 +6655,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (50)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -6760,6 +6872,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (51)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 235
@@ -6811,6 +6927,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (101)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -6864,6 +6984,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 320
@@ -6915,6 +7039,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (26)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -7216,6 +7344,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_02 (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 413820, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_RootOrder
       value: 399
@@ -7267,6 +7399,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (69)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -7635,6 +7771,10 @@ PrefabInstance:
     - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_Name
       value: sptp_street_concrete_02 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 425058, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_RootOrder
@@ -8125,6 +8265,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 184
@@ -8345,6 +8489,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 326
@@ -8396,6 +8544,10 @@ PrefabInstance:
     - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_07 (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
@@ -8981,6 +9133,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (48)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 239
@@ -9376,6 +9532,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (115)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -9893,6 +10053,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_grass_01 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 130656, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 427188, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
       propertyPath: m_RootOrder
       value: 344
@@ -10113,6 +10277,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_02 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 413820, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_RootOrder
       value: 324
@@ -10228,6 +10396,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (36)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -10533,6 +10705,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 323
@@ -10584,6 +10760,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -10701,6 +10881,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (87)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 274
@@ -10813,6 +10997,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
       value: 149
@@ -10864,6 +11052,10 @@ PrefabInstance:
     - target: {fileID: 106684, guid: aa562231f82a2664490d4cd36e223e46, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_15 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 106684, guid: aa562231f82a2664490d4cd36e223e46, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 472612, guid: aa562231f82a2664490d4cd36e223e46, type: 3}
       propertyPath: m_RootOrder
@@ -11045,6 +11237,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_street_concrete_02 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 425058, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_RootOrder
       value: 114
@@ -11166,6 +11362,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (28)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 193
@@ -11217,6 +11417,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -11570,6 +11774,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 166132, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467858, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
       propertyPath: m_RootOrder
       value: 127
@@ -11618,6 +11826,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 136440, guid: f76e9ef0fd63b484388ce742819e4750, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 462686, guid: f76e9ef0fd63b484388ce742819e4750, type: 3}
       propertyPath: m_RootOrder
       value: 147
@@ -11785,6 +11997,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (32)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -11986,6 +12202,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (65)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 413
@@ -12133,6 +12353,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (52)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -12385,6 +12609,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -12912,6 +13140,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_grass_01 (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 130656, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 427188, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
       propertyPath: m_RootOrder
       value: 411
@@ -13003,6 +13235,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (108)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -13572,6 +13808,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (58)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 264
@@ -14120,6 +14360,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_10 (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
       value: 251
@@ -14339,6 +14583,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (72)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -14880,6 +15128,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_05 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 166132, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467858, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
       propertyPath: m_RootOrder
       value: 256
@@ -15203,6 +15455,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -15711,6 +15967,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_10 (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
       value: 261
@@ -15975,6 +16235,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_grass_01 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 130656, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 427188, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
       propertyPath: m_RootOrder
       value: 319
@@ -16163,6 +16427,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_11 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 136440, guid: f76e9ef0fd63b484388ce742819e4750, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 462686, guid: f76e9ef0fd63b484388ce742819e4750, type: 3}
       propertyPath: m_RootOrder
       value: 172
@@ -16266,6 +16534,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -16622,6 +16894,10 @@ PrefabInstance:
     - target: {fileID: 130656, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
       propertyPath: m_Name
       value: sptp_grass_01 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 130656, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 427188, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
       propertyPath: m_RootOrder
@@ -17019,6 +17295,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (24)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 351
@@ -17070,6 +17350,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (59)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -17271,6 +17555,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 174
@@ -17322,6 +17610,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (116)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -17755,6 +18047,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (64)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 412
@@ -18034,6 +18330,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (62)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -18331,6 +18631,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (88)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 275
@@ -18499,6 +18803,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_07 (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
       value: 199
@@ -18614,6 +18922,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (55)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -19003,6 +19315,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (110)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 376
@@ -19054,6 +19370,10 @@ PrefabInstance:
     - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_10 (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
@@ -19948,6 +20268,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (23)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 350
@@ -20000,6 +20324,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (22)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 187
@@ -20051,6 +20379,10 @@ PrefabInstance:
     - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_Name
       value: sptp_street_concrete_02 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 425058, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_RootOrder
@@ -20353,6 +20685,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (107)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 313
@@ -20404,6 +20740,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (30)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -20569,6 +20909,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 341
@@ -20717,6 +21061,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_02 (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 413820, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_RootOrder
       value: 405
@@ -20768,6 +21116,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -20988,6 +21340,10 @@ PrefabInstance:
     - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_10 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
@@ -21368,6 +21724,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (55)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -22065,6 +22425,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (73)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 257
@@ -22212,6 +22576,10 @@ PrefabInstance:
     - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_07 (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
@@ -22529,6 +22897,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_02 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 413820, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_RootOrder
       value: 352
@@ -22613,6 +22985,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (59)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 403
@@ -22664,6 +23040,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (50)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -22812,6 +23192,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (25)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -23160,6 +23544,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (91)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 287
@@ -23495,6 +23883,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (74)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -24160,6 +24552,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (41)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 298
@@ -24211,6 +24607,10 @@ PrefabInstance:
     - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_07 (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
@@ -24540,6 +24940,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 183
@@ -24591,6 +24995,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (103)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -24675,6 +25083,10 @@ PrefabInstance:
     - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_10 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
@@ -24811,6 +25223,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 346
@@ -24894,6 +25310,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (31)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -25626,7 +26046,7 @@ GameObject:
   - component: {fileID: 743677747}
   m_Layer: 0
   m_Name: sptp_street_concrete_02 (10)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25991,6 +26411,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 181
@@ -26042,6 +26466,10 @@ PrefabInstance:
     - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_10 (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
@@ -26182,7 +26610,7 @@ GameObject:
   - component: {fileID: 749216583}
   m_Layer: 0
   m_Name: sptp_street_concrete_02 (11)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26347,6 +26775,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (26)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 354
@@ -26398,6 +26830,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (109)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -27499,6 +27935,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 174796, guid: e4e5cb51e7d1bef41a5acb77c0759bd6, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 477294, guid: e4e5cb51e7d1bef41a5acb77c0759bd6, type: 3}
       propertyPath: m_RootOrder
       value: 146
@@ -28003,6 +28443,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_10 (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
       value: 295
@@ -28319,6 +28763,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (27)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 192
@@ -28403,6 +28851,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (56)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 397
@@ -28454,6 +28906,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (30)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -28610,6 +29066,10 @@ PrefabInstance:
     - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_10 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
@@ -28778,6 +29238,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (99)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -29095,6 +29559,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (54)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 268
@@ -29178,6 +29646,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (44)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -29279,6 +29751,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (98)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -29519,6 +29995,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (32)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -29803,6 +30283,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -30324,6 +30808,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_10 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
       value: 134
@@ -30824,6 +31312,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (36)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 366
@@ -31011,6 +31503,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (62)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -31231,6 +31727,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (112)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -31512,6 +32012,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (47)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 220
@@ -31712,6 +32216,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 330
@@ -31763,6 +32271,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (102)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -32804,6 +33316,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (63)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 226
@@ -33339,6 +33855,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (29)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -33984,6 +34504,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 193742, guid: 72194ced846018c41a130c6ba8b041a5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 436814, guid: 72194ced846018c41a130c6ba8b041a5, type: 3}
       propertyPath: m_RootOrder
       value: 128
@@ -34131,6 +34655,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (38)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -34443,6 +34971,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (114)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -34796,6 +35328,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (37)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 367
@@ -34911,6 +35447,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (34)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -35131,6 +35671,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -35564,6 +36108,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (111)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 377
@@ -35775,6 +36323,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (53)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -36576,6 +37128,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_02 (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 413820, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_RootOrder
       value: 359
@@ -36807,6 +37363,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (42)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -37100,6 +37660,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_10 (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
       value: 124
@@ -37204,6 +37768,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (39)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 213
@@ -37255,6 +37823,10 @@ PrefabInstance:
     - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_Name
       value: sptp_street_concrete_02 (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 425058, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_RootOrder
@@ -37585,6 +38157,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (33)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 194
@@ -37636,6 +38212,10 @@ PrefabInstance:
     - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_07 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
@@ -37817,6 +38397,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (89)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 286
@@ -37920,6 +38504,10 @@ PrefabInstance:
     - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_Name
       value: sptp_street_concrete_02 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 425058, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_RootOrder
@@ -38290,6 +38878,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_05 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 166132, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467858, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
       propertyPath: m_RootOrder
       value: 278
@@ -38406,6 +38998,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_10 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
       value: 171
@@ -38457,6 +39053,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (60)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -38938,6 +39538,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (85)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 284
@@ -39041,6 +39645,10 @@ PrefabInstance:
     - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_Name
       value: sptp_street_concrete_02 (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 425058, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_RootOrder
@@ -39815,6 +40423,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 176
@@ -39867,6 +40479,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (21)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 186
@@ -39918,6 +40534,10 @@ PrefabInstance:
     - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_02 (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 413820, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_RootOrder
@@ -40106,6 +40726,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (79)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -40815,6 +41439,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (70)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 241
@@ -41066,6 +41694,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (45)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -41615,6 +42247,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_10 (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
       value: 252
@@ -41698,6 +42334,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (40)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -41866,6 +42506,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (21)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -42427,6 +43071,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (67)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 237
@@ -42563,6 +43211,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 328
@@ -42614,6 +43266,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (105)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -42943,6 +43599,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (37)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 211
@@ -43078,6 +43738,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (49)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -43455,6 +44119,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (43)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 384
@@ -43538,6 +44206,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (95)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -43675,6 +44347,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_07 (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
       value: 180
@@ -43811,6 +44487,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_07 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
       value: 197
@@ -43862,6 +44542,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (93)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -44386,6 +45070,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (40)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -45007,6 +45695,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 135234, guid: 2735bdfa72e806248aafddd7a7ab3177, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 465408, guid: 2735bdfa72e806248aafddd7a7ab3177, type: 3}
       propertyPath: m_RootOrder
       value: 135
@@ -45154,6 +45846,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (49)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -45338,6 +46034,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (35)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -45558,6 +46258,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (22)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -45799,6 +46503,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_08 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 135234, guid: 2735bdfa72e806248aafddd7a7ab3177, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 465408, guid: 2735bdfa72e806248aafddd7a7ab3177, type: 3}
       propertyPath: m_RootOrder
       value: 253
@@ -45850,6 +46558,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -46533,6 +47245,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (47)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -47218,6 +47934,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (97)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 303
@@ -47398,6 +48118,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (96)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 302
@@ -47446,6 +48170,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 413820, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_RootOrder
       value: 98
@@ -47942,6 +48670,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (90)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 276
@@ -48277,6 +49009,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (77)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -48627,6 +49363,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_07 (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
       value: 200
@@ -48726,6 +49466,10 @@ PrefabInstance:
     - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_Name
       value: sptp_street_concrete_02 (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 425058, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_RootOrder
@@ -48963,6 +49707,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (43)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -49280,6 +50028,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 185
@@ -49419,7 +50171,7 @@ GameObject:
   - component: {fileID: 1376828582}
   m_Layer: 0
   m_Name: sptp_street_concrete_02 (6)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49583,6 +50335,10 @@ PrefabInstance:
     - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_02 (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 413820, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_RootOrder
@@ -49883,6 +50639,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -50600,6 +51360,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 157
@@ -51080,6 +51844,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_02 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 413820, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_RootOrder
       value: 97
@@ -51184,6 +51952,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (57)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 401
@@ -51232,6 +52004,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 99
@@ -51403,7 +52179,7 @@ GameObject:
   - component: {fileID: 1439637805}
   m_Layer: 0
   m_Name: sptp_street_concrete_02 (9)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51799,6 +52575,10 @@ PrefabInstance:
     - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_07 (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
@@ -52212,6 +52992,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (58)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 402
@@ -52263,6 +53047,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (80)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -52507,7 +53295,7 @@ GameObject:
   - component: {fileID: 1472094037}
   m_Layer: 0
   m_Name: sptp_street_concrete_02 (3)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52672,6 +53460,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_02 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 413820, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_RootOrder
       value: 332
@@ -52756,6 +53548,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_grass_01 (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 130656, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 427188, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
       propertyPath: m_RootOrder
       value: 406
@@ -52815,6 +53611,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (28)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -53064,6 +53864,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (65)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 227
@@ -53232,6 +54036,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (82)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 254
@@ -53335,6 +54143,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -53904,6 +54716,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 182
@@ -54040,6 +54856,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_02 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 413820, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_RootOrder
       value: 342
@@ -54091,6 +54911,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (75)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -54435,6 +55259,10 @@ PrefabInstance:
     - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_07 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
@@ -54960,6 +55788,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (52)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 221
@@ -55147,6 +55979,10 @@ PrefabInstance:
     - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_02 (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 128726, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 413820, guid: 0f87996433fed0f4da76dbc5eec9f4fb, type: 3}
       propertyPath: m_RootOrder
@@ -55680,6 +56516,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 161
@@ -55816,6 +56656,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (61)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 407
@@ -55899,6 +56743,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -56163,6 +57011,10 @@ PrefabInstance:
     - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_Name
       value: sptp_street_concrete_02 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 425058, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_RootOrder
@@ -56517,6 +57369,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (84)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 273
@@ -56600,6 +57456,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (33)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -56736,6 +57596,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (34)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -57240,6 +58104,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (63)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -57868,6 +58736,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 168
@@ -58347,6 +59219,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (31)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 358
@@ -58398,6 +59274,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -58691,6 +59571,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (44)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 217
@@ -58858,6 +59742,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (39)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -59038,6 +59926,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (51)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -59892,6 +60784,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 345
@@ -60572,6 +61468,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_10 (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
       value: 294
@@ -60768,6 +61668,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 156
@@ -60964,6 +61868,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 173
@@ -61071,7 +61979,7 @@ GameObject:
   - component: {fileID: 1731997389}
   m_Layer: 0
   m_Name: sptp_street_concrete_02 (8)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -61448,6 +62356,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (57)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 225
@@ -61535,7 +62447,7 @@ GameObject:
   - component: {fileID: 1737608347}
   m_Layer: 0
   m_Name: sptp_street_concrete_02
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62164,6 +63076,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (92)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 277
@@ -62215,6 +63131,10 @@ PrefabInstance:
     - target: {fileID: 106684, guid: aa562231f82a2664490d4cd36e223e46, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_15 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 106684, guid: aa562231f82a2664490d4cd36e223e46, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 472612, guid: aa562231f82a2664490d4cd36e223e46, type: 3}
       propertyPath: m_RootOrder
@@ -62676,6 +63596,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (48)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 389
@@ -62960,6 +63884,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_05 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 166132, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467858, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
       propertyPath: m_RootOrder
       value: 281
@@ -63096,6 +64024,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (94)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 289
@@ -63211,6 +64143,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (60)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -63728,6 +64664,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (106)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 312
@@ -63831,6 +64771,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (68)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -65712,6 +66656,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_10 (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
       value: 293
@@ -65763,6 +66711,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -66396,6 +67348,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (45)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 218
@@ -66692,6 +67648,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_grass_01 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 130656, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 427188, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
       propertyPath: m_RootOrder
       value: 333
@@ -66751,6 +67711,10 @@ PrefabInstance:
     - target: {fileID: 130656, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
       propertyPath: m_Name
       value: sptp_grass_01 (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 130656, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 427188, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
       propertyPath: m_RootOrder
@@ -66976,6 +67940,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_street_concrete_02 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 425058, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_RootOrder
       value: 119
@@ -67129,6 +68097,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (76)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 245
@@ -67177,6 +68149,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 106684, guid: aa562231f82a2664490d4cd36e223e46, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 472612, guid: aa562231f82a2664490d4cd36e223e46, type: 3}
       propertyPath: m_RootOrder
       value: 133
@@ -67396,6 +68372,10 @@ PrefabInstance:
     - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_10 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
@@ -67648,6 +68628,10 @@ PrefabInstance:
     - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_Name
       value: sptp_street_concrete_02 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 163194, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 425058, guid: b663971da6149f94fac42c1e642a5f03, type: 2}
       propertyPath: m_RootOrder
@@ -68262,6 +69246,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 347
@@ -68345,6 +69333,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -68450,6 +69442,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (23)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 188
@@ -68505,7 +69501,7 @@ GameObject:
   - component: {fileID: 1918183203}
   m_Layer: 0
   m_Name: sptp_street_concrete_02 (1)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -68766,6 +69762,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (29)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 203
@@ -68817,6 +69817,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (86)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -68965,6 +69969,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (100)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -69698,6 +70706,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_grass_01 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 130656, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 427188, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
       propertyPath: m_RootOrder
       value: 343
@@ -69946,6 +70958,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_10 (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 126978, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 484514, guid: 8e3bf3e187a935d4f867c1af041ddfd2, type: 3}
       propertyPath: m_RootOrder
       value: 260
@@ -70129,6 +71145,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (71)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -70406,6 +71426,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (54)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 395
@@ -70489,6 +71513,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (27)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
@@ -71005,6 +72033,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (61)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 280
@@ -71472,7 +72504,7 @@ GameObject:
   - component: {fileID: 2012523858}
   m_Layer: 0
   m_Name: sptp_street_concrete_02 (7)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71605,6 +72637,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 164
@@ -71656,6 +72692,10 @@ PrefabInstance:
     - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_09 (46)
+      objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
@@ -72904,6 +73944,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_07 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 198642, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 430114, guid: 581d1ebf3352b5346846e02aec6d28e0, type: 3}
       propertyPath: m_RootOrder
       value: 178
@@ -73188,6 +74232,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (53)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 222
@@ -73239,6 +74287,10 @@ PrefabInstance:
     - target: {fileID: 135234, guid: 2735bdfa72e806248aafddd7a7ab3177, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_08 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 135234, guid: 2735bdfa72e806248aafddd7a7ab3177, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 465408, guid: 2735bdfa72e806248aafddd7a7ab3177, type: 3}
       propertyPath: m_RootOrder
@@ -73459,6 +74511,10 @@ PrefabInstance:
     - target: {fileID: 166132, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_05 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 166132, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 467858, guid: 61b9c9e3076bd7145a7680b591aab7c0, type: 3}
       propertyPath: m_RootOrder
@@ -74588,6 +75644,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_09 (78)
       objectReference: {fileID: 0}
+    - target: {fileID: 103234, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 467192, guid: 52e3c281ef0f0ea4985188d26644edcb, type: 3}
       propertyPath: m_RootOrder
       value: 246
@@ -74703,6 +75763,10 @@ PrefabInstance:
     - target: {fileID: 135234, guid: 2735bdfa72e806248aafddd7a7ab3177, type: 3}
       propertyPath: m_Name
       value: sptp_road_segment_08 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 135234, guid: 2735bdfa72e806248aafddd7a7ab3177, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 465408, guid: 2735bdfa72e806248aafddd7a7ab3177, type: 3}
       propertyPath: m_RootOrder
@@ -75292,6 +76356,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1830209200}
     m_Modifications:
+    - target: {fileID: 130656, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 427188, guid: a93a4058bd3225b4fb6d6b59fa5bc871, type: 3}
       propertyPath: m_RootOrder
       value: 100
@@ -75984,6 +77052,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (38)
       objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder
       value: 368
@@ -76068,6 +77140,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sptp_road_segment_15 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 106684, guid: aa562231f82a2664490d4cd36e223e46, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 472612, guid: aa562231f82a2664490d4cd36e223e46, type: 3}
       propertyPath: m_RootOrder
       value: 263
@@ -76151,6 +77227,10 @@ PrefabInstance:
     - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_Name
       value: sptp_sidewalk_segment_03 (42)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186562, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 489578, guid: d59da3d7b9c463c478d64b0722fd1ff5, type: 3}
       propertyPath: m_RootOrder

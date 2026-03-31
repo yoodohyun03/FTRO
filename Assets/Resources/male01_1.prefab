@@ -831,7 +831,7 @@ GameObject:
   - component: {fileID: -9193537758457896757}
   m_Layer: 0
   m_Name: male01_1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -867,7 +867,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 3e5d47c4e78bd9e418f7cbd744c16470, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -934,6 +934,12 @@ MonoBehaviour:
   - Type: 1
     SynchronizeType: 1
     Name: MoveSpeed
+  - Type: 9
+    SynchronizeType: 0
+    Name: Punch
+  - Type: 9
+    SynchronizeType: 0
+    Name: Jump
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
@@ -950,7 +956,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMove
   walkSpeed: 3
-  runSpeed: 7
+  runSpeed: 9
+  jumpPower: 5
   myRole: 
 --- !u!136 &4591711836902174258
 CapsuleCollider:
