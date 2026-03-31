@@ -62,48 +62,38 @@ public class PlayerMove : MonoBehaviourPun
 
     IEnumerator ShowRoleSequence()
     {
-        // 1. 씬에서 두 개의 텍스트를 찾습니다.
-        GameObject centerObj = GameObject.Find("CenterRoleText");
+        // 가운데 텍스트는 이제 GameManager가 하니까 안 찾습니다!
         GameObject cornerObj = GameObject.Find("CornerRoleText");
+        GameObject blindObj = GameObject.Find("BlindPanel");
 
-        // [방어막 1] 이름을 못 찾으면 에러 내지 말고 친절하게 알려주기!
-        if (centerObj == null || cornerObj == null)
+        if (cornerObj == null)
         {
-            Debug.LogError("🚨 [긴급] 형님! UI 텍스트를 못 찾았습니다! 하이어라키 창에서 이름을 정확히 CenterRoleText, CornerRoleText로 바꿨는지(대소문자), 활성화되어 있는지 확인해 주십쇼!");
-            yield break; // 여기서 안전하게 함수 종료 (캐릭터 멈춤 방지!)
+            Debug.LogError("🚨 UI 텍스트(CornerRoleText)를 못 찾았습니다!");
+            yield break;
         }
 
-        TextMeshProUGUI centerText = centerObj.GetComponent<TextMeshProUGUI>();
         TextMeshProUGUI cornerText = cornerObj.GetComponent<TextMeshProUGUI>();
 
-        // [방어막 2] TextMeshPro가 아니면 알려주기!
-        if (centerText == null || cornerText == null)
-        {
-            Debug.LogError("🚨 [긴급] 형님! TextMeshProUGUI 컴포넌트가 없습니다! 혹시 구버전 일반 Text를 만드신 건 아닌지 확인해 주십쇼!");
-            yield break; // 안전하게 종료
-        }
+        // 구석 텍스트는 처음부터 바로 켜줍니다.
+        cornerObj.SetActive(true);
 
-        // 여기까지 무사히 통과했다면? 정상적으로 컷씬 연출 시작!
-        centerObj.SetActive(true);
-        cornerObj.SetActive(false);
-
+        // 직업에 따른 '구석 텍스트'와 '안대' 세팅
         if (myRole == "Seeker")
         {
-            centerText.text = "<color=red>You Are Seeker!</color>";
             cornerText.text = "<color=red>Seeker</color>";
+            if (blindObj != null) blindObj.SetActive(true); // 술래는 눈 감아!
         }
         else
         {
-            centerText.text = "<color=#00BFFF>You Are Surviver!</color>";
             cornerText.text = "<color=#00BFFF>Surviver</color>";
+            if (blindObj != null) blindObj.SetActive(false); // 생존자는 눈 떠!
         }
 
-        // 3초 대기
-        yield return new WaitForSeconds(3f);
+        // 5초 대기 (GameManager의 준비 시간 5초와 완벽히 맞춤!)
+        yield return new WaitForSeconds(5f);
 
-        // 3초 뒤 구석으로 이동!
-        centerObj.SetActive(false);
-        cornerObj.SetActive(true);
+        // 5초 뒤: 술래 안대 벗겨주기! (추격 시작)
+        if (blindObj != null) blindObj.SetActive(false);
     }
 
     void Update()
