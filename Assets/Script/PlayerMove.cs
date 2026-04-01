@@ -97,7 +97,7 @@ public class PlayerMove : MonoBehaviourPun
         // ==========================================
         if (Input.GetMouseButtonDown(0))
         {
-            if (anim != null) anim.SetTrigger("Punch"); // 주먹 휘두르는 애니메이션!
+            photonView.RPC("RPC_PlayPunchAnimation", RpcTarget.All); // 주먹 휘두르는 애니메이션!
 
             // 내가 '술래'일 때만 주먹에 데미지(타격 판정)가 들어갑니다!
             if (myRole == "Seeker")
