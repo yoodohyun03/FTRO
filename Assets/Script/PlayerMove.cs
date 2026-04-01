@@ -88,7 +88,10 @@ public class PlayerMove : MonoBehaviourPun
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse); // 위로 퓽! 쏴주기
-            if (anim != null) anim.SetTrigger("Jump"); // 점프 애니메이션 실행
+
+            // [수정] 내 화면 + 다른 사람 화면 모두 점프 애니메이션 재생
+            photonView.RPC("RPC_PlayJumpAnimation", RpcTarget.All);
+
             isGrounded = false; // 공중에 뜸
         }
 
@@ -97,7 +100,8 @@ public class PlayerMove : MonoBehaviourPun
         // ==========================================
         if (Input.GetMouseButtonDown(0))
         {
-            if (anim != null) anim.SetTrigger("Punch"); // 주먹 휘두르는 애니메이션!
+            // [수정] 내 화면 + 다른 사람 화면 모두 펀치 애니메이션 재생
+            photonView.RPC("RPC_PlayPunchAnimation", RpcTarget.All);
 
             // 내가 '술래'일 때만 주먹에 데미지(타격 판정)가 들어갑니다!
             if (myRole == "Seeker")
@@ -199,5 +203,20 @@ public class PlayerMove : MonoBehaviourPun
 
         // 임시: 일단 맞으면 캐릭터를 없애버림 (또는 안 보이게)
         gameObject.SetActive(false);
+    }
+
+    // ==========================================
+    // 📡 애니메이션 동기화용 RPC 함수들
+    // ==========================================
+    [PunRPC]
+    void RPC_PlayPunchAnimation()
+    {
+        if (anim != null) anim.SetTrigger("Punch");
+    }
+
+    [PunRPC]
+    void RPC_PlayJumpAnimation()
+    {
+        if (anim != null) anim.SetTrigger("Jump");
     }
 }
