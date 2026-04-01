@@ -3,7 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections; // [추가★] 시간 지연(코루틴)을 위한 마법의 단어
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-//hihi
+//hihi hhhhiiiiii
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
     public GameObject startButton;
