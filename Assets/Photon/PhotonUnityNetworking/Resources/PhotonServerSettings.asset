@@ -46,6 +46,7 @@ MonoBehaviour:
   - GetCaught
   - RPC_PlayJumpAnimation
   - RPC_PlayPunchAnimation
+  - OnSurvivorCaught
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

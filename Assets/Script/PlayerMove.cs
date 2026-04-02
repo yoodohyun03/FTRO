@@ -201,6 +201,13 @@ public class PlayerMove : MonoBehaviourPun
         // 애니메이션 픽 쓰러지는 걸로 바꾸고, 관전 모드로 전환하는 로직을 넣으면 됩니다!
         if (anim != null) anim.SetTrigger("Die"); // (나중에 Die 애니메이션 추가하십쇼!)
 
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // GameManager가 싱글톤(instance)이라면 아래처럼, 아니면 Find로 찾아서 쏩니다.
+            GameManager.instance.photonView.RPC("OnSurvivorCaught", RpcTarget.MasterClient);
+        }
+
         // 임시: 일단 맞으면 캐릭터를 없애버림 (또는 안 보이게)
         gameObject.SetActive(false);
     }
