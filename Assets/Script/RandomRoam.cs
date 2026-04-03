@@ -1,16 +1,18 @@
 using UnityEngine;
 using UnityEngine.AI;
+using Photon.Pun; // 🌟 [추가] 포톤(멀티) 기능을 쓰기 위해 필수!
 
-public class RandomRoam : MonoBehaviour
+// 🌟 [수정] 그냥 MonoBehaviour가 아니라 'MonoBehaviourPun'으로 변경!
+public class RandomRoam : MonoBehaviourPun
 {
     private NavMeshAgent agent;
     private Animator anim;
 
-    public float roamRadius = 10f;
+    // 🌟 [수정] 반경 기본값을 맵 크기만큼 엄청 키워둡니다! (인스펙터에서 수정 가능)
+    public float roamRadius = 150f;
     public float waitTime = 2f;
 
-    // [추가★] 멍청함 방지용 변수들
-    public float maxWalkTime = 6f; // 5초 이상 걷고 있으면 벽에 낀 걸로 간주!
+    public float maxWalkTime = 6f;
     private float currentWalkTime = 0f;
     private float timer;
 
@@ -23,32 +25,33 @@ public class RandomRoam : MonoBehaviour
 
     void Update()
     {
+        // 🌟 [핵심] 방장(마스터 클라이언트)이 아니면? 뇌를 꺼버립니다! (위치만 받아먹음)
+        if (!PhotonNetwork.IsMasterClient) return;
+
         timer += Time.deltaTime;
 
-        // [추가★] AI가 걷고 있는 시간 측정
         if (agent.velocity.magnitude > 0.1f)
         {
             currentWalkTime += Time.deltaTime;
         }
 
-        // 1. 정상적으로 도착했거나 OR 2. 벽에 껴서 5초(maxWalkTime) 이상 헛걸음 쳤을 때!
         if ((agent.remainingDistance <= agent.stoppingDistance && timer >= waitTime) || currentWalkTime >= maxWalkTime)
         {
             Vector3 randomDirection = Random.insideUnitSphere * roamRadius;
-            randomDirection += transform.position;
+
+            // 🌟 [수정] 내 위치(transform.position)가 아니라, 맵의 정중앙(Vector3.zero)을 기준으로!
+            randomDirection += Vector3.zero;
 
             NavMeshHit hit;
             if (NavMesh.SamplePosition(randomDirection, out hit, roamRadius, 1))
             {
                 agent.SetDestination(hit.position);
 
-                // 타이머 싹 다 초기화!
                 timer = 0f;
                 currentWalkTime = 0f;
             }
         }
 
-        // 애니메이션 재생 로직 (기존과 동일)
         if (anim != null)
         {
             float currentSpeed = agent.velocity.magnitude;

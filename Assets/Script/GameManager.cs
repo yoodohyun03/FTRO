@@ -68,8 +68,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         // 2. [Playing] 본 게임 시작
         SetState(GameState.Playing);
         photonView.RPC("SyncRoleMessage", RpcTarget.All,
-            "<color=red>GOGO! Find!!</color>",
-            "<color=#00BFFF>Survive!</color>");
+            "<color=red>생존자를 찾으십시오.</color>",
+            "<color=#00BFFF>완벽히 연기하여 살아남으십시오.</color>");
 
         yield return new WaitForSeconds(2f);
         photonView.RPC("SyncMessage", RpcTarget.All, ""); // 화면 텍스트 깔끔하게 지우기
