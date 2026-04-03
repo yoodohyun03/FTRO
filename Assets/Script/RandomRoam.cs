@@ -10,7 +10,7 @@ public class RandomRoam : MonoBehaviour
     public float waitTime = 2f;
 
     // [추가★] 멍청함 방지용 변수들
-    public float maxWalkTime = 5f; // 5초 이상 걷고 있으면 벽에 낀 걸로 간주!
+    public float maxWalkTime = 6f; // 5초 이상 걷고 있으면 벽에 낀 걸로 간주!
     private float currentWalkTime = 0f;
     private float timer;
 
