@@ -19,6 +19,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             Debug.Log("🚨 [테스트 모드 가동] 로비를 건너뛰었습니다! 포톤 서버에 강제 접속합니다...");
             PhotonNetwork.ConnectUsingSettings(); // 오프라인 상태면 일단 포톤 서버부터 연결!
         }
+
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     // ==========================================
