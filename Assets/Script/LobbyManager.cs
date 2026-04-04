@@ -11,6 +11,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         if (PhotonNetwork.IsMasterClient) startButton.SetActive(true);
         else startButton.SetActive(false);
 

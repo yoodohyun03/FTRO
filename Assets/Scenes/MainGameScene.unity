@@ -16620,6 +16620,7 @@ MonoBehaviour:
   chatInput: {fileID: 1473880234}
   chatLog: {fileID: 1468169636}
   maxMessages: 7
+  isLobbyScene: 0
 --- !u!4 &426936550
 Transform:
   m_ObjectHideFlags: 0

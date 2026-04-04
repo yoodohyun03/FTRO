@@ -115,6 +115,17 @@ public class PlayerMove : MonoBehaviourPun
         // ==========================================
         if (Input.GetMouseButtonDown(0))
         {
+
+
+
+            if (Cursor.lockState != CursorLockMode.Locked)
+            {
+                // 화면을 다시 붙잡기만 하고, 공격 로직은 무시합니다! (클릭 꿀꺽 삼키기)
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                return;
+            }
+
             // [수정] 내 화면 + 다른 사람 화면 모두 펀치 애니메이션 재생
             photonView.RPC("RPC_PlayPunchAnimation", RpcTarget.All);
 
@@ -217,6 +228,14 @@ public class PlayerMove : MonoBehaviourPun
         if (aliveSurvivors.Count > 0 && spectateIndex < aliveSurvivors.Count)
         {
             Transform target = aliveSurvivors[spectateIndex];
+
+            if (target == null)
+            {
+                Debug.Log("관전 대상이 사라졌습니다! 명단을 갱신합니다.");
+                UpdateSurvivorList(); // 명단 새로고침
+                spectateIndex = 0;    // 0번 타자로 다시 초기화
+                return;               // 에러 안 나게 이번 턴은 그냥 넘김!
+            }
 
             // 타겟 머리 위나 어깨너머로 살짝 띄워주는 게 좋습니다. (y축으로 2미터 위)
             transform.position = target.position + new Vector3(0, 2f, 0);
