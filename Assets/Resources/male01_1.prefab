@@ -959,6 +959,7 @@ MonoBehaviour:
   runSpeed: 9
   jumpPower: 5
   myRole: 
+  isDead: 0
 --- !u!136 &4591711836902174258
 CapsuleCollider:
   m_ObjectHideFlags: 0

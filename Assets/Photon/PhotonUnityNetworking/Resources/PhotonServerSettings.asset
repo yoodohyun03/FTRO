@@ -47,6 +47,7 @@ MonoBehaviour:
   - RPC_PlayJumpAnimation
   - RPC_PlayPunchAnimation
   - OnSurvivorCaught
+  - RPC_ReceiveChat
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
