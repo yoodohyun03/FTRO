@@ -956,7 +956,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMove
   walkSpeed: 3
-  runSpeed: 9
+  seekerRunSpeed: 7.6
+  survivorRunSpeed: 6.5
   jumpPower: 5
   myRole: 
   isDead: 0

@@ -7,9 +7,12 @@ using System.Collections.Generic;
 
 public class PlayerMove : MonoBehaviourPun
 {
-    public float walkSpeed = 3f;
-    public float runSpeed = 7f;
-    public float jumpPower = 5f; // [추가★] 점프력!
+    [Header("이동 속도 설정")]
+    public float walkSpeed = 3f;           // 🚶 [핵심] 걷는 속도 (AI, 술래, 생존자 모두 완벽히 동일!)
+    public float seekerRunSpeed = 7.5f;    // 🏃 술래가 정체를 드러내고 추격할 때의 속도
+    public float survivorRunSpeed = 6.5f;  // 🏃 생존자가 정체를 들켜서 도망칠 때의 속도
+
+    public float jumpPower = 5f; // 점프력!
 
     private Animator anim;
     private Unity.Cinemachine.CinemachineCamera vcam;
@@ -97,6 +100,13 @@ public class PlayerMove : MonoBehaviourPun
             return;
         }
 
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
         // ==========================================
         // 🚀 1. 점프 (Space Bar)
         // ==========================================
@@ -111,33 +121,33 @@ public class PlayerMove : MonoBehaviourPun
         }
 
         // ==========================================
-        
+        // 🥊 2. 공격 (마우스 좌클릭)
         // ==========================================
         if (Input.GetMouseButtonDown(0))
         {
-
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            {
+                return; // 여기서 코드를 멈춤!
+            }
 
 
             if (Cursor.lockState != CursorLockMode.Locked)
             {
-                // 화면을 다시 붙잡기만 하고, 공격 로직은 무시합니다! (클릭 꿀꺽 삼키기)
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
                 return;
             }
 
-            // [수정] 내 화면 + 다른 사람 화면 모두 펀치 애니메이션 재생
-            photonView.RPC("RPC_PlayPunchAnimation", RpcTarget.All);
-
-            // 내가 '술래'일 때만 주먹에 데미지(타격 판정)가 들어갑니다!
+            // 생존자는 펀치 금지! '술래'일 때만 애니메이션과 판정 실행
             if (myRole == "Seeker")
             {
+                photonView.RPC("RPC_PlayPunchAnimation", RpcTarget.All);
                 CheckPunchHit();
             }
         }
 
         // ==========================================
-        // 🏃 3. 이동 로직 (기존과 완벽 동일)
+        // 🏃 3. 이동 로직 (걷기는 통일, 달리기는 차별화)
         // ==========================================
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
@@ -169,7 +179,15 @@ public class PlayerMove : MonoBehaviourPun
 
             if (!isAltLooking) transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * 10f);
 
-            float currentSpeed = isRunning ? runSpeed : walkSpeed;
+            // 🌟 [핵심 수정] 걷기 속도는 통일하고, 달릴 때만 직업 검사!
+            float currentSpeed = walkSpeed; // 기본은 통일된 걷기 속도
+
+            if (isRunning) // 쉬프트 키를 눌러 달린다면?
+            {
+                if (myRole == "Seeker") currentSpeed = seekerRunSpeed;
+                else currentSpeed = survivorRunSpeed;
+            }
+
             transform.Translate(moveDir * currentSpeed * Time.deltaTime, Space.World);
 
             float animValue = isRunning ? 1.0f : 0.5f;

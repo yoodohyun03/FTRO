@@ -120,7 +120,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 }
 
                 if (playerReady) readyText.text = "<color=green>Ready!</color>";
-                else readyText.text = "<color=gray>대기 중...</color>";
+                else readyText.text = "대기 중...";
             }
         }
     }
@@ -176,12 +176,45 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     void OnStartButtonClicked()
     {
-        // 🌟 방장이 시작 누름! 더 이상 사람 못 들어오게 방을 잠급니다.
+        // 🌟 [확인용 1] 이 메시지가 콘솔에 안 뜬다면? 버튼 클릭 자체가 안 먹히는 겁니다!
+        Debug.Log("🎮 방장: [게임 시작] 버튼 클릭 완료!");
+
+        // 방장이 시작 누름! 더 이상 사람 못 들어오게 방을 잠급니다.
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
 
-        // 🌟 형님의 진짜 게임 씬(숨바꼭질 씬) 이름으로 꼭 바꿔주십쇼!
-        PhotonNetwork.LoadLevel("GameScene");
+        // 🌟 [수정] 씬을 바로 넘기지 말고 제비뽑기(직업 세팅)부터 해야 합니다!
+        StartCoroutine(AssignRolesAndStart());
+    }
+
+    // ==========================================
+    // 🎲 [추가] 제비뽑기 후 안전하게 씬 넘어가기 마법
+    // ==========================================
+    System.Collections.IEnumerator AssignRolesAndStart()
+    {
+        Player[] players = PhotonNetwork.PlayerList;
+        int seekerIndex = Random.Range(0, players.Length);
+
+        Debug.Log("🎲 직업 제비뽑기 시작...");
+
+        // 1. 포스트잇(직업) 배정
+        for (int i = 0; i < players.Length; i++)
+        {
+            Hashtable props = new Hashtable();
+            if (i == seekerIndex) props.Add("Role", "Seeker");
+            else props.Add("Role", "Survivor");
+
+            players[i].SetCustomProperties(props);
+        }
+
+        // 2. [핵심★] 포스트잇이 서버에 확실히 붙을 때까지 0.5초 기다려줍니다!
+        yield return new WaitForSeconds(0.5f);
+
+        Debug.Log("🚀 제비뽑기 완료! MainGameScene으로 이동합니다!");
+
+        // 3. 안전하게 다 같이 메인 게임으로 납치!
+        // 🌟 주의: 이동하려는 씬 이름이 스펠링 하나 안 틀리고 정확한지 꼭 확인하세요!
+        PhotonNetwork.LoadLevel("MainGameScene");
     }
 
     void OnLeaveButtonClicked()
