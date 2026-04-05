@@ -17,9 +17,9 @@ MonoBehaviour:
     AppIdFusion: 
     AppIdChat: 
     AppIdVoice: 
-    AppVersion: 
+    AppVersion: 1
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: kr
     Server: 
     Port: 0
     ProxyServer: 
@@ -46,6 +46,8 @@ MonoBehaviour:
   - GetCaught
   - RPC_PlayJumpAnimation
   - RPC_PlayPunchAnimation
+  - OnSurvivorCaught
+  - RPC_ReceiveChat
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1
