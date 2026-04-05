@@ -721,7 +721,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a58c5ee792870fa499d12f60e21205b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RandomRoam
-  roamRadius: 150
+  roamRadius: 30
   waitTime: 2
   maxWalkTime: 5
 --- !u!114 &8696908048579349427

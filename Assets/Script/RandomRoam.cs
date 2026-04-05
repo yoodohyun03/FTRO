@@ -9,7 +9,7 @@ public class RandomRoam : MonoBehaviourPun
     private Animator anim;
 
     // 🌟 [수정] 반경 기본값을 맵 크기만큼 엄청 키워둡니다! (인스펙터에서 수정 가능)
-    public float roamRadius = 150f;
+    public float roamRadius = 30f;
     public float waitTime = 2f;
 
     public float maxWalkTime = 6f;
@@ -25,7 +25,6 @@ public class RandomRoam : MonoBehaviourPun
 
     void Update()
     {
-        // 🌟 [핵심] 방장(마스터 클라이언트)이 아니면? 뇌를 꺼버립니다! (위치만 받아먹음)
         if (!PhotonNetwork.IsMasterClient) return;
 
         timer += Time.deltaTime;
@@ -37,13 +36,15 @@ public class RandomRoam : MonoBehaviourPun
 
         if ((agent.remainingDistance <= agent.stoppingDistance && timer >= waitTime) || currentWalkTime >= maxWalkTime)
         {
+            // 🌟 [수정] 내 위치를 기준으로 반경 30m 안에서 다음 목적지를 찾습니다!
             Vector3 randomDirection = Random.insideUnitSphere * roamRadius;
 
-            // 🌟 [수정] 내 위치(transform.position)가 아니라, 맵의 정중앙(Vector3.zero)을 기준으로!
-            randomDirection += Vector3.zero;
+            // 🌟 [핵심] Vector3.zero(맵 중앙)가 아니라, transform.position(내 위치)을 더합니다!
+            randomDirection += transform.position;
 
             NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomDirection, out hit, roamRadius, 1))
+            // 여기서도 너무 멀리서 찾지 말고 근처에서만 찾도록 탐색 거리를 제한합니다.
+            if (NavMesh.SamplePosition(randomDirection, out hit, roamRadius, NavMesh.AllAreas))
             {
                 agent.SetDestination(hit.position);
 

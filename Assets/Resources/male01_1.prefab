@@ -956,11 +956,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMove
   walkSpeed: 3
-  seekerRunSpeed: 7.6
-  survivorRunSpeed: 6.5
+  seekerRunSpeed: 8.8
+  survivorRunSpeed: 7.5
   jumpPower: 5
   myRole: 
   isDead: 0
+  hitStunTime: 0.5
+  penaltyStunTime: 3.5
+  attackRadius: 1.2
 --- !u!136 &4591711836902174258
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1010,7 +1013,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!1 &4249364711453958891
 GameObject:
   m_ObjectHideFlags: 0

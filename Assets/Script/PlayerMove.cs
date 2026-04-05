@@ -107,6 +107,8 @@ public class PlayerMove : MonoBehaviourPun
             Cursor.visible = true;
         }
 
+
+
         // ==========================================
         // 🚀 1. 점프 (Space Bar)
         // ==========================================
@@ -149,6 +151,8 @@ public class PlayerMove : MonoBehaviourPun
         // ==========================================
         // 🏃 3. 이동 로직 (걷기는 통일, 달리기는 차별화)
         // ==========================================
+
+        if (isAttacking) return;
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         Vector3 moveDir = Vector3.zero;
@@ -188,13 +192,16 @@ public class PlayerMove : MonoBehaviourPun
                 else currentSpeed = survivorRunSpeed;
             }
 
-            transform.Translate(moveDir * currentSpeed * Time.deltaTime, Space.World);
+            Vector3 targetVelocity = moveDir * currentSpeed;
+            targetVelocity.y = rb.linearVelocity.y; // 🌟 점프나 중력(떨어짐)은 그대로 유지되도록 y값은 살려둡니다!
+            rb.linearVelocity = targetVelocity;
 
             float animValue = isRunning ? 1.0f : 0.5f;
             if (anim != null) anim.SetFloat("MoveSpeed", animValue);
         }
         else
         {
+            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
             if (anim != null) anim.SetFloat("MoveSpeed", 0f);
         }
     }
@@ -263,28 +270,74 @@ public class PlayerMove : MonoBehaviourPun
         }
     }
 
+    [Header("하이 리스크 하이 리턴 설정")]
+    public float hitStunTime = 0.5f;     // 🎯 진짜를 맞췄을 때 딜레이 (짧음)
+    public float penaltyStunTime = 3.5f; // 😱 허공/AI를 때렸을 때 페널티 (엄청 김!)
+    public float attackRadius = 1.2f;    // 💥 펀치 판정 두께 (높을수록 맞추기 쉬움)
+    private bool isAttacking = false;
 
+    // ==========================================
+    // 💥 펀치 타격 판정 (다중 관통 타격 지원!)
+    // ==========================================
     void CheckPunchHit()
     {
-        RaycastHit hit;
-        // 내 명치(Vector3.up * 1f) 높이에서, 앞(forward)으로, 1.5미터짜리 투명 레이저를 쏩니다!
-        if (Physics.Raycast(transform.position + Vector3.up * 1f, transform.forward, out hit, 1.5f))
+        // 🌟 [수정] RaycastHit 단일 변수가 아니라, 배열([])을 써서 범위 내의 '모든' 타격 대상을 가져옵니다!
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position + Vector3.up * 1f, attackRadius, transform.forward, 1.5f);
+
+        bool hitRealPlayer = false; // 진짜 플레이어를 때렸는지 체크
+
+        // 범위 안에 들어온 모든 녀석들을 하나씩 멱살 잡고 검사합니다.
+        foreach (RaycastHit hit in hits)
         {
-            // 맞은 놈이 플레이어 태그를 달고 있다면?!
             if (hit.collider.CompareTag("Player"))
             {
                 PhotonView targetView = hit.collider.GetComponent<PhotonView>();
 
-                // 그게 내가 아니고 다른 사람이라면!
-                if (targetView != null && !targetView.IsMine)
-                {
-                    Debug.Log("🎯 펀치 적중! 맞은 사람: " + targetView.Owner.NickName);
+                // 🌟 [핵심 완벽 구별법] 맞은 녀석한테 'PlayerMove(진짜 유저용)' 스크립트가 있는지 검사합니다!
+                // AI 더미(RandomRoam만 있음)를 때렸을 때 오류가 나는 것을 완벽히 방지합니다.
+                PlayerMove targetPlayer = hit.collider.GetComponent<PlayerMove>();
 
-                    // 맞은 사람의 컴퓨터로 "너 잡혔어!!" 하고 마법(RPC)을 날립니다.
+                // 1. PhotonView가 있고 2. 내 자신이 아니며 3. 진짜 유저(PlayerMove 존재)이고 4. 아직 안 죽었다면!
+                if (targetView != null && !targetView.IsMine && targetPlayer != null && !targetPlayer.isDead)
+                {
+                    Debug.Log("🎯 펀치 관통 적중! 무리 속에서 진짜를 찾았습니다: " + targetView.Owner.NickName);
+
+                    // 맞은 진짜 유저에게 잡혔다고 알림!
                     targetView.RPC("GetCaught", RpcTarget.All);
+                    hitRealPlayer = true;
+
+                    // 진짜를 찾았으니 더 이상 다른 녀석들을 검사할 필요 없이 반복문 탈출!
+                    break;
                 }
             }
         }
+
+        // ==========================================
+        // ⚖️ 판정 결과에 따른 페널티 발동
+        // ==========================================
+        if (hitRealPlayer)
+        {
+            // 진짜를 맞췄다! (AI랑 같이 맞았어도 진짜가 섞여있으니 무죄!) -> 짧은 공격 딜레이
+            StartCoroutine(AttackDelayRoutine(hitStunTime));
+        }
+        else
+        {
+            // 아무도 안 맞았거나, 오직 AI 더미들만 잔뜩 때렸다! -> 엄청나게 긴 기절 페널티
+            Debug.Log("😱 앗! 헛스윙이거나 AI 뭉치입니다! 기절 페널티 발동!");
+            StartCoroutine(AttackDelayRoutine(penaltyStunTime));
+        }
+    }
+
+    // ==========================================
+    // 🛑 딜레이 및 페널티 코루틴(Coroutine)
+    // ==========================================
+    System.Collections.IEnumerator AttackDelayRoutine(float delayTime)
+    {
+        isAttacking = true; // 이동 불가 상태 켜기 (발 묶임!)
+
+        yield return new WaitForSeconds(delayTime);
+
+        isAttacking = false; // 이동 불가 상태 풀림 (다시 이동 가능!)
     }
 
     // ==========================================
