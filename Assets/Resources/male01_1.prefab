@@ -961,7 +961,7 @@ MonoBehaviour:
   myRole: 
   isDead: 0
   hitStunTime: 0.5
-  penaltyStunTime: 3.5
+  penaltyStunTime: 1.5
   attackRadius: 1.2
   jumpPower: 5
   rayLength: 0.5

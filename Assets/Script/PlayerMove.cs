@@ -108,7 +108,7 @@ public class PlayerMove : MonoBehaviourPun
             HandleCursorUpdate();
             return;
         }
-
+        
         HandleCursorUpdate();
 
         // 🌟 [우리가 수정한 부분] 여기서 발밑 레이저 검사를 부릅니다!
@@ -129,8 +129,8 @@ public class PlayerMove : MonoBehaviourPun
 
             if (myRole == "Seeker" && !isAttacking)
             {
-                isAttacking = true;
-                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+                isAttacking = true; 
+                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0); 
 
                 photonView.RPC("RPC_PlayPunchAnimation", RpcTarget.All);
                 CheckPunchHit();
@@ -311,6 +311,6 @@ public class PlayerMove : MonoBehaviourPun
     }
 
     // 🌟 [친구분 코드 병합] 애니메이션 관련 RPC
-    [PunRPC] void RPC_PlayPunchAnimation() { if (anim != null) anim.SetTrigger("Punch"); }
+    [PunRPC] void RPC_PlayPunchAnimation() { if (anim != null) anim.SetTrigger("Punch"); } 
     [PunRPC] void RPC_PlayJumpAnimation() { if (anim != null) anim.SetTrigger("Jump"); }
 }
