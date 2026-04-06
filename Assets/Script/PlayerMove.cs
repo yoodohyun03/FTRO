@@ -12,7 +12,6 @@ public class PlayerMove : MonoBehaviourPun
     public float seekerRunSpeed = 7.5f;    // 🏃 술래가 정체를 드러내고 추격할 때의 속도
     public float survivorRunSpeed = 6.5f;  // 🏃 생존자가 정체를 들켜서 도망칠 때의 속도
 
-    public float jumpPower = 5f; // 점프력!
 
     private Animator anim;
     private Unity.Cinemachine.CinemachineCamera vcam;
@@ -27,6 +26,11 @@ public class PlayerMove : MonoBehaviourPun
     public bool isDead = false; // 내가 죽었는지 체크
     private List<Transform> aliveSurvivors = new List<Transform>(); // 살아있는 사람들 명단
     private int spectateIndex = 0; // 지금 몇 번째 사람을 보고 있는지
+
+
+    [Header("점프 및 땅 감지 설정")]
+    public float jumpPower = 5f;
+    public float rayLength = 0.2f;
 
     void Start()
     {
@@ -108,7 +112,7 @@ public class PlayerMove : MonoBehaviourPun
         }
 
 
-
+        CheckGrounded();
         // ==========================================
         // 🚀 1. 점프 (Space Bar)
         // ==========================================
@@ -227,10 +231,10 @@ public class PlayerMove : MonoBehaviourPun
     // ==========================================
     // 🔍 바닥 착지 감지 센서
     // ==========================================
-    void OnCollisionEnter(Collision col)
-    {
-        if (col.gameObject.CompareTag("Ground")) isGrounded = true;
-    }
+    //void OnCollisionEnter(Collision col)
+    //{
+    //    if (col.gameObject.CompareTag("Ground")) isGrounded = true;
+    //}
 
     // ==========================================
     // 💥 펀치 타격 판정 (투명 레이저 쏘기)
@@ -386,6 +390,32 @@ public class PlayerMove : MonoBehaviourPun
     void RPC_PlayJumpAnimation()
     {
         if (anim != null) anim.SetTrigger("Jump");
+    }
+
+
+
+
+    void CheckGrounded()
+    {
+        Debug.Log("🔍 CheckGrounded 함수 팽팽 돌아가는 중!");
+        Vector3 rayStartPoint = transform.position + (Vector3.up * 0.1f);
+
+        // 💡 1. 씬 뷰에서 빨간 레이저가 "바닥까지 충분히 뚫고 들어가는지" 길이를 확인하세요!
+        Debug.DrawRay(rayStartPoint, Vector3.down * rayLength, Color.red);
+
+        if (Physics.Raycast(rayStartPoint, Vector3.down, out RaycastHit hit, rayLength))
+        {
+            // 💡 2. 콘솔창 확인: 레이저가 도대체 뭘 때리고 있는지 이름을 띄워봅니다!
+            Debug.Log("🎯 레이저가 맞춘 물체: " + hit.collider.name + " / 태그: " + hit.collider.tag);
+
+            if (hit.collider.CompareTag("Ground"))
+            {
+                isGrounded = true;
+                return;
+            }
+        }
+
+        isGrounded = false;
     }
 
 
