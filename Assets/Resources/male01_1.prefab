@@ -960,11 +960,11 @@ MonoBehaviour:
   survivorRunSpeed: 7.5
   myRole: 
   isDead: 0
-  jumpPower: 5
-  rayLength: 0.5
   hitStunTime: 0.5
   penaltyStunTime: 3.5
   attackRadius: 1.2
+  jumpPower: 5
+  rayLength: 0.5
 --- !u!136 &4591711836902174258
 CapsuleCollider:
   m_ObjectHideFlags: 0
