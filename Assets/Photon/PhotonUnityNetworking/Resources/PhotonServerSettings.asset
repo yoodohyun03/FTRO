@@ -44,6 +44,8 @@ MonoBehaviour:
   - SyncTimer
   - SyncRoleMessage
   - GetCaught
+  - RPC_PlayJumpAnimation
+  - RPC_PlayPunchAnimation
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
