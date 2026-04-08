@@ -23,7 +23,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
-    // ==========================================
+    // ==========================================dd
     // 🛠️ 테스트 모드 전용 자동 접속기
     // ==========================================
 
