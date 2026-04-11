@@ -41,7 +41,13 @@ public class TitleManager : MonoBehaviourPunCallbacks
 
     [Header("5. 맵 선택 시스템")]
     public string selectedMap = "CityMapScene"; // 기본값
-    public string[] mapList = { "CityMapScene" }; // 랜덤 추첨용 배열
+    public string[] mapList = { "CityMapScene", "JapanMapScene", "ForestMapScene" }; // 랜덤 추첨용 배열
+
+    [Header("6. 맵 선택 토글")]
+    public Toggle cityMapToggle;
+    public Toggle japanMapToggle;
+    public Toggle forestMapToggle;
+    public Toggle randomMapToggle;
 
     void Start()
     {
@@ -64,6 +70,12 @@ public class TitleManager : MonoBehaviourPunCallbacks
         if (startButton != null) startButton.onClick.AddListener(OnStartButtonClicked);
         if (readyButton != null) readyButton.onClick.AddListener(OnReadyButtonClicked);
         if (leaveButton != null) leaveButton.onClick.AddListener(OnLeaveButtonClicked);
+
+        // 🌟 맵 선택 토글 이벤트 연결
+        if (cityMapToggle != null) cityMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectCityMap(); });
+        if (japanMapToggle != null) japanMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectJapanMap(); });
+        if (forestMapToggle != null) forestMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectForestMap(); });
+        if (randomMapToggle != null) randomMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectRandomMap(); });
 
         // 🌟 게임 끝나고 대기방으로 돌아왔을 때 바로 대기방 켜주기
         if (PhotonNetwork.InRoom)
@@ -168,14 +180,15 @@ public class TitleManager : MonoBehaviourPunCallbacks
     // 🗺️ [맵 선택 & 방 생성 시스템]
     // ==========================================
 
-    // 🌟 방 만들기 UI에 맵 버튼을 만들고 SelectCityMap() 또는 SelectRandomMap()에 연결해주세요!
-    // public void SelectJapanMap() { selectedMap = "JapanMapScene"; Debug.Log("일본 맵 선택"); } // 🔴 [제거됨] JapanMapScene 없음
-    public void SelectCityMap() { selectedMap = "CityMapScene"; Debug.Log("도시 맵 선택"); }
+    // 🌟 방 만들기 UI에 맵 버튼을 만들고 아래 메서드들에 연결해주세요!
+    public void SelectCityMap() { selectedMap = "CityMapScene"; Debug.Log("🏙️ 도시 맵 선택"); }
+    public void SelectJapanMap() { selectedMap = "JapanMapScene"; Debug.Log("🏯 일본 맵 선택"); }
+    public void SelectForestMap() { selectedMap = "ForestMapScene"; Debug.Log("🌲 숲 맵 선택"); }
     public void SelectRandomMap()
     {
         int r = Random.Range(0, mapList.Length);
         selectedMap = mapList[r];
-        Debug.Log("랜덤 맵 선택됨: " + selectedMap);
+        Debug.Log("🎲 랜덤 맵 선택됨: " + selectedMap);
     }
 
     public void ClickCreateRoomReal()
