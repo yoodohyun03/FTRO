@@ -9,11 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/TitleScene.unity
     guid: ae8a41884d3523e4b91e34f8c20bcee9
   - enabled: 1
-    path: Assets/Scenes/LobbyScene.unity
-    guid: 13c026b2568358b48aaccf2bdd700a16
-  - enabled: 1
-    path: Assets/Scenes/MainGameScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/CityMapScene.unity
+    guid: 64f9d3ed199864904899ff45e6d0c64d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

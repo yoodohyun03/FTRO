@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 4ccb49676687917499386abab8234bd6
+timeCreated: 1472285065
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 70581
+  packageName: Sapphiart-chan!
+  packageVersion: 2.0
+  assetPath: Assets/SapphiArt/SapphiArtchan/Scripts/SapphiArtChan_AnimManager.cs
+  uploadId: 138619

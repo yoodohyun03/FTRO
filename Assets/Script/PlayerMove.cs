@@ -4,13 +4,14 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using FindObjectsInactive = UnityEngine.FindObjectsInactive;
 
 public class PlayerMove : MonoBehaviourPun
 {
     [Header("이동 속도 설정")]
-    public float walkSpeed = 3f;           // 🚶 [핵심] 걷는 속도 (AI, 술래, 생존자 모두 완벽히 동일!)
-    public float seekerRunSpeed = 7.5f;    // 🏃 술래가 정체를 드러내고 추격할 때의 속도
-    public float survivorRunSpeed = 6.5f;  // 🏃 생존자가 정체를 들켜서 도망칠 때의 속도
+    public float walkSpeed = 3f;
+    public float seekerRunSpeed = 7.5f;
+    public float survivorRunSpeed = 6.5f;
 
     private Animator anim;
     private Unity.Cinemachine.CinemachineCamera vcam;
@@ -26,9 +27,9 @@ public class PlayerMove : MonoBehaviourPun
     private int spectateIndex = 0;
 
     [Header("공격 및 페널티 설정")]
-    public float hitStunTime = 0.5f;     // 🎯 적중 시 딜레이
-    public float penaltyStunTime = 3.5f; // 😱 헛스윙/AI 타격 시 페널티
-    public float attackRadius = 1.2f;    // 💥 펀치 판정 범위
+    public float hitStunTime = 0.5f;
+    public float penaltyStunTime = 3.5f;
+    public float attackRadius = 1.2f;
     private bool isAttacking = false;
 
     [Header("점프 및 땅 감지 설정")]
@@ -48,17 +49,127 @@ public class PlayerMove : MonoBehaviourPun
                 StartCoroutine(ShowRoleSequence());
             }
 
-            vcam = FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
+            StartCoroutine(InitializeCameraWithDelay());
+        }
+    }
 
+    IEnumerator InitializeCameraWithDelay()
+    {
+        // 🚨 [중요] 자신의 플레이어가 아니면 카메라 초기화 중단!
+        if (!photonView.IsMine)
+        {
+            Debug.Log($"[{PhotonNetwork.NickName}] 이 플레이어는 로컬 플레이어가 아니므로 카메라 설정을 건너뜁니다.");
+            yield break;
+        }
+
+        Debug.Log($"[{PhotonNetwork.NickName}] ===== 카메라 찾기 시작 (로컬 플레이어 #{PhotonNetwork.LocalPlayer.ActorNumber}) =====");
+        Debug.Log($"[{PhotonNetwork.NickName}] 현재 씬: {SceneManager.GetActiveScene().name}");
+
+        // 한 프레임 대기 (씬이 완전히 로드될 때까지)
+        yield return null;
+
+        // 3프레임 더 대기 (Cinemachine이 초기화될 시간 확보)
+        yield return new WaitForSeconds(0.1f);
+
+        // 1. MainCamera 태그로 찾기
+        GameObject mainCameraObj = GameObject.FindGameObjectWithTag("MainCamera");
+        Debug.Log($"[{PhotonNetwork.NickName}] 1️⃣ MainCamera 태그 GameObject: {(mainCameraObj != null ? mainCameraObj.name : "null")}");
+
+        if (mainCameraObj != null)
+        {
+            Debug.Log($"[{PhotonNetwork.NickName}] MainCamera 상태: Active={mainCameraObj.activeSelf}");
+            vcam = mainCameraObj.GetComponent<Unity.Cinemachine.CinemachineCamera>();
             if (vcam != null)
             {
-                vcam.Follow = this.transform;
-                vcam.LookAt = this.transform;
-                orbitalRig = vcam.GetComponent<Unity.Cinemachine.CinemachineOrbitalFollow>();
-
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                Debug.Log($"[{PhotonNetwork.NickName}] 2️⃣ CinemachineCamera 찾음 ✓");
+                Debug.Log($"[{PhotonNetwork.NickName}] 카메라 Priority: {vcam.Priority}");
+                Debug.Log($"[{PhotonNetwork.NickName}] 카메라 활성화: {vcam.enabled}");
             }
+            else
+            {
+                Debug.Log($"[{PhotonNetwork.NickName}] 2️⃣ CinemachineCamera 없음 ✗");
+            }
+        }
+
+        // 2. 태그 못 찾거나 컴포넌트 없으면 FindFirstObjectByType으로 찾기
+        if (vcam == null)
+        {
+            vcam = FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>(FindObjectsInactive.Include);
+            if (vcam != null)
+            {
+                Debug.Log($"[{PhotonNetwork.NickName}] 3️⃣ FindFirstObjectByType로 발견: {vcam.gameObject.name}");
+            }
+            else
+            {
+                Debug.Log($"[{PhotonNetwork.NickName}] 3️⃣ FindFirstObjectByType 실패");
+            }
+        }
+
+        // 3. 씬의 모든 GameObject 순회하며 CinemachineCamera 찾기
+        if (vcam == null)
+        {
+            Debug.Log($"[{PhotonNetwork.NickName}] 4️⃣ 씬의 모든 GameObject 검색 중...");
+            GameObject[] allObjects = SceneManager.GetActiveScene().GetRootGameObjects();
+            Debug.Log($"[{PhotonNetwork.NickName}] 씬 루트 객체 수: {allObjects.Length}");
+
+            foreach (GameObject rootObj in allObjects)
+            {
+                Unity.Cinemachine.CinemachineCamera[] cams = rootObj.GetComponentsInChildren<Unity.Cinemachine.CinemachineCamera>(includeInactive: true);
+                if (cams.Length > 0)
+                {
+                    Debug.Log($"[{PhotonNetwork.NickName}] 📍 '{rootObj.name}'에서 {cams.Length}개의 Cinemachine 카메라 발견!");
+                    for (int i = 0; i < cams.Length; i++)
+                    {
+                        Debug.Log($"[{PhotonNetwork.NickName}]   [{i}] {cams[i].gameObject.name} - Active={cams[i].enabled}, Priority={cams[i].Priority}");
+                    }
+                    vcam = cams[0];
+                    break;
+                }
+            }
+        }
+
+        // 4. 카메라 설정
+        if (vcam != null)
+        {
+            // 카메라가 비활성화되어 있으면 활성화
+            if (!vcam.enabled)
+            {
+                Debug.Log($"[{PhotonNetwork.NickName}] ⚠️ 카메라가 비활성화되어 있음. 활성화 중...");
+                vcam.enabled = true;
+            }
+
+            // 카메라 GameObject도 활성화
+            if (!vcam.gameObject.activeSelf)
+            {
+                Debug.Log($"[{PhotonNetwork.NickName}] ⚠️ 카메라 GameObject가 비활성화되어 있음. 활성화 중...");
+                vcam.gameObject.SetActive(true);
+            }
+
+            vcam.Follow = this.transform;
+            vcam.LookAt = this.transform;
+            orbitalRig = vcam.GetComponent<Unity.Cinemachine.CinemachineOrbitalFollow>();
+
+            if (orbitalRig != null)
+            {
+                Debug.Log($"[{PhotonNetwork.NickName}] CinemachineOrbitalFollow 찾음");
+            }
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            Debug.Log($"[{PhotonNetwork.NickName}] ✅ 카메라 '{vcam.gameObject.name}' 설정 완료!");
+            Debug.Log($"[{PhotonNetwork.NickName}] Follow: {(vcam.Follow != null ? vcam.Follow.name : "null")}, LookAt: {(vcam.LookAt != null ? vcam.LookAt.name : "null")}");
+            Debug.Log($"[{PhotonNetwork.NickName}] ===== 카메라 찾기 완료 =====");
+        }
+        else
+        {
+            Debug.LogError($"[{PhotonNetwork.NickName}] ❌ 카메라를 찾을 수 없습니다!");
+            Debug.LogError($"[{PhotonNetwork.NickName}] 확인할 사항:");
+            Debug.LogError($"  1️⃣ MainCamera GameObject에 'MainCamera' 태그가 있는가?");
+            Debug.LogError($"  2️⃣ 그 GameObject에 CinemachineCamera 컴포넌트가 있는가?");
+            Debug.LogError($"  3️⃣ 카메라가 활성화(enabled=true)되어 있는가?");
+            Debug.LogError($"  4️⃣ 카메라의 Priority가 음수가 아닌가? (현재 권장값: 10)");
+            Debug.LogError($"[{PhotonNetwork.NickName}] ===== 카메라 찾기 실패 =====");
         }
     }
 
@@ -99,22 +210,25 @@ public class PlayerMove : MonoBehaviourPun
             return;
         }
 
-        // 🛑 [중요] 공격 중이거나 'Cross Punch' 애니메이션 재생 중이면 이동 불가
-        if (isAttacking || (anim != null && anim.GetCurrentAnimatorStateInfo(0).IsName("Cross Punch")))
+        // 펀치 애니메이션 재생 중이면 이동 차단
+        if (anim != null && anim.GetCurrentAnimatorStateInfo(0).IsName("Cross Punch"))
         {
-            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0); // 물리 속도 강제 제로
-            if (anim != null) anim.SetFloat("MoveSpeed", 0f);
+            float normalizedTime = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
 
-            HandleCursorUpdate();
-            return;
+            if (normalizedTime < 1.0f)
+            {
+                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+                anim.SetFloat("MoveSpeed", 0f);
+                HandleCursorUpdate();
+                return;
+            }
+            anim.SetFloat("MoveSpeed", 0f);
         }
         
         HandleCursorUpdate();
-
-        // 🌟 [우리가 수정한 부분] 여기서 발밑 레이저 검사를 부릅니다!
         CheckGrounded();
 
-        // 🚀 1. 점프
+        // 점프
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
@@ -122,16 +236,15 @@ public class PlayerMove : MonoBehaviourPun
             isGrounded = false;
         }
 
-        // 🥊 2. 공격 (마우스 좌클릭)
+        // 공격 (마우스 좌클릭)
         if (Input.GetMouseButtonDown(0))
         {
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return;
 
             if (myRole == "Seeker" && !isAttacking)
             {
-                isAttacking = true; 
-                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0); 
-
+                isAttacking = true;
+                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
                 photonView.RPC("RPC_PlayPunchAnimation", RpcTarget.All);
                 CheckPunchHit();
             }
@@ -176,7 +289,8 @@ public class PlayerMove : MonoBehaviourPun
 
         if (h != 0 || v != 0)
         {
-            if (Camera.main != null && SceneManager.GetActiveScene().name != "LobbyScene")
+            // 🌟 [수정] 게임 씬(CityMapScene)에서 카메라 기반 이동 사용
+            if (Camera.main != null && SceneManager.GetActiveScene().name == "CityMapScene")
             {
                 if (isAltLooking) moveDir = (transform.forward * v + transform.right * h).normalized;
                 else
@@ -190,20 +304,26 @@ public class PlayerMove : MonoBehaviourPun
             }
             else moveDir = new Vector3(h, 0, v).normalized;
 
-            if (!isAltLooking) transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * 10f);
+            if (!isAltLooking)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 360f);
+            }
 
             float currentSpeed = isRunning ? (myRole == "Seeker" ? seekerRunSpeed : survivorRunSpeed) : walkSpeed;
-
             Vector3 targetVelocity = moveDir * currentSpeed;
             targetVelocity.y = rb.linearVelocity.y;
-            rb.linearVelocity = targetVelocity;
+            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.deltaTime * 12f);
 
             float animValue = isRunning ? 1.0f : 0.5f;
             if (anim != null) anim.SetFloat("MoveSpeed", animValue);
         }
         else
         {
-            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            // 🔧 [수정] 멈출 때도 부드럽게 처리
+            Vector3 stoppedVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, stoppedVelocity, Time.deltaTime * 8f);
+
             if (anim != null) anim.SetFloat("MoveSpeed", 0f);
         }
     }
@@ -235,7 +355,6 @@ public class PlayerMove : MonoBehaviourPun
 
     IEnumerator AttackDelayRoutine(float delayTime)
     {
-        isAttacking = true;
         yield return new WaitForSeconds(delayTime);
         isAttacking = false;
     }
@@ -291,20 +410,13 @@ public class PlayerMove : MonoBehaviourPun
     // 🌟 [우리가 수정한 부분] 옛날 구식 바닥 감지 OnCollisionEnter는 과감히 삭제하고 Raycast 버전만 남김!
     void CheckGrounded()
     {
-        Debug.Log("🔍 CheckGrounded 함수 팽팽 돌아가는 중!");
         Vector3 rayStartPoint = transform.position + (Vector3.up * 0.1f);
-
         Debug.DrawRay(rayStartPoint, Vector3.down * rayLength, Color.red);
 
         if (Physics.Raycast(rayStartPoint, Vector3.down, out RaycastHit hit, rayLength))
         {
-            Debug.Log("🎯 레이저가 맞춘 물체: " + hit.collider.name + " / 태그: " + hit.collider.tag);
-
-            if (hit.collider.CompareTag("Ground"))
-            {
-                isGrounded = true;
-                return;
-            }
+            isGrounded = hit.collider.CompareTag("Ground");
+            return;
         }
 
         isGrounded = false;
