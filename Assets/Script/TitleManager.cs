@@ -40,8 +40,8 @@ public class TitleManager : MonoBehaviourPunCallbacks
     private bool isReady = false;
 
     [Header("5. 맵 선택 시스템")]
-    public string selectedMap = "JapanMapScene"; // 기본값
-    public string[] mapList = { "JapanMapScene", "CityMapScene" }; // 랜덤 추첨용 배열
+    public string selectedMap = "CityMapScene"; // 기본값
+    public string[] mapList = { "CityMapScene" }; // 랜덤 추첨용 배열
 
     void Start()
     {
@@ -168,8 +168,8 @@ public class TitleManager : MonoBehaviourPunCallbacks
     // 🗺️ [맵 선택 & 방 생성 시스템]
     // ==========================================
 
-    // 🌟 방 만들기 UI에 맵 버튼 3개 만들고 각각 연결해주세요!
-    public void SelectJapanMap() { selectedMap = "JapanMapScene"; Debug.Log("일본 맵 선택"); }
+    // 🌟 방 만들기 UI에 맵 버튼을 만들고 SelectCityMap() 또는 SelectRandomMap()에 연결해주세요!
+    // public void SelectJapanMap() { selectedMap = "JapanMapScene"; Debug.Log("일본 맵 선택"); } // 🔴 [제거됨] JapanMapScene 없음
     public void SelectCityMap() { selectedMap = "CityMapScene"; Debug.Log("도시 맵 선택"); }
     public void SelectRandomMap()
     {

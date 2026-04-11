@@ -41,6 +41,10 @@ public class PlayerMove : MonoBehaviourPun
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
 
+        // 🚨 [방어] 필수 컴포넌트 확인
+        if (anim == null) Debug.LogError($"[{gameObject.name}] Animator 컴포넌트를 찾을 수 없습니다!");
+        if (rb == null) Debug.LogError($"[{gameObject.name}] Rigidbody 컴포넌트를 찾을 수 없습니다!");
+
         if (photonView.IsMine)
         {
             if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Role"))
@@ -62,14 +66,14 @@ public class PlayerMove : MonoBehaviourPun
             yield break;
         }
 
-        Debug.Log($"[{PhotonNetwork.NickName}] ===== 카메라 찾기 시작 (로컬 플레이어 #{PhotonNetwork.LocalPlayer.ActorNumber}) =====");
+        Debug.Log($"[{PhotonNetwork.NickName}] ===== 카메라 찾기 시작 (로컬 플레이어 #{PhotonNetwork.LocalPlayer.ActorNumber}, IsMasterClient={PhotonNetwork.IsMasterClient}) =====");
         Debug.Log($"[{PhotonNetwork.NickName}] 현재 씬: {SceneManager.GetActiveScene().name}");
 
         // 한 프레임 대기 (씬이 완전히 로드될 때까지)
         yield return null;
 
-        // 3프레임 더 대기 (Cinemachine이 초기화될 시간 확보)
-        yield return new WaitForSeconds(0.1f);
+        // 🌟 [수정] 모든 플레이어가 동시에 카메라 설정하도록 약간만 대기
+        yield return new WaitForSeconds(0.2f);
 
         // 1. MainCamera 태그로 찾기
         GameObject mainCameraObj = GameObject.FindGameObjectWithTag("MainCamera");
@@ -128,9 +132,11 @@ public class PlayerMove : MonoBehaviourPun
             }
         }
 
-        // 4. 카메라 설정
+        // 4. 카메라 설정 (모든 로컬 플레이어가 자신을 따르도록 설정!)
         if (vcam != null)
         {
+            Debug.Log($"[{PhotonNetwork.NickName}] 카메라 설정 중...");
+
             // 카메라가 비활성화되어 있으면 활성화
             if (!vcam.enabled)
             {
@@ -145,6 +151,7 @@ public class PlayerMove : MonoBehaviourPun
                 vcam.gameObject.SetActive(true);
             }
 
+            // 🌟 [수정] 모든 로컬 플레이어가 자신을 카메라가 따르도록 설정한다!
             vcam.Follow = this.transform;
             vcam.LookAt = this.transform;
             orbitalRig = vcam.GetComponent<Unity.Cinemachine.CinemachineOrbitalFollow>();
@@ -154,21 +161,19 @@ public class PlayerMove : MonoBehaviourPun
                 Debug.Log($"[{PhotonNetwork.NickName}] CinemachineOrbitalFollow 찾음");
             }
 
+            Debug.Log($"[{PhotonNetwork.NickName}] ✅ 카메라 '{vcam.gameObject.name}' 설정 완료!");
+            Debug.Log($"[{PhotonNetwork.NickName}] Follow: {(vcam.Follow != null ? vcam.Follow.name : "null")}, LookAt: {(vcam.LookAt != null ? vcam.LookAt.name : "null")}");
+
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            Debug.Log($"[{PhotonNetwork.NickName}] ✅ 카메라 '{vcam.gameObject.name}' 설정 완료!");
-            Debug.Log($"[{PhotonNetwork.NickName}] Follow: {(vcam.Follow != null ? vcam.Follow.name : "null")}, LookAt: {(vcam.LookAt != null ? vcam.LookAt.name : "null")}");
-            Debug.Log($"[{PhotonNetwork.NickName}] ===== 카메라 찾기 완료 =====");
+            Debug.Log($"[{PhotonNetwork.NickName}] ===== 카메라 초기화 완료 =====");
         }
         else
         {
             Debug.LogError($"[{PhotonNetwork.NickName}] ❌ 카메라를 찾을 수 없습니다!");
             Debug.LogError($"[{PhotonNetwork.NickName}] 확인할 사항:");
             Debug.LogError($"  1️⃣ MainCamera GameObject에 'MainCamera' 태그가 있는가?");
-            Debug.LogError($"  2️⃣ 그 GameObject에 CinemachineCamera 컴포넌트가 있는가?");
-            Debug.LogError($"  3️⃣ 카메라가 활성화(enabled=true)되어 있는가?");
-            Debug.LogError($"  4️⃣ 카메라의 Priority가 음수가 아닌가? (현재 권장값: 10)");
             Debug.LogError($"[{PhotonNetwork.NickName}] ===== 카메라 찾기 실패 =====");
         }
     }
@@ -217,7 +222,7 @@ public class PlayerMove : MonoBehaviourPun
 
             if (normalizedTime < 1.0f)
             {
-                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+                if (rb != null) rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
                 anim.SetFloat("MoveSpeed", 0f);
                 HandleCursorUpdate();
                 return;
@@ -312,8 +317,11 @@ public class PlayerMove : MonoBehaviourPun
 
             float currentSpeed = isRunning ? (myRole == "Seeker" ? seekerRunSpeed : survivorRunSpeed) : walkSpeed;
             Vector3 targetVelocity = moveDir * currentSpeed;
-            targetVelocity.y = rb.linearVelocity.y;
-            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.deltaTime * 12f);
+            if (rb != null)
+            {
+                targetVelocity.y = rb.linearVelocity.y;
+                rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.deltaTime * 20f);
+            }
 
             float animValue = isRunning ? 1.0f : 0.5f;
             if (anim != null) anim.SetFloat("MoveSpeed", animValue);
@@ -322,7 +330,7 @@ public class PlayerMove : MonoBehaviourPun
         {
             // 🔧 [수정] 멈출 때도 부드럽게 처리
             Vector3 stoppedVelocity = new Vector3(0, rb.linearVelocity.y, 0);
-            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, stoppedVelocity, Time.deltaTime * 8f);
+            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, stoppedVelocity, Time.deltaTime * 15f);
 
             if (anim != null) anim.SetFloat("MoveSpeed", 0f);
         }
@@ -330,6 +338,8 @@ public class PlayerMove : MonoBehaviourPun
 
     void CheckPunchHit()
     {
+        if (rb == null || anim == null) return; // 🚨 [방어] 필수 컴포넌트 확인
+
         RaycastHit[] hits = Physics.SphereCastAll(transform.position + Vector3.up * 1f, attackRadius, transform.forward, 1.5f);
         bool hitRealPlayer = false;
 
@@ -366,8 +376,11 @@ public class PlayerMove : MonoBehaviourPun
         isDead = true;
         if (anim != null) anim.SetTrigger("Die");
 
-        if (PhotonNetwork.IsMasterClient)
+        // 🚨 [방어] GameManager.instance가 null일 수 있음
+        if (PhotonNetwork.IsMasterClient && GameManager.instance != null)
+        {
             GameManager.instance.photonView.RPC("OnSurvivorCaught", RpcTarget.MasterClient);
+        }
 
         Renderer[] renderers = GetComponentsInChildren<Renderer>();
         foreach (Renderer r in renderers) r.enabled = false;
