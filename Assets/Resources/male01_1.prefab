@@ -986,10 +986,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2.5
+  m_Radius: 0.35
+  m_Height: 1.8
   m_Direction: 1
-  m_Center: {x: 0, y: 1.21, z: 0}
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!54 &-9193537758457896757
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1797,7 +1797,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 172388, guid: 7dc923b4c4812f147ba42a507e5507bd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 463472, guid: 7dc923b4c4812f147ba42a507e5507bd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1845,16 +1845,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9590100, guid: 7dc923b4c4812f147ba42a507e5507bd, type: 3}
       propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'Eye_R'\n\tTransform 'Hips'\n\tTransform
-        'Eye_L'\n\tTransform 'Ring_01_R'\n\tTransform 'Chest'\n\tTransform 'Thumb_01_L'\n\tTransform
-        'Pinky_01_L'\n\tTransform 'Index_02_L'\n\tTransform 'Shoulder_R'\n\tTransform
-        'Spine'\n\tand more ...\n\tFrom animation clip 'damage'\n\tFrom animation
-        clip 'default'\n\tFrom animation clip 'hit01'\n\tFrom animation clip 'hit02'\n\tFrom
-        animation clip 'hit03'\n\tFrom animation clip 'idle'\n\tFrom animation clip
-        'jump'\n\tFrom animation clip 'KO_big'\n\tFrom animation clip 'running'\n\tFrom
-        animation clip 'winpose'\n\tand more ..."
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11415292, guid: 7dc923b4c4812f147ba42a507e5507bd, type: 3}

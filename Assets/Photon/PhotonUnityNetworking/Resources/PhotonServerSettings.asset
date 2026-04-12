@@ -49,6 +49,9 @@ MonoBehaviour:
   - OnSurvivorCaught
   - RPC_ReceiveChat
   - SyncCharacterSkin
+  - RPC_SetDestination
+  - RPC_SetSpeed
+  - RPC_Jump
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

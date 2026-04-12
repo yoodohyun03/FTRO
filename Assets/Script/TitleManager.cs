@@ -266,15 +266,60 @@ public class TitleManager : MonoBehaviourPunCallbacks
 
     void UpdatePlayerList()
     {
-        if (playerListGroup == null) return;
+        // 🚨 [방어] 필수 요소 확인
+        if (playerListGroup == null)
+        {
+            Debug.LogError("playerListGroup이 할당되지 않았습니다!");
+            return;
+        }
 
+        if (playerSlotPrefab == null)
+        {
+            Debug.LogError("playerSlotPrefab이 할당되지 않았습니다!");
+            return;
+        }
+
+        // 기존 플레이어 슬롯 삭제
         foreach (Transform child in playerListGroup) Destroy(child.gameObject);
 
+        // 새 플레이어 슬롯 생성
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             GameObject slot = Instantiate(playerSlotPrefab, playerListGroup);
-            TextMeshProUGUI nameText = slot.transform.Find("PlayerNameText").GetComponent<TextMeshProUGUI>();
-            TextMeshProUGUI readyText = slot.transform.Find("ReadyStateText").GetComponent<TextMeshProUGUI>();
+
+            if (slot == null)
+            {
+                Debug.LogError("playerSlotPrefab을 생성할 수 없습니다!");
+                continue;
+            }
+
+            Transform nameTextTransform = slot.transform.Find("PlayerNameText");
+            Transform readyTextTransform = slot.transform.Find("ReadyStateText");
+
+            // 🚨 [방어] 자식 객체 확인
+            if (nameTextTransform == null)
+            {
+                Debug.LogError($"PlayerSlot에서 'PlayerNameText'를 찾을 수 없습니다!");
+                Destroy(slot);
+                continue;
+            }
+
+            if (readyTextTransform == null)
+            {
+                Debug.LogError($"PlayerSlot에서 'ReadyStateText'를 찾을 수 없습니다!");
+                Destroy(slot);
+                continue;
+            }
+
+            TextMeshProUGUI nameText = nameTextTransform.GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI readyText = readyTextTransform.GetComponent<TextMeshProUGUI>();
+
+            if (nameText == null || readyText == null)
+            {
+                Debug.LogError("TextMeshProUGUI 컴포넌트를 찾을 수 없습니다!");
+                Destroy(slot);
+                continue;
+            }
 
             nameText.text = $"[{player.NickName}]";
 
