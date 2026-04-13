@@ -1,47 +1,59 @@
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
-using UnityEngine.SceneManagement; // [핵심★] 현재 무슨 씬인지 알아내기 위해 마법의 단어를 추가합니다!
+using UnityEngine.SceneManagement;
 
 public class PlayerNameTag : MonoBehaviourPun
 {
-    public TextMeshProUGUI nameText; // 아까 만든 글자(Text) 연결할 곳
+    public TextMeshProUGUI nameText;
     private Camera mainCam;
+    private bool isGameStarted = false;
 
     void Start()
     {
-        // ==========================================
-        // 🕵️‍♂️ [추가된 은신 마술] 
-        // 현재 씬 이름이 "MainGameScene"이라면? 이름표를 아예 꺼버립니다!
-        // ==========================================
-        if (SceneManager.GetActiveScene().name == "MainGameScene")
+        // 🌟 [수정] 씬 이름을 "CityMapScene"으로 변경
+        if (SceneManager.GetActiveScene().name == "CityMapScene")
         {
-            nameText.gameObject.SetActive(false); // 글자 UI 전원 끄기
-            return; // 아래에 있는 닉네임 세팅 코드는 실행할 필요도 없으니 여기서 종료!
+            // 게임 씬이지만, 처음에는 이름표를 보여줌 (로비 상태)
+            // GameManager에서 Playing 상태로 변경되면 숨길 것
         }
 
-        // 1. 내 캐릭터면 내 이름, 남의 캐릭터면 남의 이름 가져와서 쾅!
         if (photonView.IsMine)
         {
             nameText.text = PhotonNetwork.NickName;
-            nameText.color = Color.green; // 내 이름은 헷갈리지 않게 초록색으로!
+            nameText.color = Color.green;
         }
         else
         {
-            nameText.text = photonView.Owner.NickName; // 남의 이름
+            nameText.text = photonView.Owner.NickName;
         }
 
-        // 2. 씬에 있는 메인 카메라(내 눈) 찾기
         mainCam = Camera.main;
     }
 
     void Update()
     {
-        // 게임 씬에서는 이름표가 꺼져 있으므로 카메라를 쳐다볼 필요도 없습니다!
-        if (SceneManager.GetActiveScene().name == "MainGameScene") return;
+        // 🌟 [추가] GameManager의 상태를 확인해서 게임 진행 중이면 이름표 숨기기
+        if (GameManager.instance != null && GameManager.instance.currentState == GameManager.GameState.Playing)
+        {
+            if (nameText.gameObject.activeSelf)
+            {
+                nameText.gameObject.SetActive(false);
+                isGameStarted = true;
+            }
+        }
+        else if (isGameStarted && GameManager.instance != null && GameManager.instance.currentState != GameManager.GameState.Playing)
+        {
+            // 게임이 끝났으면 다시 이름표 표시
+            if (!nameText.gameObject.activeSelf)
+            {
+                nameText.gameObject.SetActive(true);
+                isGameStarted = false;
+            }
+        }
 
-        // 3. 해바라기 마술: 이름표가 항상 내 카메라를 정면으로 바라보게 싹 돌려줌!
-        if (mainCam != null)
+        // 카메라 방향 동기화
+        if (SceneManager.GetActiveScene().name == "CityMapScene" && mainCam != null)
         {
             transform.forward = mainCam.transform.forward;
         }

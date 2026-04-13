@@ -8,6 +8,8 @@ public class AISpawner : MonoBehaviourPun
     public string aiPrefabName = "AI_Dummy"; // Resources 폴더에 있는 파일 이름!
     public int spawnCount = 50;              // 몇 마리 뽑을까요?
     public float spawnRadius = 80f;         // 맵 크기 (소환 반경)
+    [Range(-0.2f, 0.5f)]
+    public float heightOffset = 0.05f;      // 🌟 [수정] 미세 조정용 오프셋 (Raycast 후 추가 높이)
 
     void Start()
     {
@@ -35,7 +37,36 @@ public class AISpawner : MonoBehaviourPun
             // 이렇게 해야 맵 밖으로 찍힌 점들이 맵 가장자리로 억지로 끌려와서 뭉치는 현상이 사라집니다.
             if (NavMesh.SamplePosition(randomPos, out hit, 10f, NavMesh.AllAreas))
             {
-                PhotonNetwork.InstantiateRoomObject(aiPrefabName, hit.position, Quaternion.identity);
+                // 🌟 [핵심] 실제 지형 높이를 Raycast로 찾아서 발이 박히는 것을 방지!
+                Vector3 rayStart = hit.position + Vector3.up * 20f; // 위에서 아래로 쏨
+                float finalSpawnY = hit.position.y; // 기본값 (Raycast 실패 시)
+
+                if (Physics.Raycast(rayStart, Vector3.down, out RaycastHit rayHit, 30f))
+                {
+                    // Raycast가 맞춘 지점 (풀, 지형 등 실제 표면)의 높이
+                    finalSpawnY = rayHit.point.y + heightOffset;
+                    Debug.Log($"✅ Raycast 성공: {rayHit.collider.name} | Y높이: {rayHit.point.y:F2} + 오프셋{heightOffset:F2} = {finalSpawnY:F2}");
+                }
+                else
+                {
+                    // Raycast 실패 시 NavMesh 높이 + 오프셋 사용
+                    finalSpawnY = hit.position.y + heightOffset;
+                    Debug.Log($"⚠️ Raycast 실패 → NavMesh 높이 사용: {finalSpawnY:F2}");
+                }
+
+                // 🌟 [추가] 위에 지붕 같은 장애물이 있는지 확인!
+                Vector3 headCheck = new Vector3(hit.position.x, finalSpawnY + 2f, hit.position.z);  // 머리 높이 확인
+                bool hasObstacleAbove = Physics.Raycast(headCheck, Vector3.up, 1.5f);  // 1.5m 위에 뭔가 있으면 스킵
+
+                if (hasObstacleAbove)
+                {
+                    Debug.Log($"🚫 위에 지붕 감지 → 이 스폰 위치 스킵");
+                    i--;  // 이번 스폰 무효, 다시 뽑기
+                    continue;
+                }
+
+                Vector3 spawnPos = new Vector3(hit.position.x, finalSpawnY, hit.position.z);
+                PhotonNetwork.InstantiateRoomObject(aiPrefabName, spawnPos, Quaternion.identity);
             }
             else
             {

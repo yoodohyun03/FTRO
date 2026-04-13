@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 7e0c2d632e7c44a57b55fa1148c9be68
+timeCreated: 1583529611
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 54733
+  packageName: Low Poly Ultimate Pack
+  packageVersion: 10.0
+  assetPath: Assets/polyperfect/Low Poly Ultimate Pack/_M/Prefabs_M/Buildings_M/parts/Building
+    Doors_M/Door_Garage.prefab
+  uploadId: 805410

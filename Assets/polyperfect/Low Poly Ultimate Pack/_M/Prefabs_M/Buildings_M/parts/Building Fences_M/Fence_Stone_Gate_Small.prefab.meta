@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 4f005f6f965b24cbaa08f1e5563155b4
+timeCreated: 1585169446
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 54733
+  packageName: Low Poly Ultimate Pack
+  packageVersion: 10.0
+  assetPath: Assets/polyperfect/Low Poly Ultimate Pack/_M/Prefabs_M/Buildings_M/parts/Building
+    Fences_M/Fence_Stone_Gate_Small.prefab
+  uploadId: 805410
