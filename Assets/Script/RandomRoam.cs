@@ -14,7 +14,7 @@ public class RandomRoam : MonoBehaviourPun
     public float maxWalkTime = 6f;
 
     // 🌟 [수정] AI 속도 다양화
-    public float walkSpeed = 3.5f;       // 걷기 속도
+    public float walkSpeed = 3.8f;       // 걷기 속도
     public float runSpeed = 6f;         // 달리기 속도
     public float runChance = 0.3f;      // 달리기 확률 (30%)
 
@@ -31,12 +31,31 @@ public class RandomRoam : MonoBehaviourPun
     private float timer;
     private bool isRunning = false;     // 🌟 [추가] 현재 달리는 중인지 추적
     private bool isGrounded = true;     // 🌟 [추가] 땅에 닿았는지 추적
+    private const float moveThreshold = 0.05f;
+    private Vector3 lastPosition;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();  // 🌟 [추가] Rigidbody 초기화
+
+        // 달리기/점프 비활성화
+        runChance = 0f;
+        jumpChance = 0f;
+        runSpeed = walkSpeed;
+        isRunning = false;
+
+        if (anim != null)
+        {
+            anim.applyRootMotion = false;
+        }
+
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
 
         // 🌟 [추가] NavMeshAgent 회전 및 가속도 설정 (미끄러짐 방지)
         if (agent != null)
@@ -48,13 +67,21 @@ public class RandomRoam : MonoBehaviourPun
             // 🌟 [추가] NavMeshAgent 크기 설정 (좁은 길 통과용)
             agent.radius = agentRadius;     // 반지름 줄이기
             agent.height = agentHeight;     // 높이 맞추기
+
+            if (!agent.isOnNavMesh && NavMesh.SamplePosition(transform.position, out NavMeshHit startHit, 3f, NavMesh.AllAreas))
+            {
+                agent.Warp(startHit.position);
+            }
         }
 
         timer = waitTime;
+        lastPosition = transform.position;
     }
 
     void Update()
     {
+        if (agent == null) return;
+
         // 🌟 [추가] 땅에 닿았는지 확인
         CheckGrounded();
 
@@ -102,10 +129,13 @@ public class RandomRoam : MonoBehaviourPun
         // 🌟 [핵심] 모든 클라이언트가 애니메이션 업데이트! (네트워크 동기화)
         if (anim != null)
         {
-            float currentSpeed = agent.velocity.magnitude;
+            float currentSpeed = Mathf.Max(agent.velocity.magnitude, agent.desiredVelocity.magnitude);
+            bool hasMoveIntent = agent.hasPath && agent.remainingDistance > Mathf.Max(agent.stoppingDistance, 0.1f);
+            float positionDelta = Vector3.Distance(transform.position, lastPosition);
+            bool movedByTransform = positionDelta > 0.0015f;
             float animValue = 0f;
 
-            if (currentSpeed < 0.1f)
+            if (currentSpeed < moveThreshold && !hasMoveIntent && !movedByTransform)
             {
                 animValue = 0f;  // 멈춤
             }
@@ -120,10 +150,18 @@ public class RandomRoam : MonoBehaviourPun
 
             anim.SetFloat("MoveSpeed", animValue);
         }
+
+        lastPosition = transform.position;
     }
 
     void CheckGrounded()
     {
+        if (jumpChance <= 0f)
+        {
+            isGrounded = true;
+            return;
+        }
+
         if (rb == null) return;
 
         // 🌟 [추가] Raycast로 땅에 닿았는지 확인
@@ -135,6 +173,11 @@ public class RandomRoam : MonoBehaviourPun
     {
         if (agent != null)
         {
+            if (!agent.isOnNavMesh && NavMesh.SamplePosition(transform.position, out NavMeshHit recoverHit, 3f, NavMesh.AllAreas))
+            {
+                agent.Warp(recoverHit.position);
+            }
+
             agent.SetDestination(destination);
         }
     }

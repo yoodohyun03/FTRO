@@ -9,7 +9,7 @@ using FindObjectsInactive = UnityEngine.FindObjectsInactive;
 public class PlayerMove : MonoBehaviourPun
 {
     [Header("이동 속도 설정")]
-    public float walkSpeed = 3f;
+    public float walkSpeed = 3.8f;
     public float seekerRunSpeed = 7.5f;
     public float survivorRunSpeed = 6.5f;
 
