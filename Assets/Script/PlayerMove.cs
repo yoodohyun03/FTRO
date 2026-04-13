@@ -20,6 +20,7 @@ public class PlayerMove : MonoBehaviourPun
 
     public string myRole = "";
     private bool isGrounded = true;
+    private bool wasGrounded = true;
 
     [Header("관전 모드 설정")]
     public bool isDead = false;
@@ -34,7 +35,16 @@ public class PlayerMove : MonoBehaviourPun
 
     [Header("점프 및 땅 감지 설정")]
     public float jumpPower = 5f;
-    public float rayLength = 0.2f;
+    public float rayLength = 0.45f;
+    public float groundCheckRadius = 0.2f;
+    [Range(0f, 1f)] public float minGroundNormalY = 0.55f;
+    public float coyoteTime = 0.12f;
+    public float jumpBufferTime = 0.12f;
+    public float jumpGroundCheckDelay = 0.08f;
+    public LayerMask groundMask = ~0;
+    private float coyoteCounter;
+    private float jumpBufferCounter;
+    private float groundedIgnoreTimer;
 
     void Start()
     {
@@ -233,12 +243,37 @@ public class PlayerMove : MonoBehaviourPun
         HandleCursorUpdate();
         CheckGrounded();
 
-        // 점프
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (isGrounded) coyoteCounter = coyoteTime;
+        else coyoteCounter -= Time.deltaTime;
+
+        jumpBufferCounter -= Time.deltaTime;
+
+        if (!wasGrounded && isGrounded)
         {
-            rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            photonView.RPC("RPC_PlayLandAnimation", RpcTarget.All);
+        }
+        wasGrounded = isGrounded;
+
+        // 점프
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpBufferCounter = jumpBufferTime;
+        }
+
+        if (jumpBufferCounter > 0f && coyoteCounter > 0f)
+        {
+            if (rb != null)
+            {
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+                rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            }
+
             photonView.RPC("RPC_PlayJumpAnimation", RpcTarget.All);
             isGrounded = false;
+            wasGrounded = false;
+            groundedIgnoreTimer = jumpGroundCheckDelay;
+            coyoteCounter = 0f;
+            jumpBufferCounter = 0f;
         }
 
         // 공격 (마우스 좌클릭)
@@ -423,19 +458,80 @@ public class PlayerMove : MonoBehaviourPun
     // 🌟 [우리가 수정한 부분] 옛날 구식 바닥 감지 OnCollisionEnter는 과감히 삭제하고 Raycast 버전만 남김!
     void CheckGrounded()
     {
-        Vector3 rayStartPoint = transform.position + (Vector3.up * 0.1f);
-        Debug.DrawRay(rayStartPoint, Vector3.down * rayLength, Color.red);
-
-        if (Physics.Raycast(rayStartPoint, Vector3.down, out RaycastHit hit, rayLength))
+        if (groundedIgnoreTimer > 0f)
         {
-            isGrounded = hit.collider.CompareTag("Ground");
+            groundedIgnoreTimer -= Time.deltaTime;
+            isGrounded = false;
             return;
         }
 
+        Vector3 castStartPoint = transform.position + (Vector3.up * 0.2f);
+        Debug.DrawRay(castStartPoint, Vector3.down * rayLength, Color.red);
+
+        RaycastHit[] hits = Physics.SphereCastAll(
+            castStartPoint,
+            groundCheckRadius,
+            Vector3.down,
+            rayLength,
+            groundMask,
+            QueryTriggerInteraction.Ignore
+        );
+
         isGrounded = false;
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider == null) continue;
+            if (hit.collider.transform.IsChildOf(transform)) continue;
+            if (hit.normal.y < minGroundNormalY) continue;
+
+            isGrounded = true;
+            break;
+        }
     }
 
     // 🌟 [친구분 코드 병합] 애니메이션 관련 RPC
     [PunRPC] void RPC_PlayPunchAnimation() { if (anim != null) anim.SetTrigger("Punch"); } 
-    [PunRPC] void RPC_PlayJumpAnimation() { if (anim != null) anim.SetTrigger("Jump"); }
+    [PunRPC]
+    void RPC_PlayJumpAnimation()
+    {
+        if (anim == null) return;
+        anim.SetTrigger("Jump");
+        if (HasAnimatorParameter("IsGrounded", AnimatorControllerParameterType.Bool))
+        {
+            anim.SetBool("IsGrounded", false);
+        }
+    }
+
+    [PunRPC]
+    void RPC_PlayLandAnimation()
+    {
+        if (anim == null) return;
+
+        anim.ResetTrigger("Jump");
+
+        if (HasAnimatorParameter("Land", AnimatorControllerParameterType.Trigger))
+        {
+            anim.SetTrigger("Land");
+        }
+
+        if (HasAnimatorParameter("IsGrounded", AnimatorControllerParameterType.Bool))
+        {
+            anim.SetBool("IsGrounded", true);
+        }
+    }
+
+    bool HasAnimatorParameter(string paramName, AnimatorControllerParameterType type)
+    {
+        if (anim == null) return false;
+
+        foreach (var p in anim.parameters)
+        {
+            if (p.type == type && p.name == paramName)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -1,11 +1,11 @@
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Linq;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    public Transform[] seekerSpawnPoints;    // 🌟 [추가] 술래 스폰 포인트
-    public Transform[] survivorSpawnPoints;  // 🌟 [추가] 생존자 스폰 포인트
+    public Transform[] sharedSpawnPoints;    // 공용 스폰 포인트
 
     void Start()
     {
@@ -40,27 +40,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             myRole = (string)PhotonNetwork.LocalPlayer.CustomProperties["Role"];
         }
 
-        // 🌟 [핵심] 역할에 따라 다른 스폰 포인트에서 생성!
         Transform spawnPoint = null;
+        Transform[] validPoints = sharedSpawnPoints?.Where(p => p != null).ToArray();
 
-        if (myRole == "Seeker")
+        if (validPoints != null && validPoints.Length > 0)
         {
-            // 술래는 술래 스폰 포인트에서 생성
-            if (seekerSpawnPoints != null && seekerSpawnPoints.Length > 0)
+            int spawnIndex = GetDeterministicSpawnIndex(myRole, validPoints.Length);
+            if (spawnIndex >= 0)
             {
-                int randomIndex = Random.Range(0, seekerSpawnPoints.Length);
-                spawnPoint = seekerSpawnPoints[randomIndex];
-                Debug.Log($"🔴 술래 스폰: {spawnPoint.name}");
-            }
-        }
-        else
-        {
-            // 생존자는 생존자 스폰 포인트에서 생성
-            if (survivorSpawnPoints != null && survivorSpawnPoints.Length > 0)
-            {
-                int randomIndex = Random.Range(0, survivorSpawnPoints.Length);
-                spawnPoint = survivorSpawnPoints[randomIndex];
-                Debug.Log($"🔵 생존자 스폰: {spawnPoint.name}");
+                spawnPoint = validPoints[spawnIndex];
+                Debug.Log($"[{myRole}] 스폰: {spawnPoint.name} (index {spawnIndex})");
             }
         }
 
@@ -73,5 +62,51 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.Instantiate("male01_1", spawnPoint.position, spawnPoint.rotation);
         }
+    }
+
+    int GetDeterministicSpawnIndex(string myRole, int pointCount)
+    {
+        if (pointCount <= 0) return -1;
+
+        int seekerIndex = 0;
+
+        if (myRole == "Seeker")
+        {
+            return seekerIndex;
+        }
+
+        if (pointCount == 1)
+        {
+            return seekerIndex;
+        }
+
+        var survivorPlayers = PhotonNetwork.PlayerList
+            .Where(p => !IsSeeker(p))
+            .OrderBy(p => p.ActorNumber)
+            .ToArray();
+
+        int myOrder = 0;
+        for (int i = 0; i < survivorPlayers.Length; i++)
+        {
+            if (survivorPlayers[i].ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
+            {
+                myOrder = i;
+                break;
+            }
+        }
+
+        int availableForSurvivor = pointCount - 1;
+        int offset = myOrder % availableForSurvivor;
+        return (seekerIndex + 1 + offset) % pointCount;
+    }
+
+    bool IsSeeker(Player player)
+    {
+        if (player.CustomProperties.ContainsKey("Role"))
+        {
+            return (string)player.CustomProperties["Role"] == "Seeker";
+        }
+
+        return false;
     }
 }

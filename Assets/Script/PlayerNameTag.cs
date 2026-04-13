@@ -7,15 +7,14 @@ public class PlayerNameTag : MonoBehaviourPun
 {
     public TextMeshProUGUI nameText;
     private Camera mainCam;
-    private bool isGameStarted = false;
 
     void Start()
     {
-        // 🌟 [수정] 씬 이름을 "CityMapScene"으로 변경
-        if (SceneManager.GetActiveScene().name == "CityMapScene")
+        bool isCityMap = SceneManager.GetActiveScene().name == "CityMapScene";
+
+        if (nameText != null && isCityMap)
         {
-            // 게임 씬이지만, 처음에는 이름표를 보여줌 (로비 상태)
-            // GameManager에서 Playing 상태로 변경되면 숨길 것
+            nameText.gameObject.SetActive(false);
         }
 
         if (photonView.IsMine)
@@ -33,22 +32,13 @@ public class PlayerNameTag : MonoBehaviourPun
 
     void Update()
     {
-        // 🌟 [추가] GameManager의 상태를 확인해서 게임 진행 중이면 이름표 숨기기
-        if (GameManager.instance != null && GameManager.instance.currentState == GameManager.GameState.Playing)
+        // 게임 씬에서는 시작~진행 중 이름표 숨김, End 상태에서만 표시
+        if (SceneManager.GetActiveScene().name == "CityMapScene" && nameText != null && GameManager.instance != null)
         {
-            if (nameText.gameObject.activeSelf)
+            bool shouldShow = GameManager.instance.currentState == GameManager.GameState.End;
+            if (nameText.gameObject.activeSelf != shouldShow)
             {
-                nameText.gameObject.SetActive(false);
-                isGameStarted = true;
-            }
-        }
-        else if (isGameStarted && GameManager.instance != null && GameManager.instance.currentState != GameManager.GameState.Playing)
-        {
-            // 게임이 끝났으면 다시 이름표 표시
-            if (!nameText.gameObject.activeSelf)
-            {
-                nameText.gameObject.SetActive(true);
-                isGameStarted = false;
+                nameText.gameObject.SetActive(shouldShow);
             }
         }
 
