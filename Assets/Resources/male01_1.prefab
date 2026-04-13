@@ -967,6 +967,14 @@ MonoBehaviour:
   attackRadius: 1.2
   jumpPower: 5
   rayLength: 0.5
+  groundCheckRadius: 0.2
+  minGroundNormalY: 0.55
+  coyoteTime: 0.12
+  jumpBufferTime: 0.12
+  jumpGroundCheckDelay: 0.08
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!136 &4591711836902174258
 CapsuleCollider:
   m_ObjectHideFlags: 0
