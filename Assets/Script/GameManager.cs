@@ -6,6 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    private const string RoleKey = "Role";
+    private const string SeekerRole = "Seeker";
+    private const string SurvivorRole = "Survivor";
+
     public enum GameState { Ready, Setup, Playing, End }
     public GameState currentState = GameState.Ready;
 
@@ -14,6 +18,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     void Awake()
     {
         if (instance == null) instance = this;
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
     public GameObject gameOverPanel;
 
@@ -36,15 +45,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // [핵심] 게임 시작 시 생존자 숫자를 세팅하는 함수
+    // 게임 시작 시 생존자 수 초기화
     public void InitializeSurvivorCount()
     {
-        // 방 안에 있는 모든 플레이어 중 'Survivor'인 사람만 카운트!
+        // 방 안 플레이어 중 Survivor만 카운트
         int count = 0;
         foreach (var player in PhotonNetwork.PlayerList)
         {
-            if (player.CustomProperties.ContainsKey("Role") &&
-                (string)player.CustomProperties["Role"] == "Survivor")
+            if (player.CustomProperties.ContainsKey(RoleKey) &&
+                (string)player.CustomProperties[RoleKey] == "Survivor")
             {
                 count++;
             }
@@ -58,7 +67,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         // 1. [Setup] 시작하자마자 직업 확인 + 5초 대기 (멘트 통합!)
         SetState(GameState.Setup);
 
-        // 형님 요청대로 생존자/술래 멘트를 직관적으로 바꿨습니다.
         photonView.RPC("SyncRoleMessage", RpcTarget.All,
             "<color=red>You Are Seeker!</color>\n생존자들이 숨고 있습니다... (5초)",
             "<color=#00BFFF>You Are Surviver!</color>\n술래가 눈을 감고 있습니다...");
@@ -74,7 +82,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         InitializeSurvivorCount();
 
         yield return new WaitForSeconds(2f);
-        photonView.RPC("SyncMessage", RpcTarget.All, ""); // 화면 텍스트 깔끔하게 지우기
+        photonView.RPC("SyncMessage", RpcTarget.All, "");
 
         // 3. 타이머 시작
         float currentTime = playTime;
@@ -108,16 +116,16 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void OnSurvivorCaught()
     {
-        // 마스터 클라이언트(방장)만 숫자를 관리하게 합니다. (동기화 꼬임 방지)
+        // 마스터 클라이언트만 생존자 수를 관리
         if (!PhotonNetwork.IsMasterClient) return;
 
         survivorCount--;
         Debug.Log("생존자 검거! 남은 수: " + survivorCount);
 
-        // 만약 생존자가 0명이면? 즉시 술래 승리로 게임 종료!
+        // 생존자가 0명이면 술래 승리로 종료
         if (survivorCount <= 0 && currentState == GameState.Playing)
         {
-            StopAllCoroutines(); // 타이머 멈추기
+            StopAllCoroutines();
             SetState(GameState.End);
             photonView.RPC("SyncMessage", RpcTarget.All, "All Caught!\nSeeker Victory!");
         }
@@ -138,9 +146,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (gameOverPanel != null)
             {
-                gameOverPanel.SetActive(true); // 판넬 등장!
-
-                // 마우스 커서도 풀어줍니다 (나가기 버튼 눌러야 하니까요!)
+                gameOverPanel.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
@@ -158,13 +164,38 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         if (centerText == null) return;
 
-        string myRole = "Survivor";
-        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Role"))
+        if (!PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(RoleKey))
         {
-            myRole = (string)PhotonNetwork.LocalPlayer.CustomProperties["Role"];
+            StartCoroutine(ApplyRoleMessageWhenReady(seekerMsg, survivorMsg));
+            return;
         }
 
-        if (myRole == "Seeker") centerText.text = seekerMsg;
+        string myRole = (string)PhotonNetwork.LocalPlayer.CustomProperties[RoleKey];
+
+        if (myRole == SeekerRole) centerText.text = seekerMsg;
+        else centerText.text = survivorMsg;
+    }
+
+    IEnumerator ApplyRoleMessageWhenReady(string seekerMsg, string survivorMsg)
+    {
+        float timeout = 1.5f;
+        float elapsed = 0f;
+
+        while (!PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(RoleKey) && elapsed < timeout)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        string myRole = SurvivorRole;
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(RoleKey))
+        {
+            myRole = (string)PhotonNetwork.LocalPlayer.CustomProperties[RoleKey];
+        }
+
+        if (centerText == null) yield break;
+
+        if (myRole == SeekerRole) centerText.text = seekerMsg;
         else centerText.text = survivorMsg;
     }
 
@@ -174,14 +205,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("방을 나갑니다...");
 
-        // 1. 먼저 포톤 서버의 '방'에서 퇴장합니다. (중요!)
         PhotonNetwork.LeaveRoom();
     }
 
     public override void OnLeftRoom()
     {
-        // 2. 방에서 완전히 나간 것이 확인되면, 타이틀 씬으로 이동합니다.
-        // 씬 이름이 "TitleScene"이 맞는지 확인해 보시고 이름에 맞춰 수정하세요!
         SceneManager.LoadScene("TitleScene");
     }
 }

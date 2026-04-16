@@ -5,12 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class PlayerNameTag : MonoBehaviourPun
 {
+    private const string CityMapSceneName = "CityMapScene";
+
     public TextMeshProUGUI nameText;
     private Camera mainCam;
 
     void Start()
     {
-        bool isCityMap = SceneManager.GetActiveScene().name == "CityMapScene";
+        bool isCityMap = SceneManager.GetActiveScene().name == CityMapSceneName;
 
         if (nameText != null && isCityMap)
         {
@@ -33,7 +35,7 @@ public class PlayerNameTag : MonoBehaviourPun
     void Update()
     {
         // 게임 씬에서는 시작~진행 중 이름표 숨김, End 상태에서만 표시
-        if (SceneManager.GetActiveScene().name == "CityMapScene" && nameText != null && GameManager.instance != null)
+        if (SceneManager.GetActiveScene().name == CityMapSceneName && nameText != null && GameManager.instance != null)
         {
             bool shouldShow = GameManager.instance.currentState == GameManager.GameState.End;
             if (nameText.gameObject.activeSelf != shouldShow)
@@ -43,7 +45,7 @@ public class PlayerNameTag : MonoBehaviourPun
         }
 
         // 카메라 방향 동기화
-        if (SceneManager.GetActiveScene().name == "CityMapScene" && mainCam != null)
+        if (SceneManager.GetActiveScene().name == CityMapSceneName && mainCam != null)
         {
             transform.forward = mainCam.transform.forward;
         }

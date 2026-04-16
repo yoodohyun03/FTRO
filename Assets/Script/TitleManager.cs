@@ -4,17 +4,22 @@ using Photon.Realtime;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
-// 🌟 [핵심] 포톤 전용 해시테이블!
+// Photon 전용 해시테이블
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class TitleManager : MonoBehaviourPunCallbacks
 {
+    private const string PasswordKey = "Password";
+    private const string SelectedMapKey = "SelectedMap";
+    private const string IsReadyKey = "IsReady";
+    private const string RoleKey = "Role";
+
     [Header("1. 화면 패널들")]
     public GameObject loginPanel;
     public GameObject roomListPanel;
     public GameObject createRoomPanel;
     public GameObject passwordPopupPanel;
-    public GameObject waitingRoomPanel; // 🌟 새로 추가된 대기방 패널!
+    public GameObject waitingRoomPanel;
 
     [Header("2. 입력칸 & 토글")]
     public TMP_InputField nameInput;
@@ -32,16 +37,19 @@ public class TitleManager : MonoBehaviourPunCallbacks
     [Header("4. 대기방 UI (기존 RoomManager)")]
     public Transform playerListGroup;
     public GameObject playerSlotPrefab;
-    public TextMeshProUGUI waitingRoomNameText; // 대기방 안의 방 제목 텍스트
-    public TextMeshProUGUI selectedMapText;     // 🌟 대기방에 띄울 "선택된 맵: OOO" 텍스트
+    public TextMeshProUGUI waitingRoomNameText;
+    public TextMeshProUGUI selectedMapText;
     public Button startButton;
     public Button readyButton;
     public Button leaveButton;
     private bool isReady = false;
 
+    private const string PublicRoomLabel = "[public]";
+    private const string PrivateRoomLabel = "[private]";
+
     [Header("5. 맵 선택 시스템")]
-    public string selectedMap = "CityMapScene"; // 기본값
-    public string[] mapList = { "CityMapScene", "JapanMapScene", "ForestMapScene" }; // 랜덤 추첨용 배열
+    public string selectedMap = "CityMapScene";
+    public string[] mapList = { "CityMapScene", "JapanMapScene", "ForestMapScene" };
 
     [Header("6. 맵 선택 토글")]
     public Toggle cityMapToggle;
@@ -53,31 +61,27 @@ public class TitleManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.AutomaticallySyncScene = true;
 
-        // 🌟 혹시 게임 끝내고 로비로 돌아왔을 때를 대비한 방어막
+        // 연결이 끊긴 상태면 재연결
         if (!PhotonNetwork.IsConnected)
         {
             PhotonNetwork.ConnectUsingSettings();
         }
 
         // 처음 켰을 때 패널 초기화
-        loginPanel.SetActive(true);
-        roomListPanel.SetActive(false);
-        createRoomPanel.SetActive(false);
-        passwordPopupPanel.SetActive(false);
-        if (waitingRoomPanel != null) waitingRoomPanel.SetActive(false);
+        SetPanelState(showLogin: true, showRoomList: false, showCreateRoom: false, showPasswordPopup: false, showWaitingRoom: false);
 
         // 버튼 이벤트 연결
         if (startButton != null) startButton.onClick.AddListener(OnStartButtonClicked);
         if (readyButton != null) readyButton.onClick.AddListener(OnReadyButtonClicked);
         if (leaveButton != null) leaveButton.onClick.AddListener(OnLeaveButtonClicked);
 
-        // 🌟 맵 선택 토글 이벤트 연결
+        // 맵 선택 토글 이벤트 연결
         if (cityMapToggle != null) cityMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectCityMap(); });
         if (japanMapToggle != null) japanMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectJapanMap(); });
         if (forestMapToggle != null) forestMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectForestMap(); });
         if (randomMapToggle != null) randomMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectRandomMap(); });
 
-        // 🌟 게임 끝나고 대기방으로 돌아왔을 때 바로 대기방 켜주기
+        // 이미 방 안이면 대기방 UI 표시
         if (PhotonNetwork.InRoom)
         {
             ShowWaitingRoom();
@@ -90,16 +94,13 @@ public class TitleManager : MonoBehaviourPunCallbacks
         Debug.Log("서버 접속 및 로비 진입 완료!");
     }
 
-    // ==========================================
-    // 🚪 [로그인 & 방 목록 시스템]
-    // ==========================================
+    // 로그인/방 목록
     public void ClickPlay()
     {
         if (string.IsNullOrEmpty(nameInput.text)) return;
         PhotonNetwork.NickName = nameInput.text;
 
-        loginPanel.SetActive(false);
-        roomListPanel.SetActive(true);
+        SetPanelState(showLogin: false, showRoomList: true, showCreateRoom: false, showPasswordPopup: false, showWaitingRoom: false);
     }
 
     public void OpenCreateRoomPanel()
@@ -116,6 +117,12 @@ public class TitleManager : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        if (roomListContent == null || roomEntryPrefab == null)
+        {
+            Debug.LogError("roomListContent 또는 roomEntryPrefab이 할당되지 않았습니다.");
+            return;
+        }
+
         foreach (Transform child in roomListContent) Destroy(child.gameObject);
 
         foreach (RoomInfo room in roomList)
@@ -127,16 +134,30 @@ public class TitleManager : MonoBehaviourPunCallbacks
 
             bool hasPassword = false;
             string roomPassword = "";
-            if (room.CustomProperties.ContainsKey("Password"))
+            if (room.CustomProperties.ContainsKey(PasswordKey))
             {
-                roomPassword = (string)room.CustomProperties["Password"];
+                roomPassword = (string)room.CustomProperties[PasswordKey];
                 hasPassword = !string.IsNullOrEmpty(roomPassword);
             }
 
-            TextMeshProUGUI nameText = entry.transform.Find("RoomNameText").GetComponent<TextMeshProUGUI>();
-            TextMeshProUGUI infoText = entry.transform.Find("RoomInfoText").GetComponent<TextMeshProUGUI>();
+            Transform roomNameTransform = entry.transform.Find("RoomNameText");
+            Transform roomInfoTransform = entry.transform.Find("RoomInfoText");
+            if (roomNameTransform == null || roomInfoTransform == null)
+            {
+                Destroy(entry);
+                continue;
+            }
+
+            TextMeshProUGUI nameText = roomNameTransform.GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI infoText = roomInfoTransform.GetComponent<TextMeshProUGUI>();
+            if (nameText == null || infoText == null)
+            {
+                Destroy(entry);
+                continue;
+            }
+
             nameText.text = room.Name;
-            infoText.text = hasPassword ? $"[private] {room.PlayerCount}/{room.MaxPlayers}" : $"[public] {room.PlayerCount}/{room.MaxPlayers}";
+            infoText.text = hasPassword ? $"{PrivateRoomLabel} {room.PlayerCount}/{room.MaxPlayers}" : $"{PublicRoomLabel} {room.PlayerCount}/{room.MaxPlayers}";
 
             Button joinBtn = entry.GetComponent<Button>();
             joinBtn.onClick.AddListener(() =>
@@ -171,24 +192,20 @@ public class TitleManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            Debug.LogWarning("🚨 비밀번호 불일치!");
+            Debug.LogWarning("비밀번호가 일치하지 않습니다.");
             joinPwdInput.text = "";
         }
     }
 
-    // ==========================================
-    // 🗺️ [맵 선택 & 방 생성 시스템]
-    // ==========================================
-
-    // 🌟 방 만들기 UI에 맵 버튼을 만들고 아래 메서드들에 연결해주세요!
-    public void SelectCityMap() { selectedMap = "CityMapScene"; Debug.Log("🏙️ 도시 맵 선택"); }
-    public void SelectJapanMap() { selectedMap = "JapanMapScene"; Debug.Log("🏯 일본 맵 선택"); }
-    public void SelectForestMap() { selectedMap = "ForestMapScene"; Debug.Log("🌲 숲 맵 선택"); }
+    // 맵 선택/방 생성
+    public void SelectCityMap() { selectedMap = "CityMapScene"; Debug.Log("도시 맵 선택"); }
+    public void SelectJapanMap() { selectedMap = "JapanMapScene"; Debug.Log("일본 맵 선택"); }
+    public void SelectForestMap() { selectedMap = "ForestMapScene"; Debug.Log("숲 맵 선택"); }
     public void SelectRandomMap()
     {
         int r = Random.Range(0, mapList.Length);
         selectedMap = mapList[r];
-        Debug.Log("🎲 랜덤 맵 선택됨: " + selectedMap);
+        Debug.Log("랜덤 맵 선택: " + selectedMap);
     }
 
     public void ClickCreateRoomReal()
@@ -196,20 +213,18 @@ public class TitleManager : MonoBehaviourPunCallbacks
         if (string.IsNullOrEmpty(roomNameInput.text)) return;
 
         RoomOptions options = new RoomOptions { MaxPlayers = 8 };
-        // 🌟 로비에서 비번이랑 맵 정보를 읽을 수 있게 등록
-        options.CustomRoomPropertiesForLobby = new string[] { "Password", "SelectedMap" };
+        // 로비에서 비밀번호/맵 정보를 확인할 수 있도록 등록
+        options.CustomRoomPropertiesForLobby = new string[] { PasswordKey, SelectedMapKey };
 
         Hashtable roomProps = new Hashtable();
-        roomProps.Add("Password", isPublicToggle.isOn ? "" : createPwdInput.text);
-        roomProps.Add("SelectedMap", selectedMap); // 포스트잇에 맵 이름 붙이기!
+        roomProps.Add(PasswordKey, isPublicToggle.isOn ? "" : createPwdInput.text);
+        roomProps.Add(SelectedMapKey, selectedMap);
 
         options.CustomRoomProperties = roomProps;
         PhotonNetwork.CreateRoom(roomNameInput.text, options);
     }
 
-    // ==========================================
-    // 🛋️ [대기방 (Waiting Room) 시스템]
-    // ==========================================
+    // 대기방
     public override void OnJoinedRoom()
     {
         Debug.Log("방 입장 성공! 대기방으로 화면 전환합니다.");
@@ -219,23 +234,19 @@ public class TitleManager : MonoBehaviourPunCallbacks
     void ShowWaitingRoom()
     {
         // 다른 패널 싹 끄고 대기방만 켜기!
-        loginPanel.SetActive(false);
-        roomListPanel.SetActive(false);
-        createRoomPanel.SetActive(false);
-        passwordPopupPanel.SetActive(false);
-        waitingRoomPanel.SetActive(true);
+        SetPanelState(showLogin: false, showRoomList: false, showCreateRoom: false, showPasswordPopup: false, showWaitingRoom: true);
 
         if (waitingRoomNameText != null) waitingRoomNameText.text = PhotonNetwork.CurrentRoom.Name;
 
-        // 🌟 맵 이름 포스트잇 읽어와서 화면에 띄워주기
-        if (selectedMapText != null && PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SelectedMap"))
+        // 선택된 맵 이름 표시
+        if (selectedMapText != null && PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(SelectedMapKey))
         {
-            string mapName = (string)PhotonNetwork.CurrentRoom.CustomProperties["SelectedMap"];
+            string mapName = (string)PhotonNetwork.CurrentRoom.CustomProperties[SelectedMapKey];
             selectedMapText.text = "현재 맵: " + mapName;
         }
 
         // 내 레디 상태 초기화
-        Hashtable props = new Hashtable() { { "IsReady", false } };
+        Hashtable props = new Hashtable() { { IsReadyKey, false } };
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);
         isReady = false;
         if (readyButton != null) readyButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready";
@@ -247,8 +258,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         // 방 나가면 다시 방 목록 패널로!
-        waitingRoomPanel.SetActive(false);
-        roomListPanel.SetActive(true);
+        SetPanelState(showLogin: false, showRoomList: true, showCreateRoom: false, showPasswordPopup: false, showWaitingRoom: false);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) { UpdatePlayerList(); CheckStartButton(); }
@@ -257,7 +267,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        if (changedProps.ContainsKey("IsReady"))
+        if (changedProps.ContainsKey(IsReadyKey))
         {
             UpdatePlayerList();
             CheckStartButton();
@@ -266,7 +276,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
 
     void UpdatePlayerList()
     {
-        // 🚨 [방어] 필수 요소 확인
+        // 필수 요소 확인
         if (playerListGroup == null)
         {
             Debug.LogError("playerListGroup이 할당되지 않았습니다!");
@@ -296,7 +306,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
             Transform nameTextTransform = slot.transform.Find("PlayerNameText");
             Transform readyTextTransform = slot.transform.Find("ReadyStateText");
 
-            // 🚨 [방어] 자식 객체 확인
+            // 자식 객체 확인
             if (nameTextTransform == null)
             {
                 Debug.LogError($"PlayerSlot에서 'PlayerNameText'를 찾을 수 없습니다!");
@@ -330,7 +340,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
             else
             {
                 bool playerReady = false;
-                if (player.CustomProperties.TryGetValue("IsReady", out object isReadyObj))
+                if (player.CustomProperties.TryGetValue(IsReadyKey, out object isReadyObj))
                 {
                     playerReady = (bool)isReadyObj;
                 }
@@ -353,7 +363,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
             {
                 if (!player.IsMasterClient)
                 {
-                    player.CustomProperties.TryGetValue("IsReady", out object isReadyObj);
+                    player.CustomProperties.TryGetValue(IsReadyKey, out object isReadyObj);
                     if (isReadyObj == null || !(bool)isReadyObj)
                     {
                         allReady = false;
@@ -373,7 +383,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
     void OnReadyButtonClicked()
     {
         isReady = !isReady;
-        Hashtable props = new Hashtable() { { "IsReady", isReady } };
+        Hashtable props = new Hashtable() { { IsReadyKey, isReady } };
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);
         readyButton.GetComponentInChildren<TextMeshProUGUI>().text = isReady ? "Cancel" : "Ready";
     }
@@ -387,25 +397,35 @@ public class TitleManager : MonoBehaviourPunCallbacks
 
     System.Collections.IEnumerator AssignRolesAndStart()
     {
+        // 방장이 역할을 먼저 확정한 뒤 씬을 로드해야 클라이언트별 스폰/안내 메시지 동기화가 안정적입니다.
         Player[] players = PhotonNetwork.PlayerList;
         int seekerIndex = Random.Range(0, players.Length);
 
         for (int i = 0; i < players.Length; i++)
         {
             Hashtable props = new Hashtable();
-            props.Add("Role", i == seekerIndex ? "Seeker" : "Survivor");
+            props.Add(RoleKey, i == seekerIndex ? "Seeker" : "Survivor");
             players[i].SetCustomProperties(props);
         }
 
         yield return new WaitForSeconds(0.5f);
 
-        // 🌟 [최종 하이라이트] 방장이 고른 맵 이름표를 읽어와서 그 씬으로 텔레포트!!
-        string mapToLoad = (string)PhotonNetwork.CurrentRoom.CustomProperties["SelectedMap"];
+        // 방장이 선택한 맵으로 씬 전환
+        string mapToLoad = (string)PhotonNetwork.CurrentRoom.CustomProperties[SelectedMapKey];
         PhotonNetwork.LoadLevel(mapToLoad);
     }
 
     void OnLeaveButtonClicked()
     {
         PhotonNetwork.LeaveRoom();
+    }
+
+    void SetPanelState(bool showLogin, bool showRoomList, bool showCreateRoom, bool showPasswordPopup, bool showWaitingRoom)
+    {
+        if (loginPanel != null) loginPanel.SetActive(showLogin);
+        if (roomListPanel != null) roomListPanel.SetActive(showRoomList);
+        if (createRoomPanel != null) createRoomPanel.SetActive(showCreateRoom);
+        if (passwordPopupPanel != null) passwordPopupPanel.SetActive(showPasswordPopup);
+        if (waitingRoomPanel != null) waitingRoomPanel.SetActive(showWaitingRoom);
     }
 }

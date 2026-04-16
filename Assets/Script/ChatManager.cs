@@ -15,9 +15,9 @@ public class ChatManager : MonoBehaviourPun
     private List<string> messageList = new List<string>();
 
     [Header("씬 설정")]
-    public bool isLobbyScene = false; // 🌟 유니티에서 로비 씬일 때만 체크(V) 하십쇼!
+    public bool isLobbyScene = false; // 로비 씬일 때만 체크
 
-    // 🌟 [핵심 해결책] 엔터키 중복 인식(레이스 컨디션)을 막는 방어막
+    // 엔터키 중복 인식 방지
     private bool justSent = false;
 
     void Start()
@@ -32,8 +32,9 @@ public class ChatManager : MonoBehaviourPun
 
     void Update()
     {
-        // 🌟 [절대 방어막] 인스펙터에서 로비라고 체크를 해뒀다면?
-        // 다른 스크립트가 마우스를 훔쳐 가려 해도, 매 프레임마다 강제로 마우스를 끄집어냅니다!
+        if (chatInput == null) return;
+
+        // 로비 씬에서는 커서를 항상 표시
         if (isLobbyScene)
         {
             Cursor.lockState = CursorLockMode.None;
@@ -50,7 +51,7 @@ public class ChatManager : MonoBehaviourPun
             {
                 chatInput.ActivateInputField();
 
-                // 로비가 아닐 때(본 게임)만 마우스 상태를 변경합니다.
+                // 본 게임에서만 마우스 상태 변경
                 if (!isLobbyScene)
                 {
                     Cursor.lockState = CursorLockMode.None;
@@ -62,11 +63,13 @@ public class ChatManager : MonoBehaviourPun
 
     public void SendChatMessage()
     {
+        if (chatInput == null || chatLog == null) return;
+
         string msg = chatInput.text;
 
         if (!string.IsNullOrWhiteSpace(msg))
         {
-            // 로비에서 아직 방에 안 들어갔는데 타자를 쳤다면? (에러 방지)
+            // 방 미입장 상태에서 전송 시 안내 메시지 출력
             if (!PhotonNetwork.InRoom)
             {
                 string sysMsg = "<color=red>[시스템] 방에 입장해야 채팅이 가능합니다.</color>";
@@ -77,7 +80,7 @@ public class ChatManager : MonoBehaviourPun
                 chatInput.text = "";
                 chatInput.DeactivateInputField();
                 EventSystem.current.SetSelectedGameObject(null);
-                return; // 여기서 멈춤!
+                return;
             }
 
             // 정상 전송 로직
@@ -87,19 +90,19 @@ public class ChatManager : MonoBehaviourPun
             photonView.RPC("RPC_ReceiveChat", RpcTarget.All, nickName, msg);
         }
 
-        // 전송 끝! 창 닫기
+        // 전송 후 입력창 종료
         chatInput.text = "";
         chatInput.DeactivateInputField();
-        EventSystem.current.SetSelectedGameObject(null); // UI 선택 완벽 해제
+        EventSystem.current.SetSelectedGameObject(null);
 
-        // 🌟 로비가 아닐 때(게임 중일 때)만 마우스를 다시 화면에 가둡니다!
+        // 본 게임에서만 마우스를 다시 잠금
         if (!isLobbyScene)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
-        // 🌟 [핵심 방어막] 전송 완료 직후, 0.1초 동안 엔터키를 무시하도록 쿨타임을 줍니다!
+        // 전송 직후 짧은 쿨타임 적용
         justSent = true;
         Invoke("ResetJustSent", 0.1f);
     }

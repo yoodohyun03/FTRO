@@ -5,7 +5,11 @@ using System.Linq;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    public Transform[] sharedSpawnPoints;    // 공용 스폰 포인트
+    private const string RoleKey = "Role";
+    private const string SeekerRole = "Seeker";
+
+    public Transform[] sharedSpawnPoints;
+    private bool hasSpawned;
 
     void Start()
     {
@@ -33,11 +37,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void SpawnPlayer()
     {
-        // 🌟 [핵심] 자신의 역할 확인
+        if (hasSpawned) return;
+
+        // 자신의 역할 확인
         string myRole = "Survivor";  // 기본값
-        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Role"))
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(RoleKey))
         {
-            myRole = (string)PhotonNetwork.LocalPlayer.CustomProperties["Role"];
+            myRole = (string)PhotonNetwork.LocalPlayer.CustomProperties[RoleKey];
         }
 
         Transform spawnPoint = null;
@@ -62,6 +68,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.Instantiate("male01_1", spawnPoint.position, spawnPoint.rotation);
         }
+
+        hasSpawned = true;
     }
 
     int GetDeterministicSpawnIndex(string myRole, int pointCount)
@@ -70,7 +78,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         int seekerIndex = 0;
 
-        if (myRole == "Seeker")
+        if (myRole == SeekerRole)
         {
             return seekerIndex;
         }
@@ -102,9 +110,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     bool IsSeeker(Player player)
     {
-        if (player.CustomProperties.ContainsKey("Role"))
+        if (player.CustomProperties.ContainsKey(RoleKey))
         {
-            return (string)player.CustomProperties["Role"] == "Seeker";
+            return (string)player.CustomProperties[RoleKey] == SeekerRole;
         }
 
         return false;
