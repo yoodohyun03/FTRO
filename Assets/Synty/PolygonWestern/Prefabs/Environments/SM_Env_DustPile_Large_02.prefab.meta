@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: f36791e04fe916942a60757651385b46
+timeCreated: 1519172578
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Environments/SM_Env_DustPile_Large_02.prefab
+  uploadId: 884522

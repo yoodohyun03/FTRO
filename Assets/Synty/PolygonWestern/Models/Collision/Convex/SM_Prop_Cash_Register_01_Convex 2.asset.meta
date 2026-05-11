@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 8d5025e7ee8b84f4d9397b1425ce9569
+timeCreated: 1580086302
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43132164370287296
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Cash_Register_01_Convex
+    2.asset
+  uploadId: 884522

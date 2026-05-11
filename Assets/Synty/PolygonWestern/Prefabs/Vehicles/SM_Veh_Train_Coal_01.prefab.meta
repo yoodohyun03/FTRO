@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 7de9d83e7cf93764d841d97ec6bcad60
+timeCreated: 1519076407
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Vehicles/SM_Veh_Train_Coal_01.prefab
+  uploadId: 884522

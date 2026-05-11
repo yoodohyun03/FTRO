@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 72d1711daa31cb745b6bf4d7901d2440
+timeCreated: 1580088920
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43157770742989950
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_PokerTable_01_Convex
+    1.asset
+  uploadId: 884522

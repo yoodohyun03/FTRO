@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: db7f6482b06b1f640af96b0a2a14b19c
+timeCreated: 1580089320
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43952014429022924
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Dresser_01_Convex.asset
+  uploadId: 884522

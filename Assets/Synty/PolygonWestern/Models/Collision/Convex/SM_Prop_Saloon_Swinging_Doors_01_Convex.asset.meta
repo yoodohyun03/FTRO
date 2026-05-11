@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0bca8277acf8cdd4eacf5e19f38f0b79
+timeCreated: 1580089471
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43178963824399778
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Saloon_Swinging_Doors_01_Convex.asset
+  uploadId: 884522

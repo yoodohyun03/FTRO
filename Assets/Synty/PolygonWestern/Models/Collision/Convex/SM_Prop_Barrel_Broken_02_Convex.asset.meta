@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e2f4bb9a79bfbb048b9bdf247838f7b6
+timeCreated: 1580086253
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43847670792080680
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Barrel_Broken_02_Convex.asset
+  uploadId: 884522

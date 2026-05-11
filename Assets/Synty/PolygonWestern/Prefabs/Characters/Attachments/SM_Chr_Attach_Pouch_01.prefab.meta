@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 6cf8ff28f333c54479452abd0fe7235e
+timeCreated: 1519259334
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Characters/Attachments/SM_Chr_Attach_Pouch_01.prefab
+  uploadId: 884522

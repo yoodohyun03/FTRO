@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 6bbc47437e45a2d4f8c3ace57abc5591
+timeCreated: 1519251516
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Buildings/SM_Bld_Single_BackDoor_01.prefab
+  uploadId: 884522

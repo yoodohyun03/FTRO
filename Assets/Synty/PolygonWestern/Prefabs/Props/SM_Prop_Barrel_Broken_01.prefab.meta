@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 6c46190a04ac36045bab57473e2bb033
+timeCreated: 1519251969
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Props/SM_Prop_Barrel_Broken_01.prefab
+  uploadId: 884522

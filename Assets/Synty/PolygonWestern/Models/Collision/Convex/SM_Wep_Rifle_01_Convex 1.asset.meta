@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 5ddf0c6fbe7950b459a95679552692a5
+timeCreated: 1580089875
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43145917219166180
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Wep_Rifle_01_Convex
+    1.asset
+  uploadId: 884522

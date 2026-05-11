@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e85f10072d335224984d9b8ae2e93843
+timeCreated: 1519177860
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Characters/SM_Chr_Business_Man_01.prefab
+  uploadId: 884522

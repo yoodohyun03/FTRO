@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 20f4a10518b731a40b5d5295099114d8
+timeCreated: 1580089474
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43149553087354518
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Ladder_01_Convex.asset
+  uploadId: 884522

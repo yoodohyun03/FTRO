@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 18e4227b9e5501848bdbb19c1a17523c
+timeCreated: 1519602707
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Buildings/SM_Bld_Double_Preset_02.prefab
+  uploadId: 884522

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 63072bdeb7e9cec47b1825d8a2df5978
+timeCreated: 1580086342
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43398054661404306
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Card_01_Convex.asset
+  uploadId: 884522

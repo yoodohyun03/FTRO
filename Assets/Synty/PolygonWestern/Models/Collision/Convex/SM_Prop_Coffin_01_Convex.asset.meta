@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: cd75b869c71e9e4428aefbd1aeea2195
+timeCreated: 1580086613
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43077040612302338
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Coffin_01_Convex.asset
+  uploadId: 884522

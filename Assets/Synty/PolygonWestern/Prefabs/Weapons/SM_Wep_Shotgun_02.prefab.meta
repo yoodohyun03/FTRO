@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 5fb00c8822a8e7f43a78ba89a7971e2f
+timeCreated: 1519089498
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Weapons/SM_Wep_Shotgun_02.prefab
+  uploadId: 884522

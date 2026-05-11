@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: f831cb8820a9ee645a44779d9132e432
+timeCreated: 1580688667
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43333553944367962
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Bld_Saloon_01_Convex
+    4.asset
+  uploadId: 884522

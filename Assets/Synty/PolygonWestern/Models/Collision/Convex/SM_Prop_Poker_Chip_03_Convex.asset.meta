@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: dfcc8590df278d541a07aa6dd4bb8bd0
+timeCreated: 1580088882
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43952618040536902
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Poker_Chip_03_Convex.asset
+  uploadId: 884522

@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: e44fa3d738dbd7f46a326f7254a53159
+timeCreated: 1580091164
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43479039702012684
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Env_Grave_01_Convex
+    1.asset
+  uploadId: 884522

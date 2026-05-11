@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: afa8e52904c20a64cb6d8c384e4b82de
+timeCreated: 1580097713
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43229953884282002
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Water_Tower_01_Convex.asset
+  uploadId: 884522

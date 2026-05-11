@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 90b648075f81a9f4e94213445bcd7312
+timeCreated: 1580086159
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43598038222482282
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Vegetables_Box_03_Convex.asset
+  uploadId: 884522

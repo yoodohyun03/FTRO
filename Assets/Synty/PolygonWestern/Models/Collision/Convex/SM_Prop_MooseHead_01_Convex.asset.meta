@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e70346eed2718d842b2abec0843aa708
+timeCreated: 1580088884
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43995135149407928
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_MooseHead_01_Convex.asset
+  uploadId: 884522

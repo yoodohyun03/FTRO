@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 2f4df1fc3898eef4a97772525f31f15e
+timeCreated: 1519275469
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Buildings/SM_Bld_Double_DeckCover_02.prefab
+  uploadId: 884522

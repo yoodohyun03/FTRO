@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 690aa7cc68bf23f47834eee1a48c55e5
+timeCreated: 1580086113
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43934519567066048
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Fur_Roll_02_Convex.asset
+  uploadId: 884522

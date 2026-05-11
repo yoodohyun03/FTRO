@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0ccf3324a4a775e49ac589b6f5459cd6
+timeCreated: 1580088678
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43958769049196278
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Tin_03_Convex.asset
+  uploadId: 884522

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 927d27a046453fc4bb11accbc5120da5
+timeCreated: 1580089475
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43243799451352002
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_HitchingPost_01_Convex.asset
+  uploadId: 884522

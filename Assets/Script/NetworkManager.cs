@@ -2,6 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Linq;
+using UnityEngine.SceneManagement; // 씬 이름을 확인하기 위해 추가
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -11,8 +12,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public Transform[] sharedSpawnPoints;
     private bool hasSpawned;
 
+    // 인스펙터에서 캐릭터 이름을 직접 설정하고 싶을 때를 위해 변수 추가
+    [Header("캐릭터 설정")]
+    public string playerPrefabName = "male01_1";
+
     void Start()
     {
+        // 현재 씬이 서부 맵이라면 자동으로 프리팹 이름을 변경
+        if (SceneManager.GetActiveScene().name == "WesternMapScene")
+        {
+            playerPrefabName = "WesternPlayer";
+        }
+
         if (PhotonNetwork.InRoom)
         {
             SpawnPlayer();
@@ -59,14 +70,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             }
         }
 
-        // 스폰 포인트가 없으면 기본값 사용
+        // 고정된 문자열 대신 playerPrefabName 변수를 사용합니다.
         if (spawnPoint == null)
         {
-            PhotonNetwork.Instantiate("male01_1", new Vector3(0, 5, 0), Quaternion.identity);
+            PhotonNetwork.Instantiate(playerPrefabName, new Vector3(0, 5, 0), Quaternion.identity);
         }
         else
         {
-            PhotonNetwork.Instantiate("male01_1", spawnPoint.position, spawnPoint.rotation);
+            PhotonNetwork.Instantiate(playerPrefabName, spawnPoint.position, spawnPoint.rotation);
         }
 
         hasSpawned = true;

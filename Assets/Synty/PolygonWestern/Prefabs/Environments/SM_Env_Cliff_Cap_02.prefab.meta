@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: ce265a7411f2a7f40b606576e81c0804
+timeCreated: 1519247605
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Environments/SM_Env_Cliff_Cap_02.prefab
+  uploadId: 884522

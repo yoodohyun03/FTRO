@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: caea527bb604c4241935bb2ef553f896
+timeCreated: 1519251510
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Buildings/SM_Bld_Double_Front_02.prefab
+  uploadId: 884522

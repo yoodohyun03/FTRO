@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 302b9483ea26a724f8190d6953419794
+timeCreated: 1580089476
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43950418312719310
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Hay_Bale_01_Convex.asset
+  uploadId: 884522

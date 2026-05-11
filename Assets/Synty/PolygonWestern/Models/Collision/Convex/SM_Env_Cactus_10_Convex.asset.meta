@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 55430d36c293af1499aaa706a706b25f
+timeCreated: 1580090637
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43709165974080986
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Env_Cactus_10_Convex.asset
+  uploadId: 884522

@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: a9c5f7a556ae05349b47423bd25114f0
+timeCreated: 1580088899
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43070068192867606
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Piano_01_Convex
+    1.asset
+  uploadId: 884522

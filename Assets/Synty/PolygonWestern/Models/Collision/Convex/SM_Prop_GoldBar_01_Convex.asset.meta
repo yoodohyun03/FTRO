@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c2efd3d5bfba813429736b05efc02b67
+timeCreated: 1580089476
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43331000804711356
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_GoldBar_01_Convex.asset
+  uploadId: 884522

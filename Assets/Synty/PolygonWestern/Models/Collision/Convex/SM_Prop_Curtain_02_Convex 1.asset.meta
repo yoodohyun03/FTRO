@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: e1eba52ac2eb6e04ea6678039d9868f1
+timeCreated: 1580089345
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43775033428847260
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Curtain_02_Convex
+    1.asset
+  uploadId: 884522

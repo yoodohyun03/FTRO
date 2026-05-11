@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 50cfe5694ecac044e9274b303bbe262c
+timeCreated: 1580092977
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43193846796765582
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Bld_Sign_02_Convex.asset
+  uploadId: 884522

@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: ba6f2a32b2f4d18459dc0c9d50615416
+timeCreated: 1580086463
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43285729512179378
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Chair_01_Convex
+    1.asset
+  uploadId: 884522

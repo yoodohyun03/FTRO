@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 288e7d27a2255bd49943c43a239c50b9
+timeCreated: 1580086030
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43366304939269386
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Bottle_Broken_03_Convex.asset
+  uploadId: 884522

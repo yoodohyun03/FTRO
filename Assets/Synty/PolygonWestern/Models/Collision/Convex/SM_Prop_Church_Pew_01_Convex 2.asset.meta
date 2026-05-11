@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 6eb7fef7a0bafc54299ce810c506dd22
+timeCreated: 1580086586
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43127002325975880
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Church_Pew_01_Convex
+    2.asset
+  uploadId: 884522

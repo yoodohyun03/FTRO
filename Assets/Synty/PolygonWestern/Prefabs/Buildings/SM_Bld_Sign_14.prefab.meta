@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: cbdf8d37c4c5fae4ba2235af6cfd1244
+timeCreated: 1519252110
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Buildings/SM_Bld_Sign_14.prefab
+  uploadId: 884522

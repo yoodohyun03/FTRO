@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ca2af58ea2e3ece4a9b58a8fae5f6c6a
+timeCreated: 1502247319
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/FX/FX_BloodSplat_01.prefab
+  uploadId: 884522

@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: cc1c9a0d59291dc40b70614d3816e2d9
+timeCreated: 1580094204
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43333882066176382
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Veh_Train_Coal_01_Convex
+    4.asset
+  uploadId: 884522
