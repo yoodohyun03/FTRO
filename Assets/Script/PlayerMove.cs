@@ -15,7 +15,7 @@ public class PlayerMove : MonoBehaviourPun
     public float seekerRunSpeed = 7.5f;
     public float survivorRunSpeed = 6.5f;
 
-    private Animator anim;
+    [HideInInspector] public Animator anim;
     private Unity.Cinemachine.CinemachineCamera vcam;
     private Unity.Cinemachine.CinemachineOrbitalFollow orbitalRig;
     private Rigidbody rb;
@@ -72,138 +72,75 @@ public class PlayerMove : MonoBehaviourPun
 
     IEnumerator InitializeCameraWithDelay()
     {
-        // 로컬 플레이어가 아니면 카메라 초기화 중단
-        if (!photonView.IsMine)
+        if (!photonView.IsMine) yield break;
+
+        // 씬 로드 안정화 대기
+        yield return null;
+        yield return new WaitForSeconds(0.3f);
+
+        // vcam 탐색: 최대 3초간 반복 시도
+        float timeout = 3f;
+        float elapsed = 0f;
+
+        while (vcam == null && elapsed < timeout)
         {
-            Debug.Log($"[{PhotonNetwork.NickName}] 이 플레이어는 로컬 플레이어가 아니므로 카메라 설정을 건너뜁니다.");
+            // 1) CinemachineBrain이 붙은 카메라 → 같은 오브젝트에 CinemachineCamera가 있는지 확인
+            Unity.Cinemachine.CinemachineBrain brain = FindFirstObjectByType<Unity.Cinemachine.CinemachineBrain>();
+            if (brain != null)
+            {
+                vcam = brain.GetComponent<Unity.Cinemachine.CinemachineCamera>();
+                // Brain과 vcam이 별도 오브젝트인 경우 씬 전체에서 vcam 검색
+                if (vcam == null)
+                    vcam = FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>(FindObjectsInactive.Include);
+
+                // 이동 기준 카메라 = Brain이 붙은 Camera 컴포넌트
+                if (cachedMainCam == null)
+                    cachedMainCam = brain.GetComponent<Camera>();
+            }
+
+            // 2) Brain 없으면 MainCamera 태그 → CinemachineCamera 순으로 탐색
+            if (vcam == null)
+            {
+                GameObject tagged = GameObject.FindGameObjectWithTag("MainCamera");
+                if (tagged != null)
+                    vcam = tagged.GetComponent<Unity.Cinemachine.CinemachineCamera>()
+                           ?? tagged.GetComponentInChildren<Unity.Cinemachine.CinemachineCamera>(true);
+            }
+
+            // 3) 최후 수단: 씬 전체 탐색
+            if (vcam == null)
+                vcam = FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>(FindObjectsInactive.Include);
+
+            if (vcam == null)
+            {
+                elapsed += 0.2f;
+                yield return new WaitForSeconds(0.2f);
+            }
+        }
+
+        if (vcam == null)
+        {
+            Debug.LogError($"[{PhotonNetwork.NickName}] CinemachineCamera를 {timeout}초 내에 찾지 못했습니다. 씬에 Cinemachine Camera가 있는지 확인하세요.");
             yield break;
         }
 
-        Debug.Log($"[{PhotonNetwork.NickName}] ===== 카메라 찾기 시작 (로컬 플레이어 #{PhotonNetwork.LocalPlayer.ActorNumber}, IsMasterClient={PhotonNetwork.IsMasterClient}) =====");
-        Debug.Log($"[{PhotonNetwork.NickName}] 현재 씬: {SceneManager.GetActiveScene().name}");
+        // vcam 활성화 보장
+        if (!vcam.gameObject.activeSelf) vcam.gameObject.SetActive(true);
+        if (!vcam.enabled) vcam.enabled = true;
 
-        // 한 프레임 대기 (씬이 완전히 로드될 때까지)
-        yield return null;
+        // 로컬 플레이어를 Follow/LookAt 대상으로 설정
+        vcam.Follow = this.transform;
+        vcam.LookAt = this.transform;
+        orbitalRig = vcam.GetComponent<Unity.Cinemachine.CinemachineOrbitalFollow>();
 
-        // 씬 로드 직후 카메라 탐색 안정화를 위해 짧게 대기
-        yield return new WaitForSeconds(0.2f);
+        // cachedMainCam이 아직 없으면 Camera.main → FindFirstObjectByType 순으로 탐색
+        if (cachedMainCam == null) cachedMainCam = Camera.main;
+        if (cachedMainCam == null) cachedMainCam = FindFirstObjectByType<Camera>();
 
-        // 1. MainCamera 태그로 찾기
-        GameObject mainCameraObj = GameObject.FindGameObjectWithTag("MainCamera");
-        Debug.Log($"[{PhotonNetwork.NickName}] MainCamera 태그 탐색 결과: {(mainCameraObj != null ? mainCameraObj.name : "null")}");
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
-        if (mainCameraObj != null)
-        {
-            Debug.Log($"[{PhotonNetwork.NickName}] MainCamera 상태: Active={mainCameraObj.activeSelf}");
-            vcam = mainCameraObj.GetComponent<Unity.Cinemachine.CinemachineCamera>();
-            if (vcam != null)
-            {
-                Debug.Log($"[{PhotonNetwork.NickName}] CinemachineCamera 찾음");
-                Debug.Log($"[{PhotonNetwork.NickName}] 카메라 Priority: {vcam.Priority}");
-                Debug.Log($"[{PhotonNetwork.NickName}] 카메라 활성화: {vcam.enabled}");
-            }
-            else
-            {
-                Debug.Log($"[{PhotonNetwork.NickName}] MainCamera에 CinemachineCamera 없음");
-            }
-        }
-
-        // 2. 태그 못 찾거나 컴포넌트 없으면 FindFirstObjectByType으로 찾기
-        if (vcam == null)
-        {
-            vcam = FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>(FindObjectsInactive.Include);
-            if (vcam != null)
-            {
-                Debug.Log($"[{PhotonNetwork.NickName}] FindFirstObjectByType로 발견: {vcam.gameObject.name}");
-            }
-            else
-            {
-                Debug.Log($"[{PhotonNetwork.NickName}] FindFirstObjectByType 실패");
-            }
-        }
-
-        // 3. 씬의 모든 GameObject 순회하며 CinemachineCamera 찾기
-        if (vcam == null)
-        {
-            Debug.Log($"[{PhotonNetwork.NickName}] 씬 루트 오브젝트 기준으로 카메라 재탐색");
-            GameObject[] allObjects = SceneManager.GetActiveScene().GetRootGameObjects();
-            Debug.Log($"[{PhotonNetwork.NickName}] 씬 루트 객체 수: {allObjects.Length}");
-
-            foreach (GameObject rootObj in allObjects)
-            {
-                Unity.Cinemachine.CinemachineCamera[] cams = rootObj.GetComponentsInChildren<Unity.Cinemachine.CinemachineCamera>(includeInactive: true);
-                if (cams.Length > 0)
-                {
-                    Debug.Log($"[{PhotonNetwork.NickName}] '{rootObj.name}'에서 Cinemachine 카메라 {cams.Length}개 발견");
-                    for (int i = 0; i < cams.Length; i++)
-                    {
-                        Debug.Log($"[{PhotonNetwork.NickName}]   [{i}] {cams[i].gameObject.name} - Active={cams[i].enabled}, Priority={cams[i].Priority}");
-                    }
-                    vcam = cams[0];
-                    break;
-                }
-            }
-        }
-
-        // 4. 카메라 설정 (모든 로컬 플레이어가 자신을 따르도록 설정!)
-        if (vcam != null)
-        {
-            Debug.Log($"[{PhotonNetwork.NickName}] 카메라 설정 중...");
-
-            // 카메라가 비활성화되어 있으면 활성화
-            if (!vcam.enabled)
-            {
-                Debug.Log($"[{PhotonNetwork.NickName}] 카메라 컴포넌트 비활성 상태: 활성화");
-                vcam.enabled = true;
-            }
-
-            // 카메라 GameObject도 활성화
-            if (!vcam.gameObject.activeSelf)
-            {
-                Debug.Log($"[{PhotonNetwork.NickName}] 카메라 오브젝트 비활성 상태: 활성화");
-                vcam.gameObject.SetActive(true);
-            }
-
-            // 로컬 플레이어를 카메라 Follow/LookAt 대상으로 지정
-            vcam.Follow = this.transform;
-            vcam.LookAt = this.transform;
-            orbitalRig = vcam.GetComponent<Unity.Cinemachine.CinemachineOrbitalFollow>();
-
-            if (orbitalRig != null)
-            {
-                Debug.Log($"[{PhotonNetwork.NickName}] CinemachineOrbitalFollow 찾음");
-            }
-
-            Debug.Log($"[{PhotonNetwork.NickName}] 카메라 '{vcam.gameObject.name}' 설정 완료");
-            Debug.Log($"[{PhotonNetwork.NickName}] Follow: {(vcam.Follow != null ? vcam.Follow.name : "null")}, LookAt: {(vcam.LookAt != null ? vcam.LookAt.name : "null")}");
-
-            // 실제 렌더링 카메라(Camera 컴포넌트) 캐싱 — 반드시 활성 카메라만 사용
-            cachedMainCam = Camera.main;
-            if (cachedMainCam == null)
-            {
-                cachedMainCam = FindFirstObjectByType<Camera>(); // 활성 오브젝트만
-                Debug.Log($"[{PhotonNetwork.NickName}] Camera.main null → FindFirstObjectByType로 대체: {(cachedMainCam != null ? cachedMainCam.name : "실패")}");
-            }
-            else
-            {
-                Debug.Log($"[{PhotonNetwork.NickName}] 이동 기준 카메라: {cachedMainCam.name}");
-            }
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-
-            Debug.Log($"[{PhotonNetwork.NickName}] ===== 카메라 초기화 완료 =====");
-        }
-        else
-        {
-            Debug.LogError($"[{PhotonNetwork.NickName}] 카메라를 찾을 수 없습니다.");
-            Debug.LogError($"[{PhotonNetwork.NickName}] 확인할 사항:");
-            Debug.LogError("  - MainCamera 오브젝트에 'MainCamera' 태그가 설정되어 있는지 확인하세요.");
-            Debug.LogError($"[{PhotonNetwork.NickName}] ===== 카메라 찾기 실패 =====");
-
-            // vcam 없어도 Camera.main이라도 캐싱 — 활성 카메라만
-            cachedMainCam = Camera.main ?? FindFirstObjectByType<Camera>();
-        }
+        Debug.Log($"[{PhotonNetwork.NickName}] 카메라 초기화 완료 — vcam: {vcam.name}, renderCam: {(cachedMainCam != null ? cachedMainCam.name : "null")}");
     }
 
     IEnumerator ShowRoleSequence()

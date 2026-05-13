@@ -5,7 +5,7 @@ using Photon.Pun;
 public class RandomRoam : MonoBehaviourPun
 {
     private NavMeshAgent agent;
-    private Animator anim;
+    [HideInInspector] public Animator anim;
     private Rigidbody rb;
 
     public float roamRadius = 30f;
@@ -161,6 +161,11 @@ public class RandomRoam : MonoBehaviourPun
 
         // Raycast로 바닥 감지
         isGrounded = Physics.Raycast(transform.position, Vector3.down, rayLength);
+    }
+
+    public void UpdateAnimator(Animator newAnim)
+    {
+        anim = newAnim;
     }
 
     [PunRPC]

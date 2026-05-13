@@ -3,32 +3,25 @@ using Photon.Pun;
 
 public class RandomSkin : MonoBehaviourPun
 {
-    [Header("여기에 자식으로 넣은 모델링들을 드래그해서 넣으세요")]
+    [Header("스킨으로 사용할 캐릭터 모델 오브젝트들을 여기에 드래그해서 넣으세요")]
     public GameObject[] characterModels;
 
     void Start()
     {
-        // 오브젝트 소유자만 스킨 인덱스 결정
+        if (characterModels == null || characterModels.Length == 0)
+        {
+            Debug.LogWarning($"[{gameObject.name}] RandomSkin: characterModels가 비어 있습니다.");
+            return;
+        }
+
+        foreach (GameObject model in characterModels)
+        {
+            if (model != null) model.SetActive(false);
+        }
+
         if (photonView.IsMine)
         {
-            int randomIndex;
-
-            // 이름으로 플레이어/AI 구분
-            if (gameObject.name.Contains("male01_1"))
-            {
-                randomIndex = Random.Range(0, characterModels.Length);
-                // 플레이어 스킨 정보를 저장하여 AI가 동일 스킨 사용
-                PlayerPrefs.SetInt("PlayerSkinIndex", randomIndex);
-                Debug.Log($"플레이어 스킨 저장: {randomIndex}");
-            }
-            else
-            {
-                // AI는 저장된 플레이어 스킨 인덱스 사용
-                randomIndex = PlayerPrefs.GetInt("PlayerSkinIndex", 0);
-                Debug.Log($"AI 스킨 동기화: {randomIndex}");
-            }
-
-            // 현재/후속 참가자까지 동일 스킨 동기화
+            int randomIndex = Random.Range(0, characterModels.Length);
             photonView.RPC("SyncCharacterSkin", RpcTarget.AllBuffered, randomIndex);
         }
     }
@@ -36,36 +29,65 @@ public class RandomSkin : MonoBehaviourPun
     [PunRPC]
     public void SyncCharacterSkin(int skinIndex)
     {
-        // 모든 모델 비활성화
+        if (characterModels == null || skinIndex < 0 || skinIndex >= characterModels.Length)
+        {
+            Debug.LogError($"[{gameObject.name}] 잘못된 스킨 인덱스: {skinIndex}");
+            return;
+        }
+
         foreach (GameObject model in characterModels)
         {
-            model.SetActive(false);
+            if (model != null) model.SetActive(false);
         }
 
-        // 선택된 모델만 활성화
-        if (skinIndex >= 0 && skinIndex < characterModels.Length)
+        GameObject selected = characterModels[skinIndex];
+        selected.SetActive(true);
+
+        // 공중 부양 방지: 로컬 위치/회전 초기화
+        selected.transform.localPosition = Vector3.zero;
+        selected.transform.localRotation = Quaternion.identity;
+        selected.transform.localScale = Vector3.one;
+
+        Animator parentAnim = GetComponent<Animator>();
+        Animator childAnim = selected.GetComponent<Animator>();
+
+        if (parentAnim == null || childAnim == null)
         {
-            GameObject selectedModel = characterModels[skinIndex];
-            selectedModel.SetActive(true);
-
-            Animator parentAnim = GetComponent<Animator>();
-            Animator childAnim = selectedModel.GetComponent<Animator>();
-
-            if (parentAnim != null && childAnim != null)
-            {
-                // 부모 Animator에 선택 모델 Avatar 적용
-                parentAnim.avatar = childAnim.avatar;
-
-                // Avatar 변경 반영
-                parentAnim.Rebind();
-
-                // 자식 Animator 비활성화
-                childAnim.enabled = false;
-            }
+            Debug.LogWarning($"[{gameObject.name}] Animator를 찾을 수 없습니다.");
+            return;
         }
-        else
+
+        bool avatarSwapped = false;
+
+        // Humanoid 리그인 경우 Avatar 스왑
+        if (childAnim.avatar != null && childAnim.avatar.isHuman && parentAnim.avatar != null && parentAnim.avatar.isHuman)
         {
-            Debug.LogError($"잘못된 스킨 인덱스: {skinIndex}");
+            parentAnim.avatar = childAnim.avatar;
+            parentAnim.Rebind();
+            parentAnim.enabled = true;
+            childAnim.enabled = false;
+            avatarSwapped = true;
+            Debug.Log($"[{gameObject.name}] Humanoid Avatar 스왑 완료: {selected.name}");
         }
+
+        // Generic 리그이거나 Avatar 스왑 실패 → 자식 Animator에 부모 Controller 적용
+        if (!avatarSwapped)
+        {
+            RuntimeAnimatorController controller = parentAnim.runtimeAnimatorController;
+            parentAnim.enabled = false;
+            childAnim.runtimeAnimatorController = controller;
+            childAnim.enabled = true;
+
+            // PlayerMove / RandomRoam의 anim 참조를 자식 Animator로 교체
+            PlayerMove pm = GetComponent<PlayerMove>();
+            if (pm != null) pm.anim = childAnim;
+
+            RandomRoam rr = GetComponent<RandomRoam>();
+            if (rr != null) rr.UpdateAnimator(childAnim);
+
+            Debug.Log($"[{gameObject.name}] Generic 리그 — 자식 Animator로 전환: {selected.name}");
+        }
+
+        Debug.Log($"[{gameObject.name}] 스킨 적용 완료: {selected.name} (index {skinIndex})");
     }
 }

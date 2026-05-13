@@ -62,11 +62,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         // 스폰 포인트가 없으면 기본값 사용
         if (spawnPoint == null)
         {
-            PhotonNetwork.Instantiate("male01_1", new Vector3(0, 5, 0), Quaternion.identity);
+            PhotonNetwork.Instantiate("playerPrefab", new Vector3(0, 5, 0), Quaternion.identity);
         }
         else
         {
-            PhotonNetwork.Instantiate("male01_1", spawnPoint.position, spawnPoint.rotation);
+            PhotonNetwork.Instantiate("playerPrefab", spawnPoint.position, spawnPoint.rotation);
         }
 
         hasSpawned = true;
