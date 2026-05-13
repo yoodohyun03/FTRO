@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 7cb00c583a7994040af8687fe34d5e2d
+timeCreated: 1580089875
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43324255316823100
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Wep_Shotgun_01_Convex
+    1.asset
+  uploadId: 884522

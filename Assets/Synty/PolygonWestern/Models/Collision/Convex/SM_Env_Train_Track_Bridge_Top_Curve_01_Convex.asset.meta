@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: daa0c9bd295572040ba6851b7685f792
+timeCreated: 1580094663
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43249488593703782
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Env_Train_Track_Bridge_Top_Curve_01_Convex.asset
+  uploadId: 884522

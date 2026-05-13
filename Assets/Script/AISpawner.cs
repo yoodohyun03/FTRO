@@ -24,51 +24,42 @@ public class AISpawner : MonoBehaviourPun
     {
         Debug.Log($"AI {spawnCount}마리 자동 소환 시작");
 
-        for (int i = 0; i < spawnCount; i++)
-        {
-            // 2D 원형 범위 랜덤 위치
-            Vector2 randomCircle = Random.insideUnitCircle * spawnRadius;
+        int spawned = 0;
+        int maxAttempts = spawnCount * 10;
 
-            // X,Z만 랜덤, Y는 기본값
+        for (int attempts = 0; spawned < spawnCount && attempts < maxAttempts; attempts++)
+        {
+            Vector2 randomCircle = Random.insideUnitCircle * spawnRadius;
             Vector3 randomPos = new Vector3(randomCircle.x, 0f, randomCircle.y);
 
             NavMeshHit hit;
-            // 랜덤 위치 근처의 NavMesh 지점만 탐색
-            if (NavMesh.SamplePosition(randomPos, out hit, 10f, NavMesh.AllAreas))
+            if (!NavMesh.SamplePosition(randomPos, out hit, 10f, NavMesh.AllAreas))
             {
-                // Raycast로 실제 표면 높이 계산
-                Vector3 rayStart = hit.position + Vector3.up * 20f;
-                float finalSpawnY = hit.position.y;
-
-                if (Physics.Raycast(rayStart, Vector3.down, out RaycastHit rayHit, 30f))
-                {
-                    finalSpawnY = rayHit.point.y + heightOffset;
-                    Debug.Log($"Raycast 성공: {rayHit.collider.name}, SpawnY={finalSpawnY:F2}");
-                }
-                else
-                {
-                    finalSpawnY = hit.position.y + heightOffset;
-                    Debug.Log($"Raycast 실패: NavMesh 높이 사용 SpawnY={finalSpawnY:F2}");
-                }
-
-                // 머리 위 장애물 확인
-                Vector3 headCheck = new Vector3(hit.position.x, finalSpawnY + 2f, hit.position.z);
-                bool hasObstacleAbove = Physics.Raycast(headCheck, Vector3.up, 1.5f);
-
-                if (hasObstacleAbove)
-                {
-                    Debug.Log("상단 장애물 감지: 해당 스폰 위치 건너뜀");
-                    i--;
-                    continue;
-                }
-
-                Vector3 spawnPos = new Vector3(hit.position.x, finalSpawnY, hit.position.z);
-                PhotonNetwork.InstantiateRoomObject(aiPrefabName, spawnPos, Quaternion.identity);
+                continue;
             }
-            else
+
+            Vector3 rayStart = hit.position + Vector3.up * 20f;
+            float finalSpawnY = hit.position.y + heightOffset;
+
+            if (Physics.Raycast(rayStart, Vector3.down, out RaycastHit rayHit, 30f))
             {
-                i--;
+                finalSpawnY = rayHit.point.y + heightOffset;
             }
+
+            Vector3 headCheck = new Vector3(hit.position.x, finalSpawnY + 2f, hit.position.z);
+            if (Physics.Raycast(headCheck, Vector3.up, 1.5f))
+            {
+                continue;
+            }
+
+            Vector3 spawnPos = new Vector3(hit.position.x, finalSpawnY, hit.position.z);
+            PhotonNetwork.InstantiateRoomObject(aiPrefabName, spawnPos, Quaternion.identity);
+            spawned++;
+        }
+
+        if (spawned < spawnCount)
+        {
+            Debug.LogWarning($"AI 스폰 미완료: {spawned}/{spawnCount}. 씬에 NavMesh가 베이크되어 있는지 확인하세요.");
         }
     }
 }

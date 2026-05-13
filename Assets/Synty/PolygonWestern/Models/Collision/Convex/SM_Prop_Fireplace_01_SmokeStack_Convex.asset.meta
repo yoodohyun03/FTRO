@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: d2542702a88fadf4ea8750b937ce8f02
+timeCreated: 1580089477
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43069431647436678
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Fireplace_01_SmokeStack_Convex.asset
+  uploadId: 884522

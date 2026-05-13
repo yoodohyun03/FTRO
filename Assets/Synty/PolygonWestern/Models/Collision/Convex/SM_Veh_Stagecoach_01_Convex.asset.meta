@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e1f43bc2dcba7c64096fe743f4d345b7
+timeCreated: 1580094340
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43381759812771974
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Veh_Stagecoach_01_Convex.asset
+  uploadId: 884522

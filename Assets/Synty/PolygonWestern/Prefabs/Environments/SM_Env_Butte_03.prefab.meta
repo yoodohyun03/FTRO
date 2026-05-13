@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e9160d8c8aa651f4bb529af79d3df5b3
+timeCreated: 1519247605
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Environments/SM_Env_Butte_03.prefab
+  uploadId: 884522

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 438075e8450b7724ea40896eb5d289bf
+timeCreated: 1580094225
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43484730175214922
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Veh_Train_Carriage_01_Convex.asset
+  uploadId: 884522

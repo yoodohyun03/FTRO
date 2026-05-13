@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 5ecd9613dc040d44ebc3d85cd1f14f07
+timeCreated: 1580096846
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43968775751289292
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Bld_TowerClock_01_Convex.asset
+  uploadId: 884522

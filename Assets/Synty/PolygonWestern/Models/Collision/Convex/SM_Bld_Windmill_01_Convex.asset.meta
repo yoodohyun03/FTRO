@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 8c692b61216824747a417e64df7063c6
+timeCreated: 1580097654
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43575485768056538
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Bld_Windmill_01_Convex.asset
+  uploadId: 884522

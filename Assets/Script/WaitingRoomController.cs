@@ -231,32 +231,32 @@ public sealed class RoomCreationController
         this.mapList = mapList;
         this.passwordKey = passwordKey;
         this.selectedMapKey = selectedMapKey;
-        selectedMap = string.IsNullOrEmpty(initialSelectedMap) ? "CityMapScene" : initialSelectedMap;
+        selectedMap = string.IsNullOrEmpty(initialSelectedMap) ? "CityScene" : initialSelectedMap;
     }
 
     public void SelectCityMap()
     {
-        selectedMap = "CityMapScene";
-        Debug.Log("도시 맵 선택");
+        selectedMap = "CityScene";
+        Debug.Log("CityScene 선택");
     }
 
     public void SelectJapanMap()
     {
-        selectedMap = "JapanMapScene";
-        Debug.Log("일본 맵 선택");
+        selectedMap = "WesternScene";
+        Debug.Log("WesternScene 선택");
     }
 
     public void SelectForestMap()
     {
-        selectedMap = "ForestMapScene";
-        Debug.Log("숲 맵 선택");
+        selectedMap = "CityMapScene";
+        Debug.Log("CityMapScene 선택");
     }
 
     public void SelectRandomMap()
     {
         if (mapList == null || mapList.Length == 0)
         {
-            selectedMap = "CityMapScene";
+            selectedMap = "CityScene";
             Debug.LogWarning("맵 목록이 비어 있어서 기본 맵으로 설정됩니다.");
             return;
         }

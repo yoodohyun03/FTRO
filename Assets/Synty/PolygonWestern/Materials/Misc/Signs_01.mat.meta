@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 379e992b9e0cca44ca665e4c677bb4e7
+timeCreated: 1518378830
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Materials/Misc/Signs_01.mat
+  uploadId: 884522

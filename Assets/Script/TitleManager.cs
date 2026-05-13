@@ -45,11 +45,11 @@ public class TitleManager : MonoBehaviourPunCallbacks
     private LobbyController lobbyController;
     private MatchStartController matchStartController;
 
-    [Header("5. 맵 선택 시스템")]
-    public string selectedMap = "CityMapScene";
-    public string[] mapList = { "CityMapScene", "JapanMapScene", "ForestMapScene" };
+    [Header("5. 맵 선택 시스템 (순서: 1 CityScene, 2 WesternScene, 3 CityMapScene, 4 랜덤)")]
+    public string selectedMap = "CityScene";
+    public string[] mapList = { "CityScene", "WesternScene", "CityMapScene" };
 
-    [Header("6. 맵 선택 토글")]
+    [Header("6. 맵 선택 토글 (위 순서와 동일: city→1, japan→2, forest→3, random→4)")]
     public Toggle cityMapToggle;
     public Toggle japanMapToggle;
     public Toggle forestMapToggle;
@@ -82,7 +82,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
         if (forestMapToggle != null) forestMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectForestMap(); });
         if (randomMapToggle != null) randomMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectRandomMap(); });
 
-        // 이미 방 안이면 대기방 UI 표시
+        SyncSelectedMapFromActiveToggle();
         if (PhotonNetwork.InRoom)
         {
             ShowWaitingRoom();
@@ -93,6 +93,14 @@ public class TitleManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.JoinLobby();
         Debug.Log("서버 접속 및 로비 진입 완료!");
+    }
+
+    void SyncSelectedMapFromActiveToggle()
+    {
+        if (cityMapToggle != null && cityMapToggle.isOn) SelectCityMap();
+        else if (japanMapToggle != null && japanMapToggle.isOn) SelectJapanMap();
+        else if (forestMapToggle != null && forestMapToggle.isOn) SelectForestMap();
+        else if (randomMapToggle != null && randomMapToggle.isOn) SelectRandomMap();
     }
 
     // 로그인/방 목록

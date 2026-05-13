@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 4ce8ce2638bf21d499bfed3f3c8e7b26
+timeCreated: 1580089473
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43442637796401180
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Rope_01_Convex.asset
+  uploadId: 884522

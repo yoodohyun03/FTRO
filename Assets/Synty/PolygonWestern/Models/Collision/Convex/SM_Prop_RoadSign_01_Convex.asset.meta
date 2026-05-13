@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 887610903d5b1744cb304ab331106e26
+timeCreated: 1580088880
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43524336698349864
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_RoadSign_01_Convex.asset
+  uploadId: 884522

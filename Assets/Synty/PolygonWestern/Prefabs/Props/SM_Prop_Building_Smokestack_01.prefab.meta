@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 5806c697d916571498bbd20131e6433a
+timeCreated: 1519186460
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Props/SM_Prop_Building_Smokestack_01.prefab
+  uploadId: 884522

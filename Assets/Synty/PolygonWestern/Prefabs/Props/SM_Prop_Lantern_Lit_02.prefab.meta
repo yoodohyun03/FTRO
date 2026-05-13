@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 79cb06eb2d3b7094a8726c78ff6ee177
+timeCreated: 1519334606
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Props/SM_Prop_Lantern_Lit_02.prefab
+  uploadId: 884522

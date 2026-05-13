@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c039cbca88973c747981c2d574121f27
+timeCreated: 1580086338
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43023179830343496
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Church_Door_01_Convex.asset
+  uploadId: 884522

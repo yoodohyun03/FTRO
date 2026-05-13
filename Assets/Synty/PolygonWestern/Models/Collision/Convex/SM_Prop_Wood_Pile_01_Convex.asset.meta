@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: badd67d7a49e979479ae7b44277a18d7
+timeCreated: 1580088600
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43775316962039048
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Wood_Pile_01_Convex.asset
+  uploadId: 884522

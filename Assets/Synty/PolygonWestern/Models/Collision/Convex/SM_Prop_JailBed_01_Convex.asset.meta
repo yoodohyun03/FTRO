@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 59a4e6a31ff92884e9b08c2447eedfb2
+timeCreated: 1580089475
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43851833668813488
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_JailBed_01_Convex.asset
+  uploadId: 884522

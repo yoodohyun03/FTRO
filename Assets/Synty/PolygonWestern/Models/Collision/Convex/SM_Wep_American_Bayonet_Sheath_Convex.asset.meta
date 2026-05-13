@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1fdb154d2b72d4c40b574f0c1c2c428f
+timeCreated: 1580089870
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43540149778787588
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Wep_American_Bayonet_Sheath_Convex.asset
+  uploadId: 884522

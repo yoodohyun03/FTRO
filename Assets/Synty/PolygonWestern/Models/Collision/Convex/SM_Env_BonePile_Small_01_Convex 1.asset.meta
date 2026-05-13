@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 6ecfc093f3e971240a8edd0944e25b9a
+timeCreated: 1580090803
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43890343980179478
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Env_BonePile_Small_01_Convex
+    1.asset
+  uploadId: 884522

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 35b7216bd17db514eb25c562ddb51cb7
+timeCreated: 1580088677
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43595502202913142
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_WaterTrough_01_Convex.asset
+  uploadId: 884522

@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 697471c6f666eff4dbacf5b2c5e099fd
+timeCreated: 1580091516
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43049519725569736
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Env_TreeDead_01_Convex
+    5.asset
+  uploadId: 884522

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c925c4c821fdd754b82064509594bd6e
+timeCreated: 1519251973
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Props/SM_Prop_Fur_Roll_02.prefab
+  uploadId: 884522

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 6ced95f04487bec4e81f51a934884b80
+timeCreated: 1519344462
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Environments/SM_Env_Road_Straight_01.prefab
+  uploadId: 884522

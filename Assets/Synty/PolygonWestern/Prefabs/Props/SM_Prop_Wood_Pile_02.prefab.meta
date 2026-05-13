@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b6949799c3251354a8c142ed6624ca37
+timeCreated: 1519342401
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Props/SM_Prop_Wood_Pile_02.prefab
+  uploadId: 884522

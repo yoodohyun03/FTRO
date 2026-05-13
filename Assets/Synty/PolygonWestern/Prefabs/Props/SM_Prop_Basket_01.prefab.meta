@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a2b25da568e3dac4c9643b20c6401b41
+timeCreated: 1519342727
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Props/SM_Prop_Basket_01.prefab
+  uploadId: 884522

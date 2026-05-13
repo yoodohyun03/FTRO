@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1bc8081f15fad3c40b8ba4cf8159b224
+timeCreated: 1519247610
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Props/SM_Prop_Table_Small_01.prefab
+  uploadId: 884522

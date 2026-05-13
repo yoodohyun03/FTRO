@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 219f61c812806a645bb865eb3b2cd9a0
+timeCreated: 1580085969
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43619048450581272
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_BarberPost_01_Convex
+    1.asset
+  uploadId: 884522

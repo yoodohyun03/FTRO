@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 22cf24f509e4daa409d78326bcacded2
+timeCreated: 1502253995
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/FX/FX_GunShot_Smoke_01.prefab
+  uploadId: 884522

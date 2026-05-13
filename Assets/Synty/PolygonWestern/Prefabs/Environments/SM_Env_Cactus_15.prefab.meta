@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 2e3a851fb51f05946afa4156d0078cae
+timeCreated: 1519333552
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Environments/SM_Env_Cactus_15.prefab
+  uploadId: 884522

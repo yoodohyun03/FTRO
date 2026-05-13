@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 6c3de6a544de2b64a9a879d9b2755ce8
+timeCreated: 1580086627
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43963469630124840
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Cow_Skull_01_Convex.asset
+  uploadId: 884522

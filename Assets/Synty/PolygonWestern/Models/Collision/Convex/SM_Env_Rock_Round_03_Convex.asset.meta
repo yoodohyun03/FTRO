@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 6155d00e7a8d1ba49887e9da79d792f7
+timeCreated: 1580090178
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43964424791690158
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Env_Rock_Round_03_Convex.asset
+  uploadId: 884522

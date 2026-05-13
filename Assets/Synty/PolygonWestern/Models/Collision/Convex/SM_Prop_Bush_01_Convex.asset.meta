@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: f83062ccaa837e948b474652daaf3ad1
+timeCreated: 1580086343
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43444305355181696
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Bush_01_Convex.asset
+  uploadId: 884522

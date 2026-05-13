@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 7ad3cd5fb08dc98418fd5a409df21b39
+timeCreated: 1580089469
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43927555622174570
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Stool_01_Convex.asset
+  uploadId: 884522

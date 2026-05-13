@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 28e6d559a2b0949419125f40858f77a1
+timeCreated: 1519076405
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Vehicles/SM_Veh_Train_Carriage_01.prefab
+  uploadId: 884522

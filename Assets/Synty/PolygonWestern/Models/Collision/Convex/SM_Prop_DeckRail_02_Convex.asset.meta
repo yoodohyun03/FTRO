@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 4eb52837d87e8d04a8d851b27508e6ed
+timeCreated: 1580089480
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43437582316686436
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_DeckRail_02_Convex.asset
+  uploadId: 884522

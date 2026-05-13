@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: ffa4e6173b2a73841b88bb50b93c648d
+timeCreated: 1580090009
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43751676283030678
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Env_Butte_03_Convex.asset
+  uploadId: 884522

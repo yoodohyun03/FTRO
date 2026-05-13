@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 383e9aad42c028e45a53cd9199f340dd
+timeCreated: 1580089869
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43772430143571088
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Wep_Revolver_02_Convex.asset
+  uploadId: 884522

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 6459e09a700bafe4298bf2bd130d919b
+timeCreated: 1580089468
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43336018688702272
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Suitcase_01_Convex.asset
+  uploadId: 884522

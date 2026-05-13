@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 76d3c1ce6daa38344a432667e1371635
+timeCreated: 1519337446
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Buildings/SM_Bld_Shed_01.prefab
+  uploadId: 884522

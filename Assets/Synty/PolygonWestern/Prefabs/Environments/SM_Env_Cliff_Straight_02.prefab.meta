@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1c8c6bed3438b9141b6c6e2eb548b815
+timeCreated: 1519247610
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Prefabs/Environments/SM_Env_Cliff_Straight_02.prefab
+  uploadId: 884522

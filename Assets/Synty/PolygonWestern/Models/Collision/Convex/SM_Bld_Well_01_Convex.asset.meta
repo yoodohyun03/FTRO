@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: aeca04ee6720c3241a547d3db45c7f9e
+timeCreated: 1580097689
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43978721653582090
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Bld_Well_01_Convex.asset
+  uploadId: 884522

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: cca645880da70084783a601907938be0
+timeCreated: 1580091204
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43028945029521070
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Env_Grass_02_Convex.asset
+  uploadId: 884522

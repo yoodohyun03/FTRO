@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 6034d42d3242ea94f87159da05423e8e
+timeCreated: 1580086777
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43496619767518442
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Tumbleweed_01_Convex.asset
+  uploadId: 884522

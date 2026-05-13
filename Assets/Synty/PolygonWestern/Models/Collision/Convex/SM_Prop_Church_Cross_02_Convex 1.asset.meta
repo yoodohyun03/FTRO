@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 3e91ef13b72719944930d48baf6f669b
+timeCreated: 1580086373
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 43719965452210096
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112212
+  packageName: POLYGON - Western Pack - Art by Synty
+  packageVersion: 1.2.0
+  assetPath: Assets/Synty/PolygonWestern/Models/Collision/Convex/SM_Prop_Church_Cross_02_Convex
+    1.asset
+  uploadId: 884522
