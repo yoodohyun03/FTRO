@@ -290,6 +290,7 @@ MonoBehaviour:
   walkSpeed: 3
   seekerRunSpeed: 8.8
   survivorRunSpeed: 7.5
+  anim: {fileID: 0}
   myRole: 
   isDead: 0
   hitStunTime: 0.5
