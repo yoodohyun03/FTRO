@@ -10,8 +10,6 @@ public class PlayerMove : MonoBehaviourPun
 {
     private const string RoleKey = "Role";
     private const string SeekerRole = "Seeker";
-    private const string CityMapSceneName = "CityMapScene";
-
     [Header("이동 속도 설정")]
     public float walkSpeed = 3.8f;
     public float seekerRunSpeed = 7.5f;
@@ -21,6 +19,7 @@ public class PlayerMove : MonoBehaviourPun
     private Unity.Cinemachine.CinemachineCamera vcam;
     private Unity.Cinemachine.CinemachineOrbitalFollow orbitalRig;
     private Rigidbody rb;
+    private Camera cachedMainCam;
 
     public string myRole = "";
     private bool isGrounded = true;
@@ -178,6 +177,18 @@ public class PlayerMove : MonoBehaviourPun
             Debug.Log($"[{PhotonNetwork.NickName}] 카메라 '{vcam.gameObject.name}' 설정 완료");
             Debug.Log($"[{PhotonNetwork.NickName}] Follow: {(vcam.Follow != null ? vcam.Follow.name : "null")}, LookAt: {(vcam.LookAt != null ? vcam.LookAt.name : "null")}");
 
+            // 실제 렌더링 카메라(Camera 컴포넌트) 캐싱 — 반드시 활성 카메라만 사용
+            cachedMainCam = Camera.main;
+            if (cachedMainCam == null)
+            {
+                cachedMainCam = FindFirstObjectByType<Camera>(); // 활성 오브젝트만
+                Debug.Log($"[{PhotonNetwork.NickName}] Camera.main null → FindFirstObjectByType로 대체: {(cachedMainCam != null ? cachedMainCam.name : "실패")}");
+            }
+            else
+            {
+                Debug.Log($"[{PhotonNetwork.NickName}] 이동 기준 카메라: {cachedMainCam.name}");
+            }
+
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
@@ -189,6 +200,9 @@ public class PlayerMove : MonoBehaviourPun
             Debug.LogError($"[{PhotonNetwork.NickName}] 확인할 사항:");
             Debug.LogError("  - MainCamera 오브젝트에 'MainCamera' 태그가 설정되어 있는지 확인하세요.");
             Debug.LogError($"[{PhotonNetwork.NickName}] ===== 카메라 찾기 실패 =====");
+
+            // vcam 없어도 Camera.main이라도 캐싱 — 활성 카메라만
+            cachedMainCam = Camera.main ?? FindFirstObjectByType<Camera>();
         }
     }
 
@@ -331,17 +345,22 @@ public class PlayerMove : MonoBehaviourPun
             orbitalRig.HorizontalAxis.Value = transform.eulerAngles.y;
         }
 
+        // 카메라 참조 누락 시 재시도 — 활성 카메라만
+        if (cachedMainCam == null)
+        {
+            cachedMainCam = Camera.main ?? FindFirstObjectByType<Camera>();
+        }
+
         if (h != 0 || v != 0)
         {
-            // 게임 씬에서는 카메라 기준 이동
-            if (Camera.main != null && SceneManager.GetActiveScene().name == CityMapSceneName)
+            if (cachedMainCam != null)
             {
                 if (isAltLooking) moveDir = (transform.forward * v + transform.right * h).normalized;
                 else
                 {
-                    Vector3 camForward = Camera.main.transform.forward;
+                    Vector3 camForward = cachedMainCam.transform.forward;
                     camForward.y = 0;
-                    Vector3 camRight = Camera.main.transform.right;
+                    Vector3 camRight = cachedMainCam.transform.right;
                     camRight.y = 0;
                     moveDir = (camForward.normalized * v + camRight.normalized * h).normalized;
                 }
