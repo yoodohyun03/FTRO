@@ -54,9 +54,11 @@ public class PlayerMove : MonoBehaviourPun
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
 
-        // 필수 컴포넌트 확인
         if (anim == null) Debug.LogError($"[{gameObject.name}] Animator 컴포넌트를 찾을 수 없습니다!");
         if (rb == null) Debug.LogError($"[{gameObject.name}] Rigidbody 컴포넌트를 찾을 수 없습니다!");
+
+        // MAP: 플레이어 제어 활성화
+        if (anim != null) anim.SetBool("IsControl", true);
 
         if (photonView.IsMine)
         {
@@ -180,19 +182,13 @@ public class PlayerMove : MonoBehaviourPun
             return;
         }
 
-        // 펀치 애니메이션 재생 중이면 이동 차단
-        if (anim != null && anim.GetCurrentAnimatorStateInfo(0).IsName("Cross Punch"))
+        // 펀치 중이면 이동 차단
+        if (anim != null && anim.GetBool("IsPunch"))
         {
-            float normalizedTime = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
-
-            if (normalizedTime < 1.0f)
-            {
-                if (rb != null) rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
-                anim.SetFloat("MoveSpeed", 0f);
-                HandleCursorUpdate();
-                return;
-            }
-            anim.SetFloat("MoveSpeed", 0f);
+            if (rb != null) rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            anim.SetFloat("InputMagnitude", 0f);
+            HandleCursorUpdate();
+            return;
         }
         
         HandleCursorUpdate();
@@ -270,6 +266,7 @@ public class PlayerMove : MonoBehaviourPun
 
     void MoveUpdate()
     {
+
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         Vector3 moveDir = Vector3.zero;
@@ -318,8 +315,17 @@ public class PlayerMove : MonoBehaviourPun
                 rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.deltaTime * 20f);
             }
 
-            float animValue = isRunning ? 1.0f : 0.5f;
-            if (anim != null) anim.SetFloat("MoveSpeed", animValue);
+            if (anim != null)
+            {
+                float magnitude = isRunning ? 1.0f : 0.5f;
+                anim.SetFloat("InputMagnitude", magnitude);
+                anim.SetFloat("Vertical", v);
+                anim.SetFloat("Horizontal", h);
+                anim.SetFloat("Z", v);
+                anim.SetFloat("X", h);
+                anim.SetBool("Running", isRunning);
+                anim.SetFloat("SprintFactor", isRunning ? 1f : 0f);
+            }
         }
         else
         {
@@ -327,7 +333,16 @@ public class PlayerMove : MonoBehaviourPun
             Vector3 stoppedVelocity = new Vector3(0, rb.linearVelocity.y, 0);
             rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, stoppedVelocity, Time.deltaTime * 15f);
 
-            if (anim != null) anim.SetFloat("MoveSpeed", 0f);
+            if (anim != null)
+            {
+                anim.SetFloat("InputMagnitude", 0f);
+                anim.SetFloat("Vertical", 0f);
+                anim.SetFloat("Horizontal", 0f);
+                anim.SetFloat("Z", 0f);
+                anim.SetFloat("X", 0f);
+                anim.SetBool("Running", false);
+                anim.SetFloat("SprintFactor", 0f);
+            }
         }
     }
 
@@ -369,7 +384,7 @@ public class PlayerMove : MonoBehaviourPun
     {
         if (isDead) return;
         isDead = true;
-        if (anim != null) anim.SetTrigger("Die");
+        if (anim != null) anim.SetBool("IsDead", true);
 
         // GameManager가 없는 경우 대비
         if (PhotonNetwork.IsMasterClient && GameManager.instance != null)
@@ -450,34 +465,37 @@ public class PlayerMove : MonoBehaviourPun
     }
 
     // 애니메이션 RPC
-    [PunRPC] void RPC_PlayPunchAnimation() { if (anim != null) anim.SetTrigger("Punch"); } 
+    [PunRPC]
+    void RPC_PlayPunchAnimation()
+    {
+        if (anim == null) return;
+        anim.SetBool("IsPunch", true);
+        anim.SetBool("IsPunchStart", true);
+        StartCoroutine(ResetPunchAfterDelay());
+    }
+
+    IEnumerator ResetPunchAfterDelay()
+    {
+        yield return new WaitForSeconds(0.1f);
+        if (anim != null) anim.SetBool("IsPunchStart", false);
+        yield return new WaitForSeconds(hitStunTime + penaltyStunTime);
+        if (anim != null) anim.SetBool("IsPunch", false);
+    }
+
     [PunRPC]
     void RPC_PlayJumpAnimation()
     {
         if (anim == null) return;
-        anim.SetTrigger("Jump");
-        if (HasAnimatorParameter("IsGrounded", AnimatorControllerParameterType.Bool))
-        {
-            anim.SetBool("IsGrounded", false);
-        }
+        anim.SetBool("IsJump", true);
+        anim.SetBool("IsFalling", true);
     }
 
     [PunRPC]
     void RPC_PlayLandAnimation()
     {
         if (anim == null) return;
-
-        anim.ResetTrigger("Jump");
-
-        if (HasAnimatorParameter("Land", AnimatorControllerParameterType.Trigger))
-        {
-            anim.SetTrigger("Land");
-        }
-
-        if (HasAnimatorParameter("IsGrounded", AnimatorControllerParameterType.Bool))
-        {
-            anim.SetBool("IsGrounded", true);
-        }
+        anim.SetBool("IsJump", false);
+        anim.SetBool("IsFalling", false);
     }
 
     bool HasAnimatorParameter(string paramName, AnimatorControllerParameterType type)

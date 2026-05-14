@@ -48,6 +48,7 @@ public class RandomRoam : MonoBehaviourPun
         if (anim != null)
         {
             anim.applyRootMotion = false;
+            anim.SetBool("IsControl", true);
         }
 
         if (rb != null)
@@ -128,22 +129,30 @@ public class RandomRoam : MonoBehaviourPun
             bool hasMoveIntent = agent.hasPath && agent.remainingDistance > Mathf.Max(agent.stoppingDistance, 0.1f);
             float positionDelta = Vector3.Distance(transform.position, lastPosition);
             bool movedByTransform = positionDelta > 0.0015f;
-            float animValue = 0f;
+            bool isMoving = currentSpeed >= moveThreshold || hasMoveIntent || movedByTransform;
 
-            if (currentSpeed < moveThreshold && !hasMoveIntent && !movedByTransform)
+            float magnitude = 0f;
+            if (isMoving) magnitude = isRunning ? 1.0f : 0.5f;
+
+            anim.SetFloat("InputMagnitude", magnitude);
+            anim.SetBool("Running", isRunning && isMoving);
+
+            if (isMoving)
             {
-                animValue = 0f;
-            }
-            else if (isRunning)
-            {
-                animValue = 1.0f;
+                Vector3 localVel = transform.InverseTransformDirection(agent.velocity.normalized);
+                anim.SetFloat("Vertical", localVel.z);
+                anim.SetFloat("Horizontal", localVel.x);
+                anim.SetFloat("Z", localVel.z);
+                anim.SetFloat("X", localVel.x);
             }
             else
             {
-                animValue = 0.5f;
+                anim.SetFloat("Vertical", 0f);
+                anim.SetFloat("Horizontal", 0f);
+                anim.SetFloat("Z", 0f);
+                anim.SetFloat("X", 0f);
             }
-
-            anim.SetFloat("MoveSpeed", animValue);
+            anim.SetFloat("SprintFactor", (isRunning && isMoving) ? 1f : 0f);
         }
 
         lastPosition = transform.position;
