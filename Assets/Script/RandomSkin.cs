@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine.SceneManagement;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class RandomSkin : MonoBehaviourPun
+public class RandomSkin : MonoBehaviourPunCallbacks
 {
+    private string SkinKey => "S_" + photonView.ViewID;
+
     [System.Serializable]
     public class MapSkinSet
     {
@@ -19,33 +23,78 @@ public class RandomSkin : MonoBehaviourPun
     [Header("위 목록에 없는 씬에서 쓸 기본 스킨")]
     public GameObject[] defaultModels;
 
-    [Header("★ 애니메이션이 정상 작동하는 기준 캐릭터 (보통 배열 첫 번째)")]
-    [Tooltip("이 캐릭터의 뼈대를 기준으로 다른 캐릭터 메시를 리타게팅합니다.")]
+    [Header("★ 애니메이션 기준 캐릭터")]
     public GameObject skeletonSource;
 
-    // 기준 뼈대 맵 (이름 → Transform)
     private Dictionary<string, Transform> boneMap = new Dictionary<string, Transform>();
+    private int chosenSkinIndex = -1;
 
     void Start()
     {
-        HideAllModels();
         BuildBoneMap();
+        ShowSkeletonSourceLocal();
 
-        if (!photonView.IsMine) return;
-
-        GameObject[] models = GetModelsForCurrentScene();
-
-        // 현재 씬 스킨도 없고 기본 스킨도 없으면 skeletonSource라도 표시
-        if (models == null || models.Length == 0)
+        if (photonView.IsMine)
         {
-            Debug.LogWarning($"[{gameObject.name}] RandomSkin: 현재 씬에 맞는 스킨이 없음 — skeletonSource로 대체합니다.");
-            photonView.RPC("RPC_ShowSkeletonSource", RpcTarget.AllBuffered);
-            return;
-        }
+            // 내 스킨 선택
+            GameObject[] models = GetModelsForCurrentScene();
+            if (models != null && models.Length > 0)
+                chosenSkinIndex = GetGlobalIndex(models[Random.Range(0, models.Length)]);
+            else
+                chosenSkinIndex = -1;
 
-        int randomIndex = Random.Range(0, models.Length);
-        int globalIndex = GetGlobalIndex(models[randomIndex]);
-        photonView.RPC("SyncCharacterSkin", RpcTarget.AllBuffered, globalIndex);
+            // 즉시 로컬 적용
+            ApplySkinByIndex(chosenSkinIndex);
+
+            // CustomProperties로 저장 → 모든 클라이언트에 자동 동기화
+            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { SkinKey, chosenSkinIndex } });
+        }
+        else
+        {
+            // 상대방이 이미 프로퍼티를 설정했다면 즉시 적용
+            TryApplySkinFromOwner();
+        }
+    }
+
+    // 상대 플레이어의 CustomProperties에서 스킨 읽어서 적용
+    void TryApplySkinFromOwner()
+    {
+        if (photonView.Owner == null) return;
+        if (photonView.Owner.CustomProperties.TryGetValue(SkinKey, out object val))
+            ApplySkinByIndex((int)val);
+    }
+
+    // CustomProperties가 바뀌면 해당 플레이어의 캐릭터에 스킨 적용
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (!changedProps.ContainsKey(SkinKey)) return;
+        if (photonView.Owner != targetPlayer) return;
+
+        ApplySkinByIndex((int)changedProps[SkinKey]);
+    }
+
+    void ApplySkinByIndex(int index)
+    {
+        if (index < 0)
+            RPC_ShowSkeletonSource();
+        else
+            SyncCharacterSkin(index);
+    }
+
+    // ── 스킨 적용 ───────────────────────────────────────
+
+    void ShowSkeletonSourceLocal()
+    {
+        foreach (var set in mapSkinSets)
+            foreach (var m in set.characterModels)
+                if (m != null && m != skeletonSource) m.SetActive(false);
+        foreach (var m in defaultModels)
+            if (m != null && m != skeletonSource) m.SetActive(false);
+
+        if (skeletonSource == null) return;
+        skeletonSource.SetActive(true);
+        foreach (var smr in skeletonSource.GetComponentsInChildren<SkinnedMeshRenderer>())
+            smr.enabled = true;
     }
 
     [PunRPC]
@@ -54,66 +103,9 @@ public class RandomSkin : MonoBehaviourPun
         HideAllModels();
         BuildBoneMap();
         if (skeletonSource == null) return;
-
         foreach (var smr in skeletonSource.GetComponentsInChildren<SkinnedMeshRenderer>())
             smr.enabled = true;
-
-        Animator parentAnim = GetComponent<Animator>();
-        if (parentAnim != null)
-        {
-            parentAnim.enabled = true;
-            StartCoroutine(RestoreParamsNextFrame(parentAnim));
-        }
-    }
-
-    void HideAllModels()
-    {
-        foreach (var set in mapSkinSets)
-            foreach (var m in set.characterModels)
-                if (m != null) m.SetActive(false);
-
-        foreach (var m in defaultModels)
-            if (m != null) m.SetActive(false);
-    }
-
-    // 기준 스켈레톤의 모든 뼈 이름 → Transform 매핑
-    void BuildBoneMap()
-    {
-        boneMap.Clear();
-        if (skeletonSource == null) return;
-
-        // 기준 캐릭터는 메시만 숨기고 뼈대는 항상 활성 유지
-        skeletonSource.SetActive(true);
-        foreach (var smr in skeletonSource.GetComponentsInChildren<SkinnedMeshRenderer>())
-            smr.enabled = false;
-
-        foreach (Transform t in skeletonSource.GetComponentsInChildren<Transform>(true))
-        {
-            if (!boneMap.ContainsKey(t.name))
-                boneMap[t.name] = t;
-        }
-    }
-
-    // 선택된 캐릭터의 SkinnedMeshRenderer 뼈를 기준 스켈레톤에 리매핑
-    void RemapBones(GameObject target)
-    {
-        if (boneMap.Count == 0) return;
-
-        foreach (var smr in target.GetComponentsInChildren<SkinnedMeshRenderer>(true))
-        {
-            Transform[] newBones = new Transform[smr.bones.Length];
-            for (int i = 0; i < smr.bones.Length; i++)
-            {
-                if (smr.bones[i] != null && boneMap.TryGetValue(smr.bones[i].name, out Transform mapped))
-                    newBones[i] = mapped;
-                else
-                    newBones[i] = smr.bones[i];
-            }
-            smr.bones = newBones;
-
-            if (smr.rootBone != null && boneMap.TryGetValue(smr.rootBone.name, out Transform mappedRoot))
-                smr.rootBone = mappedRoot;
-        }
+        RefreshAnimator();
     }
 
     [PunRPC]
@@ -125,11 +117,12 @@ public class RandomSkin : MonoBehaviourPun
         GameObject selected = GetModelByGlobalIndex(globalIndex);
         if (selected == null)
         {
-            Debug.LogError($"[{gameObject.name}] 잘못된 스킨 인덱스: {globalIndex}");
+            if (skeletonSource != null)
+                foreach (var smr in skeletonSource.GetComponentsInChildren<SkinnedMeshRenderer>())
+                    smr.enabled = true;
             return;
         }
 
-        // skeletonSource와 동일한 캐릭터면 그냥 메시만 보여줌
         if (selected == skeletonSource)
         {
             foreach (var smr in skeletonSource.GetComponentsInChildren<SkinnedMeshRenderer>())
@@ -137,27 +130,24 @@ public class RandomSkin : MonoBehaviourPun
         }
         else
         {
-            // 다른 캐릭터: 활성화 후 뼈를 기준 스켈레톤에 리매핑
             selected.SetActive(true);
             selected.transform.localPosition = Vector3.zero;
             selected.transform.localRotation = Quaternion.identity;
             selected.transform.localScale = Vector3.one;
-
             RemapBones(selected);
-
-            // 선택된 캐릭터의 자식 Animator 비활성화 (부모 Animator가 제어)
             var childAnim = selected.GetComponent<Animator>();
             if (childAnim != null) childAnim.enabled = false;
         }
 
-        Animator parentAnim = GetComponent<Animator>();
-        if (parentAnim != null)
-        {
-            parentAnim.enabled = true;
-            StartCoroutine(RestoreParamsNextFrame(parentAnim));
-        }
+        RefreshAnimator();
+    }
 
-        Debug.Log($"[{gameObject.name}] 스킨 적용: {selected.name} (index {globalIndex})");
+    void RefreshAnimator()
+    {
+        Animator a = GetComponent<Animator>();
+        if (a == null) return;
+        a.enabled = true;
+        StartCoroutine(RestoreParamsNextFrame(a));
     }
 
     IEnumerator RestoreParamsNextFrame(Animator a)
@@ -170,15 +160,56 @@ public class RandomSkin : MonoBehaviourPun
         a.SetBool("IsJump", false);
     }
 
-    // ── 유틸리티 ───────────────────────────────────────
+    // ── 뼈대 유틸 ───────────────────────────────────────
+
+    void HideAllModels()
+    {
+        foreach (var set in mapSkinSets)
+            foreach (var m in set.characterModels)
+                if (m != null) m.SetActive(false);
+        foreach (var m in defaultModels)
+            if (m != null) m.SetActive(false);
+    }
+
+    void BuildBoneMap()
+    {
+        boneMap.Clear();
+        if (skeletonSource == null) return;
+        skeletonSource.SetActive(true);
+        foreach (var smr in skeletonSource.GetComponentsInChildren<SkinnedMeshRenderer>())
+            smr.enabled = false;
+        foreach (Transform t in skeletonSource.GetComponentsInChildren<Transform>(true))
+            if (!boneMap.ContainsKey(t.name)) boneMap[t.name] = t;
+    }
+
+    void RemapBones(GameObject target)
+    {
+        if (boneMap.Count == 0) return;
+        foreach (var smr in target.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+        {
+            Transform[] nb = new Transform[smr.bones.Length];
+            for (int i = 0; i < smr.bones.Length; i++)
+                nb[i] = (smr.bones[i] != null && boneMap.TryGetValue(smr.bones[i].name, out var m)) ? m : smr.bones[i];
+            smr.bones = nb;
+            if (smr.rootBone != null && boneMap.TryGetValue(smr.rootBone.name, out var mr))
+                smr.rootBone = mr;
+        }
+    }
+
+    // ── 씬/인덱스 유틸 ───────────────────────────────────
 
     GameObject[] GetModelsForCurrentScene()
     {
         string scene = SceneManager.GetActiveScene().name;
         foreach (var set in mapSkinSets)
-            if (set.sceneName == scene && set.characterModels.Length > 0)
+            if (set.sceneName == scene && set.characterModels != null && set.characterModels.Length > 0)
                 return set.characterModels;
-        return defaultModels;
+        if (defaultModels != null && defaultModels.Length > 0)
+            return defaultModels;
+        foreach (var set in mapSkinSets)
+            if (set.characterModels != null && set.characterModels.Length > 0)
+                return set.characterModels;
+        return null;
     }
 
     int GetGlobalIndex(GameObject target)
