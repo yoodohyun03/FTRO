@@ -17,6 +17,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Application.runInBackground = true;
         PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.SendRate = 30;
+        PhotonNetwork.SerializationRate = 15;
 
         if (PhotonNetwork.InRoom)
         {

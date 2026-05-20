@@ -59,6 +59,8 @@ public class TitleManager : MonoBehaviourPunCallbacks
     {
         Application.runInBackground = true;
         PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.SendRate = 30;
+        PhotonNetwork.SerializationRate = 15;
 
         // 연결이 끊긴 상태면 재연결
         if (!PhotonNetwork.IsConnected)
