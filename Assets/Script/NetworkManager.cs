@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Linq;
@@ -13,6 +14,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        Application.runInBackground = true;
         PhotonNetwork.AutomaticallySyncScene = true;
 
         if (PhotonNetwork.InRoom)
@@ -21,7 +23,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            // 방에 없는 채로 게임씬이 로드됐다면 타이틀로 복귀
             Debug.LogWarning("[NetworkManager] 방 밖에서 게임씬 진입 - 타이틀로 복귀합니다.");
             UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
         }
@@ -53,17 +54,27 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             }
         }
 
-        // 스폰 포인트가 없으면 기본값 사용
-        if (spawnPoint == null)
-        {
-            PhotonNetwork.Instantiate("playerPrefab", new Vector3(0, 5, 0), Quaternion.identity);
-        }
-        else
-        {
-            PhotonNetwork.Instantiate("playerPrefab", spawnPoint.position, spawnPoint.rotation);
-        }
+        Vector3 spawnPos = spawnPoint != null ? spawnPoint.position : FindSafeSpawnPosition();
+        Quaternion spawnRot = spawnPoint != null ? spawnPoint.rotation : Quaternion.identity;
+        PhotonNetwork.Instantiate("playerPrefab", spawnPos, spawnRot);
 
         hasSpawned = true;
+    }
+
+    Vector3 FindSafeSpawnPosition()
+    {
+        // NavMesh 위 무작위 위치 탐색
+        for (int i = 0; i < 20; i++)
+        {
+            Vector3 candidate = new Vector3(
+                Random.Range(-30f, 30f), 0f, Random.Range(-30f, 30f));
+            if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, 10f, NavMesh.AllAreas))
+            {
+                return hit.position + Vector3.up * 1f;
+            }
+        }
+        // NavMesh도 없으면 원점 위
+        return new Vector3(0f, 5f, 0f);
     }
 
     int GetDeterministicSpawnIndex(string myRole, int pointCount)

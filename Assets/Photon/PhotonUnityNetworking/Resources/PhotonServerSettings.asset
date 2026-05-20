@@ -53,6 +53,7 @@ MonoBehaviour:
   - RPC_SetSpeed
   - RPC_Jump
   - RPC_PlayLandAnimation
+  - RPC_ShowSkeletonSource
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
