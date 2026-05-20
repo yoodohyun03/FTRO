@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Linq;
@@ -23,16 +24,42 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            Debug.LogWarning("[NetworkManager] 방 밖에서 게임씬 진입 - 타이틀로 복귀합니다.");
+            // 씬 로드 직후 InRoom이 잠깐 false일 수 있으므로 재시도
+            StartCoroutine(WaitAndSpawn());
+        }
+    }
+
+    IEnumerator WaitAndSpawn()
+    {
+        float elapsed = 0f;
+        while (!PhotonNetwork.InRoom && elapsed < 5f)
+        {
+            yield return new WaitForSeconds(0.2f);
+            elapsed += 0.2f;
+        }
+
+        if (PhotonNetwork.InRoom)
+        {
+            SpawnPlayer();
+        }
+        else
+        {
+            Debug.LogWarning("[NetworkManager] 5초 대기 후에도 방에 없음 - 타이틀로 복귀합니다.");
             UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
         }
+    }
+
+    public override void OnJoinedRoom()
+    {
+        // WaitAndSpawn 보다 OnJoinedRoom이 먼저 오는 경우 대비
+        SpawnPlayer();
     }
 
     void SpawnPlayer()
     {
         if (hasSpawned) return;
 
-        Debug.Log($"[NetworkManager] 스폰 시작 — Region: {PhotonNetwork.CloudRegion}, Room: {PhotonNetwork.CurrentRoom?.Name}, Players: {PhotonNetwork.CurrentRoom?.PlayerCount}");
+        Debug.Log($"[NetworkManager] ★ 스폰 시작 — Region: {PhotonNetwork.CloudRegion} | Room: {PhotonNetwork.CurrentRoom?.Name} | Players: {PhotonNetwork.CurrentRoom?.PlayerCount} | IsMaster: {PhotonNetwork.IsMasterClient}");
 
         // 자신의 역할 확인
         string myRole = "Survivor";  // 기본값
@@ -121,5 +148,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         return false;
+    }
+
+    void OnGUI()
+    {
+        GUIStyle style = new GUIStyle(GUI.skin.box);
+        style.fontSize = 14;
+        style.normal.textColor = Color.white;
+
+        string info = PhotonNetwork.InRoom
+            ? $"Room: {PhotonNetwork.CurrentRoom.Name}  |  Players: {PhotonNetwork.CurrentRoom.PlayerCount}  |  Region: {PhotonNetwork.CloudRegion}  |  Spawned: {hasSpawned}"
+            : $"[NOT IN ROOM]  State: {PhotonNetwork.NetworkClientState}";
+
+        GUI.Box(new Rect(10, 10, 600, 30), info, style);
     }
 }
