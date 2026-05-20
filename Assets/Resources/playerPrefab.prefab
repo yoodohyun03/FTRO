@@ -389,6 +389,10 @@ MonoBehaviour:
   walkSpeed: 3
   seekerRunSpeed: 8.8
   survivorRunSpeed: 7.5
+  groundAcceleration: 25
+  airAcceleration: 3
+  groundDeceleration: 20
+  airDeceleration: 1
   anim: {fileID: 0}
   myRole: 
   isDead: 0
@@ -412,7 +416,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4227893057856370313}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 7b4483a97fb0a6142a9aaa44174fe4af, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

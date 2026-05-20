@@ -154,7 +154,7 @@ public class RandomSkin : MonoBehaviourPunCallbacks
     {
         yield return null;
         if (a == null) yield break;
-        a.SetBool("IsControl", true);
+        a.SetFloat("IsControl", 1f);
         a.SetBool("IsDead", false);
         a.SetBool("IsFalling", false);
         a.SetBool("IsJump", false);
