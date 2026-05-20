@@ -13,31 +13,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
+
         if (PhotonNetwork.InRoom)
         {
             SpawnPlayer();
         }
         else
         {
-            PhotonNetwork.ConnectUsingSettings();
+            // 방에 없는 채로 게임씬이 로드됐다면 타이틀로 복귀
+            Debug.LogWarning("[NetworkManager] 방 밖에서 게임씬 진입 - 타이틀로 복귀합니다.");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
         }
-
-        PhotonNetwork.AutomaticallySyncScene = true;
-    }
-
-    public override void OnConnectedToMaster()
-    {
-        PhotonNetwork.JoinOrCreateRoom("TestRoom", new RoomOptions { MaxPlayers = 4 }, null);
-    }
-
-    public override void OnJoinedRoom()
-    {
-        SpawnPlayer();
     }
 
     void SpawnPlayer()
     {
         if (hasSpawned) return;
+
+        Debug.Log($"[NetworkManager] 스폰 시작 — Region: {PhotonNetwork.CloudRegion}, Room: {PhotonNetwork.CurrentRoom?.Name}, Players: {PhotonNetwork.CurrentRoom?.PlayerCount}");
 
         // 자신의 역할 확인
         string myRole = "Survivor";  // 기본값

@@ -81,6 +81,7 @@ public class RandomRoam : MonoBehaviourPun
     void Update()
     {
         if (agent == null) return;
+        if (!agent.isOnNavMesh) return;
 
         // 땅에 닿았는지 확인
         CheckGrounded();

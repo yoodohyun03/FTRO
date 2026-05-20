@@ -34,15 +34,36 @@ public class RandomSkin : MonoBehaviourPun
         if (!photonView.IsMine) return;
 
         GameObject[] models = GetModelsForCurrentScene();
+
+        // 현재 씬 스킨도 없고 기본 스킨도 없으면 skeletonSource라도 표시
         if (models == null || models.Length == 0)
         {
-            Debug.LogWarning($"[{gameObject.name}] RandomSkin: 현재 씬에 맞는 스킨이 없습니다.");
+            Debug.LogWarning($"[{gameObject.name}] RandomSkin: 현재 씬에 맞는 스킨이 없음 — skeletonSource로 대체합니다.");
+            photonView.RPC("RPC_ShowSkeletonSource", RpcTarget.AllBuffered);
             return;
         }
 
         int randomIndex = Random.Range(0, models.Length);
         int globalIndex = GetGlobalIndex(models[randomIndex]);
         photonView.RPC("SyncCharacterSkin", RpcTarget.AllBuffered, globalIndex);
+    }
+
+    [PunRPC]
+    public void RPC_ShowSkeletonSource()
+    {
+        HideAllModels();
+        BuildBoneMap();
+        if (skeletonSource == null) return;
+
+        foreach (var smr in skeletonSource.GetComponentsInChildren<SkinnedMeshRenderer>())
+            smr.enabled = true;
+
+        Animator parentAnim = GetComponent<Animator>();
+        if (parentAnim != null)
+        {
+            parentAnim.enabled = true;
+            StartCoroutine(RestoreParamsNextFrame(parentAnim));
+        }
     }
 
     void HideAllModels()

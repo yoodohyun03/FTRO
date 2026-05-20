@@ -57,6 +57,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        Application.runInBackground = true;
         PhotonNetwork.AutomaticallySyncScene = true;
 
         // 연결이 끊긴 상태면 재연결
