@@ -24,12 +24,8 @@ private const string RoleKey = "Role";
     [Header("스폰 설정")]
     public GameObject terminalPrefab;
     public GameObject escapeZonePrefab;
-    public GameObject lootBoxPrefab;
     public List<Transform> terminalSpawnPoints = new List<Transform>();
     public List<Transform> escapeSpawnPoints = new List<Transform>();
-    public List<Transform> lootSpawnPoints = new List<Transform>();
-
-    public int lootCount = 5;
 
     void Awake()
 {
@@ -92,22 +88,51 @@ private const string RoleKey = "Role";
             return;
         }
 
-        // 1. 터미널 스폰 (랜덤 위치 선택)
+        // 1. 터미널 스폰 (랜덤 위치 선택, 거리 고려)
         List<Transform> availablePoints = new List<Transform>();
         foreach(var p in terminalSpawnPoints) if(p != null) availablePoints.Add(p);
 
+        List<Vector3> spawnedPositions = new List<Vector3>();
+        float minDistanceBetweenTerminals = 20f; // 최소 거리 설정
+
         int countToSpawn = Mathf.Min(totalObjectives, availablePoints.Count);
-        for (int i = 0; i < countToSpawn; i++)
+        int spawnedCount = 0;
+        int maxAttempts = 50; // 무한 루프 방지
+
+        while (spawnedCount < countToSpawn && availablePoints.Count > 0 && maxAttempts > 0)
         {
+            maxAttempts--;
             int randomIndex = Random.Range(0, availablePoints.Count);
             Transform spawnPoint = availablePoints[randomIndex];
-            availablePoints.RemoveAt(randomIndex);
-
-            // Apply Y-offset (+0.5f) because pivot is at center
-            Vector3 spawnPos = spawnPoint.position + Vector3.up * 0.5f;
-            PhotonNetwork.InstantiateRoomObject("HackingTerminal", spawnPos, spawnPoint.rotation);
-            Debug.Log($"[GameManager] 터미널 {i+1} 생성됨 at {spawnPos}");
+            
+            // 거리 체크
+            bool tooClose = false;
+            foreach (var pos in spawnedPositions)
+            {
+                if (Vector3.Distance(spawnPoint.position, pos) < minDistanceBetweenTerminals)
+                {
+                    tooClose = true;
+                    break;
+                }
             }
+
+            if (!tooClose || availablePoints.Count <= (countToSpawn - spawnedCount))
+            {
+                // 충분히 멀거나, 남은 포인트가 부족해서 어쩔 수 없이 뽑아야 할 때
+                availablePoints.RemoveAt(randomIndex);
+                Vector3 spawnPos = spawnPoint.position + Vector3.up * 0.5f;
+                PhotonNetwork.InstantiateRoomObject("HackingTerminal", spawnPos, spawnPoint.rotation);
+                spawnedPositions.Add(spawnPoint.position);
+                spawnedCount++;
+                Debug.Log($"[GameManager] 터미널 {spawnedCount} 생성됨 at {spawnPos}");
+            }
+            else
+            {
+                // 너무 가까우면 리스트에서 잠시 제외했다가 나중에 다시 고려하거나 그냥 스킵
+                // 여기서는 그냥 스킵하고 다른 포인트를 찾음
+                continue;
+            }
+        }
 
             // 2. 탈출구 스폰
             List<Transform> availableEscapePoints = new List<Transform>();
@@ -131,28 +156,6 @@ private const string RoleKey = "Role";
             else
             {
                 Debug.LogWarning("escapeSpawnPoints 리스트가 비어있습니다.");
-            }
-
-            // 3. Loot Box 스폰
-            List<Transform> availableLootPoints = new List<Transform>();
-            foreach(var p in lootSpawnPoints) if(p != null) availableLootPoints.Add(p);
-            
-            // If lootSpawnPoints is empty, try to use unused terminal points
-            if (availableLootPoints.Count == 0 && availablePoints.Count > 0)
-            {
-                availableLootPoints = availablePoints;
-            }
-
-            int countToSpawnLoot = Mathf.Min(lootCount, availableLootPoints.Count);
-            for (int i = 0; i < countToSpawnLoot; i++)
-            {
-                int randomIndex = Random.Range(0, availableLootPoints.Count);
-                Transform spawnPoint = availableLootPoints[randomIndex];
-                availableLootPoints.RemoveAt(randomIndex);
-
-                Vector3 spawnPos = spawnPoint.position + Vector3.up * 0.5f;
-                PhotonNetwork.InstantiateRoomObject("LootBox", spawnPos, spawnPoint.rotation);
-                Debug.Log($"[GameManager] 아이템 상자 {i+1} 생성됨 at {spawnPos}");
             }
             }
 

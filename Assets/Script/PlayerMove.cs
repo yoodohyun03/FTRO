@@ -62,9 +62,8 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     private float currentV = 0f;
     private bool isRunningSync = false;
     private ObjectivePoint currentInteractionTarget;
-    private LootBox currentLootBoxTarget;
     private UnityEngine.UI.Slider progressBar;
-private TextMeshProUGUI interactionText;
+    private TextMeshProUGUI interactionText;
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 {
@@ -235,72 +234,39 @@ private TextMeshProUGUI interactionText;
         {
             if (myRole == SeekerRole || isDead || !photonView.IsMine) return;
 
-            ObjectivePoint nearestObj = null;
-            LootBox nearestLoot = null;
-            float interactRange = 6.0f; 
+            ObjectivePoint nearest = null;
+            float interactRange = 6.0f; // Increased range
             Collider[] hits = Physics.OverlapSphere(transform.position, interactRange);
             foreach (var hit in hits)
             {
+                // Search in self or parents
                 ObjectivePoint op = hit.GetComponent<ObjectivePoint>() ?? hit.GetComponentInParent<ObjectivePoint>();
                 if (op != null && !op.isCompleted)
                 {
-                    nearestObj = op;
-                    break;
-                }
-                
-                LootBox lb = hit.GetComponent<LootBox>() ?? hit.GetComponentInParent<LootBox>();
-                if (lb != null && !lb.isOpened)
-                {
-                    nearestLoot = lb;
+                    nearest = op;
                     break;
                 }
             }
 
-            bool canInteract = (nearestObj != null || nearestLoot != null);
-            if (interactionText != null) 
-            {
-                interactionText.gameObject.SetActive(canInteract && currentInteractionTarget == null && currentLootBoxTarget == null);
-                if (canInteract)
-                {
-                    interactionText.text = nearestObj != null ? "Press [E] to Hack" : "Press [E] to Open Loot Box";
-                }
-            }
+            if (interactionText != null) interactionText.gameObject.SetActive(nearest != null && currentInteractionTarget == null);
 
-            if (Input.GetKey(KeyCode.E))
+            if (Input.GetKey(KeyCode.E) && nearest != null)
             {
-                if (nearestObj != null)
+                currentInteractionTarget = nearest;
+                currentInteractionTarget.photonView.RPC("RPC_AddProgress", RpcTarget.MasterClient, Time.deltaTime);
+            
+                if (progressBar != null)
                 {
-                    currentInteractionTarget = nearestObj;
-                    currentInteractionTarget.photonView.RPC("RPC_AddProgress", RpcTarget.MasterClient, Time.deltaTime);
-                
-                    if (progressBar != null)
-                    {
-                        progressBar.gameObject.SetActive(true);
-                        progressBar.value = currentInteractionTarget.currentProgress / currentInteractionTarget.interactionTime;
-                    }
-                }
-                else if (nearestLoot != null)
-                {
-                    currentLootBoxTarget = nearestLoot;
-                    currentLootBoxTarget.photonView.RPC("RPC_AddProgress", RpcTarget.MasterClient, Time.deltaTime, photonView.ViewID);
-                    
-                    if (progressBar != null)
-                    {
-                        progressBar.gameObject.SetActive(true);
-                        progressBar.value = currentLootBoxTarget.currentProgress / currentLootBoxTarget.interactionTime;
-                    }
+                    progressBar.gameObject.SetActive(true);
+                    progressBar.value = currentInteractionTarget.currentProgress / currentInteractionTarget.interactionTime;
                 }
 
-                if (nearestObj != null || nearestLoot != null)
-                {
-                    currentH *= 0.1f;
-                    currentV *= 0.1f;
-                }
+                currentH *= 0.1f;
+                currentV *= 0.1f;
             }
             else
             {
                 currentInteractionTarget = null;
-                currentLootBoxTarget = null;
                 if (progressBar != null) progressBar.gameObject.SetActive(false);
             }
         }
@@ -358,16 +324,50 @@ private TextMeshProUGUI interactionText;
     void MoveUpdate()
     {
         if (isAttacking) { currentH = 0; currentV = 0; return; }
-        float h = Input.GetAxisRaw("Horizontal"); float v = Input.GetAxisRaw("Vertical");
-        if (Mathf.Abs(h) < 0.2f) h = 0f; if (Mathf.Abs(v) < 0.2f) v = 0f;
-        currentH = h; currentV = v; Vector3 moveDir = Vector3.zero; bool isAlt = Input.GetKey(KeyCode.LeftAlt); bool isRun = Input.GetKey(KeyCode.LeftShift);
-        if (cachedMainCam == null) cachedMainCam = Camera.main ?? FindFirstObjectByType<Camera>();
-        if (h != 0 || v != 0)
+        
+        // Only read axes if we haven't set currentH/V elsewhere (like for interaction penalty)
+        // Actually, it's better to always read but apply penalty at the end of MoveUpdate
+        float h = Input.GetAxisRaw("Horizontal"); 
+        float v = Input.GetAxisRaw("Vertical");
+        
+        if (Mathf.Abs(h) < 0.2f) h = 0f; 
+        if (Mathf.Abs(v) < 0.2f) v = 0f;
+        
+        currentH = h; 
+        currentV = v; 
+
+        // Apply interaction penalty
+        if (currentInteractionTarget != null)
         {
-            if (cachedMainCam != null) { if (isAlt) moveDir = (transform.forward * v + transform.right * h).normalized; else { Vector3 f = cachedMainCam.transform.forward; f.y = 0; Vector3 r = cachedMainCam.transform.right; r.y = 0; moveDir = (f.normalized * v + r.normalized * h).normalized; } }
-            else moveDir = new Vector3(h, 0, v).normalized;
+            currentH *= 0.1f;
+            currentV *= 0.1f;
+        }
+
+        Vector3 moveDir = Vector3.zero; 
+        bool isAlt = Input.GetKey(KeyCode.LeftAlt); 
+        bool isRun = Input.GetKey(KeyCode.LeftShift);
+        
+        if (cachedMainCam == null) cachedMainCam = Camera.main ?? FindFirstObjectByType<Camera>();
+        
+        if (currentH != 0 || currentV != 0)
+        {
+            if (cachedMainCam != null) 
+            { 
+                if (isAlt) moveDir = (transform.forward * currentV + transform.right * currentH).normalized; 
+                else 
+                { 
+                    Vector3 f = cachedMainCam.transform.forward; f.y = 0; 
+                    Vector3 r = cachedMainCam.transform.right; r.y = 0; 
+                    moveDir = (f.normalized * currentV + r.normalized * currentH).normalized; 
+                } 
+            }
+            else moveDir = new Vector3(currentH, 0, currentV).normalized;
+            
             if (!isAlt && moveDir != Vector3.zero) transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 540f);
-            float speed = isRun ? (myRole == SeekerRole ? seekerRunSpeed : survivorRunSpeed) : walkSpeed; Vector3 targetVel = moveDir * speed;
+            
+            float speed = isRun ? (myRole == SeekerRole ? seekerRunSpeed : survivorRunSpeed) : walkSpeed; 
+            Vector3 targetVel = moveDir * speed;
+            
             if (rb != null) { targetVel.y = rb.linearVelocity.y; rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundAcceleration : airAcceleration)); }
         }
         else if (rb != null) { Vector3 targetVel = new Vector3(0, rb.linearVelocity.y, 0); rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundDeceleration : airDeceleration)); }

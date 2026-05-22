@@ -1,7 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
 
-public class ObjectivePoint : MonoBehaviourPunCallbacks
+public class ObjectivePoint : MonoBehaviourPunCallbacks, IPunObservable
 {
     public float interactionTime = 10f; 
     public bool isCompleted = false;
@@ -9,12 +9,28 @@ public class ObjectivePoint : MonoBehaviourPunCallbacks
 
     private SpriteRenderer minimapIcon;
 
-    private Light hackingLight;
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(currentProgress);
+            stream.SendNext(isCompleted);
+        }
+        else
+        {
+            currentProgress = (float)stream.ReceiveNext();
+            isCompleted = (bool)stream.ReceiveNext();
+            
+            if (isCompleted && minimapIcon != null)
+            {
+                minimapIcon.color = Color.gray;
+            }
+        }
+    }
 
     void Start()
     {
         CreateMinimapIcon();
-        SetupHackingLight();
     }
 
     void CreateMinimapIcon()
@@ -31,36 +47,17 @@ public class ObjectivePoint : MonoBehaviourPunCallbacks
         iconObj.transform.localScale = Vector3.one * 15f; 
     }
 
-    void SetupHackingLight()
-    {
-        GameObject lightObj = new GameObject("HackingLight");
-        lightObj.transform.SetParent(transform, false);
-        lightObj.transform.localPosition = Vector3.up * 1f;
-        hackingLight = lightObj.AddComponent<Light>();
-        hackingLight.type = LightType.Point;
-        hackingLight.range = 5f;
-        hackingLight.intensity = 0f;
-        hackingLight.color = Color.yellow;
-    }
-
     [PunRPC]
     public void RPC_AddProgress(float amount)
     {
         if (isCompleted) return;
         
         currentProgress += amount;
-        
-        if (hackingLight != null)
-        {
-            hackingLight.intensity = Mathf.PingPong(Time.time * 5f, 2f);
-        }
-
         if (currentProgress >= interactionTime)
         {
             currentProgress = interactionTime;
             isCompleted = true;
             if (minimapIcon != null) minimapIcon.color = Color.gray;
-            if (hackingLight != null) { hackingLight.color = Color.green; hackingLight.intensity = 5f; }
             Debug.Log("[Objective] Terminal Completed!");
             if (PhotonNetwork.IsMasterClient && GameManager.instance != null)
             {

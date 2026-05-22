@@ -10,14 +10,7 @@ public class NoisePing : MonoBehaviour
 
     void Awake()
     {
-        // World-space sprite
-        GameObject worldObj = new GameObject("WorldSprite");
-        worldObj.transform.SetParent(transform, false);
-        worldSprite = worldObj.AddComponent<SpriteRenderer>();
-        worldSprite.sprite = Resources.Load<Sprite>("NoiseExclamation");
-        worldSprite.color = Color.red;
-        worldObj.transform.localScale = Vector3.one * 1.2f; // Larger base scale
-        worldObj.AddComponent<Billboard>();
+        // World-space sprite removed as per user request (minimap only)
 
         // Minimap-only sprite
         GameObject miniObj = new GameObject("MinimapSprite");
@@ -37,28 +30,20 @@ public class NoisePing : MonoBehaviour
         float progress = timer / duration;
         float alpha = 1.0f - progress;
         
-        // Pulsing effect for both
+        // Pulsing effect for minimap
         float pulse = 1.0f + Mathf.Sin(timer * 10f) * 0.15f;
         
-        Color c = new Color(1, 0, 0, alpha);
-        if (worldSprite != null) worldSprite.color = c;
         if (minimapSprite != null)
         {
             // Make it flash on minimap to be more annoying/noticeable
             float flashAlpha = alpha * (0.7f + Mathf.PingPong(timer * 5f, 0.3f));
             minimapSprite.color = new Color(1, 0, 0, flashAlpha);
+            minimapSprite.transform.localScale = Vector3.one * 3.0f * pulse;
         }
         
-        // Float up
+        // Float up (optional, but keep it for visual dynamic on minimap)
         transform.position += Vector3.up * Time.deltaTime * 1.0f;
         
-        // Scaling logic
-        if (worldSprite != null)
-            worldSprite.transform.localScale = Vector3.one * (1.2f + progress * 0.8f) * pulse;
-
-        if (minimapSprite != null)
-            minimapSprite.transform.localScale = Vector3.one * 3.0f * pulse;
-
         if (timer >= duration)
         {
             Destroy(gameObject);

@@ -76,32 +76,7 @@ public class EscapePoint : MonoBehaviourPunCallbacks
     public void RPC_ActivateEscape()
     {
         isActive = true;
-        if (minimapIcon != null) minimapIcon.color = Color.cyan; 
+        if (minimapIcon != null) minimapIcon.color = Color.cyan; // Bright cyan when active
         Debug.Log("[Escape] Escape Zone Activated!");
-
-        // Add visual beacon
-        GameObject beacon = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        beacon.name = "EscapeBeacon";
-        beacon.transform.SetParent(transform, false);
-        beacon.transform.localPosition = Vector3.up * 10f;
-        beacon.transform.localScale = new Vector3(1f, 20f, 1f);
-        
-        // Disable collision
-        Destroy(beacon.GetComponent<Collider>());
-        
-        // Add emission/color
-        Renderer r = beacon.GetComponent<Renderer>();
-        if (r != null)
-        {
-            r.material.color = new Color(0, 1, 1, 0.5f);
-            // Setup for transparency if material supports it
-            r.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-            r.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            r.material.SetInt("_ZWrite", 0);
-            r.material.DisableKeyword("_ALPHATEST_ON");
-            r.material.EnableKeyword("_ALPHABLEND_ON");
-            r.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-            r.material.renderQueue = 3000;
-        }
     }
 }
