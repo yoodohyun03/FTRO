@@ -151,17 +151,4 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         return false;
     }
-
-    void OnGUI()
-    {
-        GUIStyle style = new GUIStyle(GUI.skin.box);
-        style.fontSize = 14;
-        style.normal.textColor = Color.white;
-
-        string info = PhotonNetwork.InRoom
-            ? $"Room: {PhotonNetwork.CurrentRoom.Name}  |  Players: {PhotonNetwork.CurrentRoom.PlayerCount}  |  Region: {PhotonNetwork.CloudRegion}  |  Spawned: {hasSpawned}"
-            : $"[NOT IN ROOM]  State: {PhotonNetwork.NetworkClientState}";
-
-        GUI.Box(new Rect(10, 10, 600, 30), info, style);
     }
-}

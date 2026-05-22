@@ -229,6 +229,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 3348939581265681446}
   - {fileID: 6094929110363149428}
+  - {fileID: 3057170455231798803}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -399,6 +400,7 @@ MonoBehaviour:
   hitStunTime: 0.5
   penaltyStunTime: 1.5
   attackRadius: 1.2
+  sprintNoiseThreshold: 1.5
   jumpPower: 5
   rayLength: 0.5
   groundCheckRadius: 0.2

@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using FindObjectsInactive = UnityEngine.FindObjectsInactive;
 
-public class PlayerMove : MonoBehaviourPun
+public class PlayerMove : MonoBehaviourPun, IPunObservable
 {
     private const string RoleKey = "Role";
     private const string SeekerRole = "Seeker";
@@ -41,6 +41,10 @@ public class PlayerMove : MonoBehaviourPun
     public float attackRadius = 1.2f;
     private bool isAttacking = false;
 
+    [Header("소음 시스템 설정")]
+    public float sprintNoiseThreshold = 1.5f;
+    private float sprintNoiseTimer = 0f;
+
     [Header("점프 및 땅 감지 설정")]
     public float jumpPower = 6.5f;
     public float rayLength = 0.35f;
@@ -56,6 +60,33 @@ public class PlayerMove : MonoBehaviourPun
 
     private float currentH = 0f;
     private float currentV = 0f;
+    private bool isRunningSync = false;
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(currentH);
+            stream.SendNext(currentV);
+            stream.SendNext(Input.GetKey(KeyCode.LeftShift));
+            stream.SendNext(isGrounded);
+            stream.SendNext(isDead);
+        }
+        else
+        {
+            currentH = (float)stream.ReceiveNext();
+            currentV = (float)stream.ReceiveNext();
+            isRunningSync = (bool)stream.ReceiveNext();
+            isGrounded = (bool)stream.ReceiveNext();
+            bool deadState = (bool)stream.ReceiveNext();
+            
+            if (isDead != deadState)
+            {
+                isDead = deadState;
+                if (isDead) SyncDeadState();
+            }
+        }
+    }
 
     void Start()
     {
@@ -64,13 +95,15 @@ public class PlayerMove : MonoBehaviourPun
         if (anim == null) Debug.LogError($"[{gameObject.name}] Animator 컴포넌트를 찾을 수 없습니다!");
         if (rb == null) Debug.LogError($"[{gameObject.name}] Rigidbody 컴포넌트를 찾을 수 없습니다!");
         if (anim != null) anim.SetFloat("IsControl", 1f);
+
+        if (photonView.Owner.CustomProperties.ContainsKey(RoleKey))
+        {
+            myRole = (string)photonView.Owner.CustomProperties[RoleKey];
+        }
+
         if (photonView.IsMine)
         {
-            if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(RoleKey))
-            {
-                myRole = (string)PhotonNetwork.LocalPlayer.CustomProperties[RoleKey];
-                StartCoroutine(ShowRoleSequence());
-            }
+            StartCoroutine(ShowRoleSequence());
             StartCoroutine(InitializeCameraWithDelay());
         }
     }
@@ -102,22 +135,86 @@ public class PlayerMove : MonoBehaviourPun
 
     void Update()
     {
-        if (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject != null) return;
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine)
+        {
+            if (isDead) SyncDeadState();
+            UpdateAnimation();
+            return;
+        }
+
         if (isDead) { SpectateUpdate(); return; }
+
+        if (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject != null) return;
+        
         HandleCursorUpdate(); CheckGrounded();
+        
         if (isGrounded) coyoteCounter = coyoteTime; else coyoteCounter -= Time.deltaTime;
         jumpBufferCounter -= Time.deltaTime;
+        
         if (!wasGrounded && isGrounded) photonView.RPC("RPC_PlayLandAnimation", RpcTarget.All);
         wasGrounded = isGrounded;
-        if (Input.GetKeyDown(KeyCode.Space)) jumpBufferCounter = jumpBufferTime;
+        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpBufferCounter = jumpBufferTime;
+        }
+
         if (jumpBufferCounter > 0f && coyoteCounter > 0f)
         {
             if (rb != null) { rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z); rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse); }
-            photonView.RPC("RPC_PlayJumpAnimation", RpcTarget.All); isGrounded = false; wasGrounded = false; groundedIgnoreTimer = jumpGroundCheckDelay; coyoteCounter = 0f; jumpBufferCounter = 0f;
+            photonView.RPC("RPC_PlayJumpAnimation", RpcTarget.All); 
+            
+            if (myRole != SeekerRole) TriggerNoise();
+
+            isGrounded = false; wasGrounded = false; groundedIgnoreTimer = jumpGroundCheckDelay; coyoteCounter = 0f; jumpBufferCounter = 0f;
         }
+
         if (Input.GetMouseButtonDown(0)) { if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() && myRole == SeekerRole && !isAttacking) StartCoroutine(PerformAttack()); }
-        MoveUpdate(); UpdateAnimation();
+        
+        HandleNoiseDetection();
+        MoveUpdate(); 
+        UpdateAnimation();
+    }
+
+    void HandleNoiseDetection()
+    {
+        if (myRole == SeekerRole || isDead) return;
+
+        bool isRun = Input.GetKey(KeyCode.LeftShift);
+        bool hasInput = (currentH != 0 || currentV != 0);
+
+        if (isGrounded && isRun && hasInput)
+        {
+            sprintNoiseTimer += Time.deltaTime;
+            if (sprintNoiseTimer >= sprintNoiseThreshold)
+            {
+                TriggerNoise();
+                sprintNoiseTimer = 0f;
+            }
+        }
+        else
+        {
+            sprintNoiseTimer = 0f;
+        }
+    }
+
+    void TriggerNoise()
+    {
+        Debug.Log("[Noise] Triggering noise at " + transform.position);
+        photonView.RPC("RPC_CreateNoisePing", RpcTarget.All, transform.position + Vector3.up * 2f);
+    }
+
+    [PunRPC]
+    void RPC_CreateNoisePing(Vector3 position)
+    {
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(RoleKey) && 
+            (string)PhotonNetwork.LocalPlayer.CustomProperties[RoleKey] == SeekerRole)
+        {
+            Debug.Log("[Noise] Seeker received noise ping at " + position);
+            GameObject ping = new GameObject("NoisePing");
+            ping.transform.position = position;
+            ping.AddComponent<NoisePing>();
+        }
     }
 
     IEnumerator PerformAttack()
@@ -151,25 +248,43 @@ public class PlayerMove : MonoBehaviourPun
     {
         if (anim == null) return;
         if (isAttacking) { ResetMovementAnimatorParameters(); return; }
-        bool isRun = Input.GetKey(KeyCode.LeftShift); bool hasInput = (currentH != 0 || currentV != 0);
+        
+        bool isRun = photonView.IsMine ? Input.GetKey(KeyCode.LeftShift) : isRunningSync;
+        bool hasInput = (currentH != 0 || currentV != 0);
+        
         if (!hasInput)
         {
             ResetMovementAnimatorParameters();
-            if (isGrounded && groundedIgnoreTimer <= 0f && new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude < 0.5f)
+            if (isGrounded && groundedIgnoreTimer <= 0f)
             {
-                AnimatorStateInfo s = anim.GetCurrentAnimatorStateInfo(0);
-                if (s.IsName("No Weapon.Walking.Walking Blend Tree") || s.IsName("No Weapon.Walking.Start Walking Blend Tree") || s.IsName("Walking Blend Tree") || s.IsName("Start Walking Blend Tree"))
-                    anim.CrossFadeInFixedTime("No Weapon.Standing.Idle", 0.1f);
+                float velMag = (rb != null) ? new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude : 0f;
+                if (velMag < 0.5f)
+                {
+                    AnimatorStateInfo s = anim.GetCurrentAnimatorStateInfo(0);
+                    if (s.IsName("No Weapon.Walking.Walking Blend Tree") || s.IsName("No Weapon.Walking.Start Walking Blend Tree") || s.IsName("Walking Blend Tree") || s.IsName("Start Walking Blend Tree"))
+                        anim.CrossFadeInFixedTime("No Weapon.Standing.Idle", 0.1f);
+                }
             }
         }
         else
         {
-            float targetMag = isRun ? 1.0f : 0.5f; float curMag = anim.GetFloat("InputMagnitude"); if (curMag < 0.1f) curMag = 0.25f;
-            anim.SetFloat("InputMagnitude", Mathf.MoveTowards(curMag, targetMag, Time.deltaTime * 30f)); anim.SetFloat("InputAngle", 0f);
-            anim.SetFloat("Vertical", targetMag); anim.SetFloat("Horizontal", 0f); anim.SetFloat("Z", targetMag); anim.SetFloat("X", 0f);
-            anim.SetBool("Running", isRun); anim.SetFloat("SprintFactor", isRun ? 1f : 0f);
+            float targetMag = isRun ? 1.0f : 0.5f; 
+            float curMag = anim.GetFloat("InputMagnitude"); 
+            if (curMag < 0.1f) curMag = 0.25f;
+            
+            anim.SetFloat("InputMagnitude", Mathf.MoveTowards(curMag, targetMag, Time.deltaTime * 30f)); 
+            anim.SetFloat("InputAngle", 0f);
+            anim.SetFloat("Vertical", targetMag); 
+            anim.SetFloat("Horizontal", 0f); 
+            anim.SetFloat("Z", targetMag); 
+            anim.SetFloat("X", 0f);
+            anim.SetBool("Running", isRun); 
+            anim.SetFloat("SprintFactor", isRun ? 1f : 0f);
         }
-        anim.SetBool("IsJump", !isGrounded && rb.linearVelocity.y > 0.1f); anim.SetBool("IsFalling", !isGrounded && rb.linearVelocity.y <= 0.1f);
+        
+        float yVel = (rb != null) ? rb.linearVelocity.y : 0f;
+        anim.SetBool("IsJump", !isGrounded && yVel > 0.1f); 
+        anim.SetBool("IsFalling", !isGrounded && yVel <= 0.1f);
     }
 
     void ResetMovementAnimatorParameters() { if (anim == null) return; anim.SetFloat("InputMagnitude", 0f); anim.SetFloat("InputAngle", 0f); anim.SetFloat("Vertical", 0f); anim.SetFloat("Horizontal", 0f); anim.SetFloat("Z", 0f); anim.SetFloat("X", 0f); anim.SetBool("Running", false); anim.SetFloat("SprintFactor", 0f); }
@@ -177,8 +292,26 @@ public class PlayerMove : MonoBehaviourPun
     [PunRPC] void RPC_PlayPunchAnimation() { if (anim != null) { anim.CrossFadeInFixedTime("No Weapon.Punching.Idle_Punch_Move_L", 0.02f); anim.SetTrigger("IsPunch"); anim.SetTrigger("IsPunchStart"); } }
     [PunRPC] void RPC_PlayJumpAnimation() { if (anim != null) { anim.SetBool("IsJump", true); anim.SetBool("IsFalling", false); bool hasInput = (currentH != 0 || currentV != 0); anim.CrossFadeInFixedTime(hasInput ? "No Weapon.Jumping.JumpRunStart_RU" : "No Weapon.Jumping.JumpIdleStart", 0.1f); } }
     [PunRPC] void RPC_PlayLandAnimation() { if (anim != null) { anim.SetBool("IsJump", false); anim.SetBool("IsFalling", false); } }
-    [PunRPC] public void GetCaught() { if (isDead) return; isDead = true; if (anim != null) anim.SetBool("IsDead", true); if (PhotonNetwork.IsMasterClient && GameManager.instance != null) GameManager.instance.photonView.RPC("OnSurvivorCaught", RpcTarget.MasterClient); Renderer[] rs = GetComponentsInChildren<Renderer>(); foreach (Renderer r in rs) r.enabled = false; Collider c = GetComponent<Collider>(); if (c != null) c.enabled = false; UpdateSurvivorList(); }
-    void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject.FindGameObjectsWithTag("Player"); foreach (GameObject p in ps) { Renderer r = p.GetComponentInChildren<Renderer>(); if (p != this.gameObject && r != null && r.enabled) aliveSurvivors.Add(p.transform); } }
+    
+    [PunRPC] 
+    public void GetCaught() 
+    { 
+        if (isDead) return; 
+        isDead = true; 
+        SyncDeadState();
+        if (PhotonNetwork.IsMasterClient && GameManager.instance != null) GameManager.instance.photonView.RPC("OnSurvivorCaught", RpcTarget.MasterClient); 
+        UpdateSurvivorList(); 
+    }
+
+    void SyncDeadState()
+    {
+        if (anim != null) anim.SetBool("IsDead", true); 
+        Renderer[] rs = GetComponentsInChildren<Renderer>(); 
+        foreach (Renderer r in rs) r.enabled = false; 
+        Collider c = GetComponent<Collider>(); 
+        if (c != null) c.enabled = false; 
+    }
+void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject.FindGameObjectsWithTag("Player"); foreach (GameObject p in ps) { Renderer r = p.GetComponentInChildren<Renderer>(); if (p != this.gameObject && r != null && r.enabled) aliveSurvivors.Add(p.transform); } }
     void SpectateUpdate() { if (aliveSurvivors.Count == 0) return; if (Input.GetMouseButtonDown(0)) { spectateIndex = (spectateIndex + 1) % aliveSurvivors.Count; UpdateSurvivorList(); } if (spectateIndex < aliveSurvivors.Count) { Transform t = aliveSurvivors[spectateIndex]; if (t != null) transform.position = t.position + new Vector3(0, 2f, 0); else UpdateSurvivorList(); } }
     void CheckGrounded() { if (groundedIgnoreTimer > 0f) { groundedIgnoreTimer -= Time.deltaTime; isGrounded = false; return; } Vector3 p = transform.position + (Vector3.up * 0.15f); RaycastHit[] hits = Physics.SphereCastAll(p, 0.25f, Vector3.down, rayLength, groundMask, QueryTriggerInteraction.Ignore); isGrounded = false; foreach (RaycastHit h in hits) { if (h.collider == null || h.collider.isTrigger || h.collider.transform.IsChildOf(transform) || h.normal.y < minGroundNormalY) continue; isGrounded = true; break; } }
     void HandleCursorUpdate() { if (Input.GetKeyDown(KeyCode.Escape)) { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; } if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; } }
