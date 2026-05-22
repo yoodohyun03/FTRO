@@ -1,0 +1,28 @@
+{
+    "asset": "a3851870471c9eb438fae5fe3a51514a",
+    "fileName": "019e4ee9-fa9b-75cd-80ed-7a93ba6b6cce.png",
+    "prompt": "A minimalist green computer terminal screen icon, clean vector style, white outline, transparent background, for game minimap.",
+    "negativePrompt": "",
+    "model": "flux-2-dev",
+    "modelName": "Flux 2 (Dev)",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

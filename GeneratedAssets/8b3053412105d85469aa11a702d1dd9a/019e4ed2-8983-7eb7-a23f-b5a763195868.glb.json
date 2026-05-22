@@ -1,0 +1,23 @@
+{
+    "asset": "8b3053412105d85469aa11a702d1dd9a",
+    "fileName": "019e4ed2-8983-7eb7-a23f-b5a763195868.glb",
+    "prompt": "Sci-fi teleportation extraction pad, circular platform with blue glowing rings, low poly stylized.",
+    "negativePrompt": "",
+    "model": "model3d-tripo-p1",
+    "modelName": "Tripo P1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "f750205fbc66d914e8b697c3c90c0c1b",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

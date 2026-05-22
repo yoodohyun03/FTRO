@@ -61,9 +61,13 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     private float currentH = 0f;
     private float currentV = 0f;
     private bool isRunningSync = false;
+    private ObjectivePoint currentInteractionTarget;
+    private LootBox currentLootBoxTarget;
+    private UnityEngine.UI.Slider progressBar;
+private TextMeshProUGUI interactionText;
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
+{
         if (stream.IsWriting)
         {
             stream.SendNext(currentH);
@@ -105,7 +109,57 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         {
             StartCoroutine(ShowRoleSequence());
             StartCoroutine(InitializeCameraWithDelay());
+            CreateInteractionUI();
         }
+    }
+
+    void CreateInteractionUI()
+    {
+        Canvas canvas = FindFirstObjectByType<Canvas>();
+        if (canvas == null) return;
+
+        GameObject textObj = new GameObject("InteractionText");
+        textObj.transform.SetParent(canvas.transform, false);
+        interactionText = textObj.AddComponent<TextMeshProUGUI>();
+        interactionText.text = "Press [E] to Hack";
+        interactionText.fontSize = 30;
+        interactionText.alignment = TextAlignmentOptions.Center;
+        interactionText.color = Color.yellow;
+        RectTransform rtText = interactionText.GetComponent<RectTransform>();
+        rtText.anchoredPosition = new Vector2(0, -100);
+        textObj.SetActive(false);
+
+        GameObject sliderObj = new GameObject("InteractionProgressBar");
+        sliderObj.transform.SetParent(canvas.transform, false);
+        progressBar = sliderObj.AddComponent<UnityEngine.UI.Slider>();
+        RectTransform rtSlider = progressBar.GetComponent<RectTransform>();
+        rtSlider.sizeDelta = new Vector2(300, 30);
+        rtSlider.anchoredPosition = new Vector2(0, -150);
+
+        GameObject bg = new GameObject("Background");
+        bg.transform.SetParent(sliderObj.transform, false);
+        UnityEngine.UI.Image bgImg = bg.AddComponent<UnityEngine.UI.Image>();
+        bgImg.color = new Color(0, 0, 0, 0.7f);
+        RectTransform rtBg = bgImg.GetComponent<RectTransform>();
+        rtBg.anchorMin = Vector2.zero; rtBg.anchorMax = Vector2.one; rtBg.sizeDelta = Vector2.zero;
+
+        GameObject fillArea = new GameObject("Fill Area");
+        fillArea.transform.SetParent(sliderObj.transform, false);
+        RectTransform rtFillArea = fillArea.AddComponent<RectTransform>();
+        rtFillArea.anchorMin = new Vector2(0, 0); rtFillArea.anchorMax = new Vector2(1, 1);
+        rtFillArea.sizeDelta = new Vector2(-10, -10);
+
+        GameObject fill = new GameObject("Fill");
+        fill.transform.SetParent(fillArea.transform, false);
+        UnityEngine.UI.Image fillImg = fill.AddComponent<UnityEngine.UI.Image>();
+        fillImg.color = Color.green;
+        RectTransform rtFill = fillImg.GetComponent<RectTransform>();
+        rtFill.anchorMin = Vector2.zero; rtFill.anchorMax = Vector2.one; rtFill.sizeDelta = Vector2.zero;
+
+        progressBar.fillRect = rtFill;
+        progressBar.minValue = 0;
+        progressBar.maxValue = 1;
+        sliderObj.SetActive(false);
     }
 
     IEnumerator InitializeCameraWithDelay()
@@ -172,9 +226,84 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         if (Input.GetMouseButtonDown(0)) { if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() && myRole == SeekerRole && !isAttacking) StartCoroutine(PerformAttack()); }
         
         HandleNoiseDetection();
+        HandleInteraction();
         MoveUpdate(); 
         UpdateAnimation();
-    }
+        }
+
+        void HandleInteraction()
+        {
+            if (myRole == SeekerRole || isDead || !photonView.IsMine) return;
+
+            ObjectivePoint nearestObj = null;
+            LootBox nearestLoot = null;
+            float interactRange = 6.0f; 
+            Collider[] hits = Physics.OverlapSphere(transform.position, interactRange);
+            foreach (var hit in hits)
+            {
+                ObjectivePoint op = hit.GetComponent<ObjectivePoint>() ?? hit.GetComponentInParent<ObjectivePoint>();
+                if (op != null && !op.isCompleted)
+                {
+                    nearestObj = op;
+                    break;
+                }
+                
+                LootBox lb = hit.GetComponent<LootBox>() ?? hit.GetComponentInParent<LootBox>();
+                if (lb != null && !lb.isOpened)
+                {
+                    nearestLoot = lb;
+                    break;
+                }
+            }
+
+            bool canInteract = (nearestObj != null || nearestLoot != null);
+            if (interactionText != null) 
+            {
+                interactionText.gameObject.SetActive(canInteract && currentInteractionTarget == null && currentLootBoxTarget == null);
+                if (canInteract)
+                {
+                    interactionText.text = nearestObj != null ? "Press [E] to Hack" : "Press [E] to Open Loot Box";
+                }
+            }
+
+            if (Input.GetKey(KeyCode.E))
+            {
+                if (nearestObj != null)
+                {
+                    currentInteractionTarget = nearestObj;
+                    currentInteractionTarget.photonView.RPC("RPC_AddProgress", RpcTarget.MasterClient, Time.deltaTime);
+                
+                    if (progressBar != null)
+                    {
+                        progressBar.gameObject.SetActive(true);
+                        progressBar.value = currentInteractionTarget.currentProgress / currentInteractionTarget.interactionTime;
+                    }
+                }
+                else if (nearestLoot != null)
+                {
+                    currentLootBoxTarget = nearestLoot;
+                    currentLootBoxTarget.photonView.RPC("RPC_AddProgress", RpcTarget.MasterClient, Time.deltaTime, photonView.ViewID);
+                    
+                    if (progressBar != null)
+                    {
+                        progressBar.gameObject.SetActive(true);
+                        progressBar.value = currentLootBoxTarget.currentProgress / currentLootBoxTarget.interactionTime;
+                    }
+                }
+
+                if (nearestObj != null || nearestLoot != null)
+                {
+                    currentH *= 0.1f;
+                    currentV *= 0.1f;
+                }
+            }
+            else
+            {
+                currentInteractionTarget = null;
+                currentLootBoxTarget = null;
+                if (progressBar != null) progressBar.gameObject.SetActive(false);
+            }
+        }
 
     void HandleNoiseDetection()
     {
@@ -289,9 +418,9 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
     void ResetMovementAnimatorParameters() { if (anim == null) return; anim.SetFloat("InputMagnitude", 0f); anim.SetFloat("InputAngle", 0f); anim.SetFloat("Vertical", 0f); anim.SetFloat("Horizontal", 0f); anim.SetFloat("Z", 0f); anim.SetFloat("X", 0f); anim.SetBool("Running", false); anim.SetFloat("SprintFactor", 0f); }
     bool CheckPunchHitOwner() { if (rb == null) return false; RaycastHit[] hits = Physics.SphereCastAll(transform.position + Vector3.up * 1f, attackRadius, transform.forward, 1.5f); foreach (RaycastHit hit in hits) { if (hit.collider.CompareTag("Player")) { PhotonView tv = hit.collider.GetComponent<PhotonView>(); PlayerMove tp = hit.collider.GetComponent<PlayerMove>(); if (tv != null && !tv.IsMine && tp != null && !tp.isDead) { tv.RPC("GetCaught", RpcTarget.All); return true; } } } return false; }
-    [PunRPC] void RPC_PlayPunchAnimation() { if (anim != null) { anim.CrossFadeInFixedTime("No Weapon.Punching.Idle_Punch_Move_L", 0.02f); anim.SetTrigger("IsPunch"); anim.SetTrigger("IsPunchStart"); } }
-    [PunRPC] void RPC_PlayJumpAnimation() { if (anim != null) { anim.SetBool("IsJump", true); anim.SetBool("IsFalling", false); bool hasInput = (currentH != 0 || currentV != 0); anim.CrossFadeInFixedTime(hasInput ? "No Weapon.Jumping.JumpRunStart_RU" : "No Weapon.Jumping.JumpIdleStart", 0.1f); } }
-    [PunRPC] void RPC_PlayLandAnimation() { if (anim != null) { anim.SetBool("IsJump", false); anim.SetBool("IsFalling", false); } }
+    [PunRPC] void RPC_PlayPunchAnimation() { if (anim != null) { anim.CrossFadeInFixedTime("Punch", 0.02f); anim.SetTrigger("IsPunch"); anim.SetTrigger("IsPunchStart"); } }
+    [PunRPC] void RPC_PlayJumpAnimation() { if (anim != null) { anim.SetBool("IsJump", true); anim.SetBool("IsFalling", false); bool hasInput = (currentH != 0 || currentV != 0); anim.CrossFadeInFixedTime(hasInput ? "Jump" : "Jump", 0.1f); } }
+[PunRPC] void RPC_PlayLandAnimation() { if (anim != null) { anim.SetBool("IsJump", false); anim.SetBool("IsFalling", false); } }
     
     [PunRPC] 
     public void GetCaught() 

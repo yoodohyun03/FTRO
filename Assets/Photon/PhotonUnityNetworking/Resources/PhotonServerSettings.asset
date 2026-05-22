@@ -55,6 +55,15 @@ MonoBehaviour:
   - RPC_PlayLandAnimation
   - RPC_ShowSkeletonSource
   - RPC_CreateNoisePing
+  - RPC_ActivateEscape
+  - RPC_AddProgress
+  - RPC_SetCompleted
+  - OnObjectiveCompleted
+  - RPC_GameOver
+  - RPC_FlashbangEffect
+  - RPC_SetInvisibility
+  - RPC_SetOpened
+  - RPC_GiveItem
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -1,0 +1,23 @@
+{
+    "asset": "a154ecb30c61b5149bfd721a74dda660",
+    "fileName": "019e4ed2-a5d7-7459-b74c-6801c61d4da0.glb",
+    "prompt": "Futuristic sci-fi computer terminal station, glowing holograms, low poly stylized.",
+    "negativePrompt": "",
+    "model": "model3d-tripo-p1",
+    "modelName": "Tripo P1",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "promptImageReferenceGuid": "fd664de6f4cb6fd429bf8463716d9bed",
+    "modelReferenceGuid": "",
+    "multiviewFrontGuid": "",
+    "multiviewBackGuid": "",
+    "multiviewLeftGuid": "",
+    "multiviewRightGuid": "",
+    "multiviewTopGuid": "",
+    "multiviewBottomGuid": "",
+    "multiviewLeftFrontGuid": "",
+    "multiviewRightFrontGuid": "",
+    "faceLimit": -1
+}

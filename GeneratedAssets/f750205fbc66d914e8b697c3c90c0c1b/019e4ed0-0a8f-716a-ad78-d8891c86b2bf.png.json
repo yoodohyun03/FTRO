@@ -1,0 +1,28 @@
+{
+    "asset": "f750205fbc66d914e8b697c3c90c0c1b",
+    "fileName": "019e4ed0-0a8f-716a-ad78-d8891c86b2bf.png",
+    "prompt": "Sci-fi teleportation extraction pad, large circular metal platform with blue glowing neon rings, low poly stylized, isolated on white background, 3D game asset concept art.",
+    "negativePrompt": "",
+    "model": "flux-2-dev",
+    "modelName": "Flux 2 (Dev)",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

@@ -32,12 +32,15 @@ public class RandomRoam : MonoBehaviourPun
     private bool isGrounded = true;
     private const float moveThreshold = 0.05f;
     private Vector3 lastPosition;
+    private ObjectivePoint[] cachedObjectives;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+
+        cachedObjectives = Object.FindObjectsByType<ObjectivePoint>(FindObjectsSortMode.None);
 
         // 달리기/점프 비활성화
         runChance = 0f;
@@ -98,11 +101,25 @@ public class RandomRoam : MonoBehaviourPun
 
             if ((agent.remainingDistance <= agent.stoppingDistance && timer >= waitTime) || currentWalkTime >= maxWalkTime)
             {
-                Vector3 randomDirection = Random.insideUnitSphere * roamRadius;
-                randomDirection += transform.position;
+                Vector3 targetPos;
+
+                // 25% chance to head towards an objective terminal to distract the seeker
+                if (cachedObjectives != null && cachedObjectives.Length > 0 && Random.value < 0.25f)
+                {
+                    targetPos = cachedObjectives[Random.Range(0, cachedObjectives.Length)].transform.position;
+                    // Add slight random offset so they don't all stack on one point
+                    targetPos += Random.insideUnitSphere * 2f;
+                    targetPos.y = transform.position.y;
+                }
+                else
+                {
+                    Vector3 randomDirection = Random.insideUnitSphere * roamRadius;
+                    randomDirection += transform.position;
+                    targetPos = randomDirection;
+                }
 
                 NavMeshHit hit;
-                if (NavMesh.SamplePosition(randomDirection, out hit, roamRadius, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(targetPos, out hit, roamRadius, NavMesh.AllAreas))
                 {
                     // 목적지 동기화
                     photonView.RPC("RPC_SetDestination", RpcTarget.AllBuffered, hit.position);

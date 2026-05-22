@@ -154,6 +154,8 @@ GameObject:
   - component: {fileID: 4591711836902174258}
   - component: {fileID: -9193537758457896757}
   - component: {fileID: -8212622554268921394}
+  - component: {fileID: -7207434378605525240}
+  - component: {fileID: 8170087499197063960}
   m_Layer: 0
   m_Name: playerPrefab
   m_TagString: Player
@@ -489,6 +491,39 @@ MonoBehaviour:
     characterModels: []
   defaultModels: []
   skeletonSource: {fileID: 2903258877048970065}
+--- !u!114 &-7207434378605525240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4227893057856370313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de770d64b8aa2334981e149b705642ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeartbeatSystem
+  maxDistance: 25
+  intenseDistance: 5
+  heartbeatAudio: {fileID: 0}
+  heartbeatClip: {fileID: 8300000, guid: e9791c82fe188a3469f76f1623613ee0, type: 3}
+  minVolume: 0
+  maxVolume: 1
+  postProcessVolume: {fileID: 0}
+--- !u!114 &8170087499197063960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4227893057856370313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4699e6c04ab387c458fe423ad80da6af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSystem
+  currentItem: 0
+  hasItem: 0
 --- !u!1 &5662720093640914312
 GameObject:
   m_ObjectHideFlags: 0
