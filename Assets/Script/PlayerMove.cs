@@ -186,6 +186,8 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         yield return new WaitForSeconds(5f); if (blindObj != null) blindObj.SetActive(false);
     }
 
+    private float airTime = 0f;
+
     void Update()
     {
         if (!photonView.IsMine)
@@ -199,13 +201,36 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
         if (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject != null) return;
         
-        HandleCursorUpdate(); CheckGrounded();
+        HandleCursorUpdate(); 
+        CheckGrounded();
         
-        if (isGrounded) coyoteCounter = coyoteTime; else coyoteCounter -= Time.deltaTime;
+        if (isGrounded) 
+        {
+            coyoteCounter = coyoteTime;
+            
+            // 공중에 충분히 머물렀거나(0.15초 이상) 떨어지는 속도가 어느 정도 있을 때만 착지 애니메이션 수행
+            if (!wasGrounded && (airTime > 0.15f || (rb != null && rb.linearVelocity.y < -2.0f)))
+            {
+                bool isRunAtLand = Input.GetKey(KeyCode.LeftShift);
+                photonView.RPC("RPC_PlayLandAnimation", RpcTarget.All, isRunAtLand);
+                
+                if (rb != null) {
+                    float reduction = isRunAtLand ? 0.95f : 0.8f;
+                    Vector3 vel = rb.linearVelocity;
+                    vel.x *= reduction;
+                    vel.z *= reduction;
+                    rb.linearVelocity = vel;
+                }
+            }
+            airTime = 0f;
+        } 
+        else 
+        {
+            coyoteCounter -= Time.deltaTime;
+            airTime += Time.deltaTime;
+        }
+        
         jumpBufferCounter -= Time.deltaTime;
-        
-        if (!wasGrounded && isGrounded) photonView.RPC("RPC_PlayLandAnimation", RpcTarget.All);
-        wasGrounded = isGrounded;
         
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -228,7 +253,9 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         HandleInteraction();
         MoveUpdate(); 
         UpdateAnimation();
-        }
+
+        wasGrounded = isGrounded; // wasGrounded 업데이트 위치를 마지막으로 이동
+    }
 
         void HandleInteraction()
         {
@@ -368,9 +395,30 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             float speed = isRun ? (myRole == SeekerRole ? seekerRunSpeed : survivorRunSpeed) : walkSpeed; 
             Vector3 targetVel = moveDir * speed;
             
-            if (rb != null) { targetVel.y = rb.linearVelocity.y; rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundAcceleration : airAcceleration)); }
-        }
-        else if (rb != null) { Vector3 targetVel = new Vector3(0, rb.linearVelocity.y, 0); rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundDeceleration : airDeceleration)); }
+            if (rb != null) 
+            { 
+                targetVel.y = rb.linearVelocity.y; 
+                rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundAcceleration : airAcceleration)); 
+
+                // 울퉁불퉁한 땅에서 튀어오르는 현상 방지 (Ground Snapping)
+                // 점프 중이 아니고 땅에 붙어 있는 상태에서 이동 중일 때 살짝 아래로 눌러줌
+                if (isGrounded && groundedIgnoreTimer <= 0f && rb.linearVelocity.y > -0.1f)
+                {
+                    rb.AddForce(Vector3.down * 10f, ForceMode.Acceleration);
+                }
+            }
+            }
+            else if (rb != null) 
+            { 
+            Vector3 targetVel = new Vector3(0, rb.linearVelocity.y, 0); 
+            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundDeceleration : airDeceleration)); 
+            
+            // 정지 중에도 지면 밀착 유지
+            if (isGrounded && groundedIgnoreTimer <= 0f && rb.linearVelocity.y > -0.1f)
+            {
+                rb.AddForce(Vector3.down * 5f, ForceMode.Acceleration);
+            }
+            }
     }
 
     void UpdateAnimation()
@@ -419,8 +467,37 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     void ResetMovementAnimatorParameters() { if (anim == null) return; anim.SetFloat("InputMagnitude", 0f); anim.SetFloat("InputAngle", 0f); anim.SetFloat("Vertical", 0f); anim.SetFloat("Horizontal", 0f); anim.SetFloat("Z", 0f); anim.SetFloat("X", 0f); anim.SetBool("Running", false); anim.SetFloat("SprintFactor", 0f); }
     bool CheckPunchHitOwner() { if (rb == null) return false; RaycastHit[] hits = Physics.SphereCastAll(transform.position + Vector3.up * 1f, attackRadius, transform.forward, 1.5f); foreach (RaycastHit hit in hits) { if (hit.collider.CompareTag("Player")) { PhotonView tv = hit.collider.GetComponent<PhotonView>(); PlayerMove tp = hit.collider.GetComponent<PlayerMove>(); if (tv != null && !tv.IsMine && tp != null && !tp.isDead) { tv.RPC("GetCaught", RpcTarget.All); return true; } } } return false; }
     [PunRPC] void RPC_PlayPunchAnimation() { if (anim != null) { anim.CrossFadeInFixedTime("Punch", 0.02f); anim.SetTrigger("IsPunch"); anim.SetTrigger("IsPunchStart"); } }
-    [PunRPC] void RPC_PlayJumpAnimation() { if (anim != null) { anim.SetBool("IsJump", true); anim.SetBool("IsFalling", false); bool hasInput = (currentH != 0 || currentV != 0); anim.CrossFadeInFixedTime(hasInput ? "Jump" : "Jump", 0.1f); } }
-[PunRPC] void RPC_PlayLandAnimation() { if (anim != null) { anim.SetBool("IsJump", false); anim.SetBool("IsFalling", false); } }
+    [PunRPC] void RPC_PlayJumpAnimation() { if (anim != null) { anim.SetBool("IsJump", true); anim.SetBool("IsFalling", false); } }
+
+    [PunRPC]
+    void RPC_PlayLandAnimation(bool wasRunningAtLand)
+    {
+        if (anim != null)
+        {
+            anim.SetBool("IsJump", false);
+            anim.SetBool("IsFalling", false);
+
+            bool hasInput = (currentH != 0 || currentV != 0);
+            if (hasInput)
+            {
+                if (wasRunningAtLand)
+                {
+                    // 달리면서 착지: 달리기 전용 착지 모션으로 전환
+                    anim.CrossFadeInFixedTime("No Weapon.Jumping.JumpRun_RU_Land2Run", 0.05f);
+                }
+                else
+                {
+                    // 걷기 중 착지: 걷기 연계 착지 모션
+                    anim.CrossFadeInFixedTime("No Weapon.Falling.JumpIdleLand2Walk", 0.05f);
+                }
+            }
+            else
+            {
+                // 정지 상태라면 일반 착지 애니메이션
+                anim.CrossFadeInFixedTime("No Weapon.Falling.JumpIdleLandHard", 0.1f);
+            }
+        }
+    }
     
     [PunRPC] 
     public void GetCaught() 
@@ -442,6 +519,29 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     }
 void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject.FindGameObjectsWithTag("Player"); foreach (GameObject p in ps) { Renderer r = p.GetComponentInChildren<Renderer>(); if (p != this.gameObject && r != null && r.enabled) aliveSurvivors.Add(p.transform); } }
     void SpectateUpdate() { if (aliveSurvivors.Count == 0) return; if (Input.GetMouseButtonDown(0)) { spectateIndex = (spectateIndex + 1) % aliveSurvivors.Count; UpdateSurvivorList(); } if (spectateIndex < aliveSurvivors.Count) { Transform t = aliveSurvivors[spectateIndex]; if (t != null) transform.position = t.position + new Vector3(0, 2f, 0); else UpdateSurvivorList(); } }
-    void CheckGrounded() { if (groundedIgnoreTimer > 0f) { groundedIgnoreTimer -= Time.deltaTime; isGrounded = false; return; } Vector3 p = transform.position + (Vector3.up * 0.15f); RaycastHit[] hits = Physics.SphereCastAll(p, 0.25f, Vector3.down, rayLength, groundMask, QueryTriggerInteraction.Ignore); isGrounded = false; foreach (RaycastHit h in hits) { if (h.collider == null || h.collider.isTrigger || h.collider.transform.IsChildOf(transform) || h.normal.y < minGroundNormalY) continue; isGrounded = true; break; } }
+    void CheckGrounded()
+    {
+        if (groundedIgnoreTimer > 0f)
+        {
+            groundedIgnoreTimer -= Time.deltaTime;
+            isGrounded = false;
+            return;
+        }
+
+        // 구체 캐스팅을 발밑 근처에서 시작하여 정확도 향상
+        Vector3 p = transform.position + (Vector3.up * groundCheckRadius);
+        float checkDistance = rayLength; 
+        RaycastHit[] hits = Physics.SphereCastAll(p, groundCheckRadius, Vector3.down, checkDistance, groundMask, QueryTriggerInteraction.Ignore);
+        
+        isGrounded = false;
+        foreach (RaycastHit h in hits)
+        {
+            if (h.collider == null || h.collider.isTrigger || h.collider.transform.IsChildOf(transform) || h.normal.y < minGroundNormalY)
+                continue;
+            
+            isGrounded = true;
+            break;
+        }
+    }
     void HandleCursorUpdate() { if (Input.GetKeyDown(KeyCode.Escape)) { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; } if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; } }
 }
