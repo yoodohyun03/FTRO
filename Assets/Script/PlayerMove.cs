@@ -512,11 +512,12 @@ float curH = anim.GetFloat("Horizontal");
         anim.SetFloat("Vertical", Mathf.MoveTowards(curV, targetV, Time.deltaTime * smoothTime));
         anim.SetFloat("MoveSpeed", Mathf.MoveTowards(curSpeed, Mathf.Max(Mathf.Abs(targetH), Mathf.Abs(targetV)), Time.deltaTime * smoothTime));
         
-        // Sync ground/jump/fall states
-        anim.SetBool("IsGrounded", isGrounded);
+        // 애니메이터용 지면 판정: 짧은 시간(0.2초) 공중에 뜨는 것은 무시하여 계단 등에서 애니메이션 씹힘 방지
+        bool animGrounded = isGrounded || (airTime < 0.2f && !Input.GetKeyDown(KeyCode.Space));
+        anim.SetBool("IsGrounded", animGrounded);
         
         float yVel = (rb != null) ? rb.linearVelocity.y : 0f;
-        if (!isGrounded)
+        if (!animGrounded)
         {
             anim.SetBool("IsJump", yVel > 0.1f);
             anim.SetBool("IsFalling", yVel <= 0.1f);
@@ -526,7 +527,7 @@ float curH = anim.GetFloat("Horizontal");
             anim.SetBool("IsJump", false);
             anim.SetBool("IsFalling", false);
         }
-    }
+}
 
     void ResetMovementAnimatorParameters() 
     { 
