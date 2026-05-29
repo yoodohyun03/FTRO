@@ -56,9 +56,15 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     public float jumpBufferTime = 0.15f;
     public float jumpGroundCheckDelay = 0.1f;
     public LayerMask groundMask = ~0;
+
+    [Header("계단/턱 오르기 설정")]
+    public float stepHeight = 0.3f;
+    public float stepSmooth = 4.0f;
+
     private float coyoteCounter;
     private float jumpBufferCounter;
     private float groundedIgnoreTimer;
+    private Vector3 groundNormal = Vector3.up;
 
     private float currentH = 0f;
     private float currentV = 0f;
@@ -251,12 +257,21 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
         if (jumpBufferCounter > 0f && coyoteCounter > 0f)
         {
-            if (rb != null) { rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z); rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse); }
+            if (rb != null) 
+            {
+                // 점프 시 수직 속도를 즉시 설정하여 물리 엔진의 씹힘 현상 방지
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpPower, rb.linearVelocity.z); 
+            }
             photonView.RPC("RPC_PlayJumpAnimation", RpcTarget.All); 
             
             if (myRole != SeekerRole) TriggerNoise();
 
-            isGrounded = false; wasGrounded = false; groundedIgnoreTimer = jumpGroundCheckDelay; coyoteCounter = 0f; jumpBufferCounter = 0f;
+            isGrounded = false; 
+            wasGrounded = false; 
+            groundedIgnoreTimer = 0.15f; // 점프 직후 지면 감지 무시 시간 상향
+            coyoteCounter = 0f; 
+            jumpBufferCounter = 0f;
+            airTime = 0f;
         }
 
         if (Input.GetMouseButtonDown(0)) { var _es = UnityEngine.EventSystems.EventSystem.current; if ((_es == null || !_es.IsPointerOverGameObject()) && myRole == SeekerRole && !isAttacking) StartCoroutine(PerformAttack()); }
@@ -411,24 +426,47 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             
             if (rb != null)
             {
-                targetVel.y = rb.linearVelocity.y;
-                rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundAcceleration : airAcceleration));
+                Vector3 currentVel = rb.linearVelocity;
+                
+                // 지면에 있을 때 이동 속도를 경사면에 투영
+                if (isGrounded && groundedIgnoreTimer <= 0f)
+                {
+                    targetVel = Vector3.ProjectOnPlane(targetVel, groundNormal).normalized * speed;
+                }
+                else
+                {
+                    // 공중에서는 수직 속도를 Rigidbody의 현재 값으로 유지
+                    targetVel.y = currentVel.y;
+                }
+
+                // 수평 속도와 수직 속도를 분리하여 보간 (점프 힘 보존)
+                Vector3 horizontalVel = Vector3.Lerp(new Vector3(currentVel.x, 0, currentVel.z), new Vector3(targetVel.x, 0, targetVel.z), Time.deltaTime * (isGrounded ? groundAcceleration : airAcceleration));
+                rb.linearVelocity = new Vector3(horizontalVel.x, targetVel.y, horizontalVel.z);
+
+                // 계단/턱 오르기 처리
+                HandleStepOffset(moveDir);
 
                 // Ground Snapping: 빠른 이동 시 지형 굴곡에서 튀어오르는 현상 방지
-                if (isGrounded && groundedIgnoreTimer <= 0f && rb.linearVelocity.y > -0.1f)
-                    rb.AddForce(Vector3.down * 10f, ForceMode.Acceleration);
+                if (isGrounded && groundedIgnoreTimer <= 0f && rb.linearVelocity.y > -0.5f)
+                    rb.AddForce(Vector3.down * 15f, ForceMode.Acceleration);
             }
         }
         else if (rb != null)
         {
-            Vector3 targetVel = new Vector3(0, rb.linearVelocity.y, 0);
-            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundDeceleration : airDeceleration));
+            Vector3 currentVel = rb.linearVelocity;
+            Vector3 targetVel = Vector3.zero;
+            
+            if (!isGrounded || groundedIgnoreTimer > 0f) 
+                targetVel.y = currentVel.y;
+
+            Vector3 horizontalVel = Vector3.Lerp(new Vector3(currentVel.x, 0, currentVel.z), Vector3.zero, Time.deltaTime * (isGrounded ? groundDeceleration : airDeceleration));
+            rb.linearVelocity = new Vector3(horizontalVel.x, targetVel.y, horizontalVel.z);
 
             // 정지 중에도 지면 밀착 유지
-            if (isGrounded && groundedIgnoreTimer <= 0f && rb.linearVelocity.y > -0.1f)
-                rb.AddForce(Vector3.down * 5f, ForceMode.Acceleration);
+            if (isGrounded && groundedIgnoreTimer <= 0f && rb.linearVelocity.y > -0.5f)
+                rb.AddForce(Vector3.down * 10f, ForceMode.Acceleration);
         }
-    }
+}
 
     void UpdateAnimation()
     {
@@ -573,13 +611,32 @@ void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject
         RaycastHit[] hits = Physics.SphereCastAll(p, groundCheckRadius, Vector3.down, rayLength, groundMask, QueryTriggerInteraction.Ignore);
 
         isGrounded = false;
+        groundNormal = Vector3.up;
         foreach (RaycastHit h in hits)
         {
             if (h.collider == null || h.collider.isTrigger || h.collider.transform.IsChildOf(transform) || h.normal.y < minGroundNormalY)
                 continue;
+            
             isGrounded = true;
+            groundNormal = h.normal;
             break;
         }
     }
-    void HandleCursorUpdate() { if (Input.GetKeyDown(KeyCode.Escape)) { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; } var _ces = UnityEngine.EventSystems.EventSystem.current; if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked && (_ces == null || !_ces.IsPointerOverGameObject())) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; } }
+
+    void HandleStepOffset(Vector3 moveDir)
+    {
+        if (!isGrounded || moveDir == Vector3.zero || rb == null) return;
+
+        // 발 위치보다 약간 높은 곳에서 이동 방향으로 레이캐스트 (낮은 턱 감지)
+        if (Physics.Raycast(transform.position + Vector3.up * 0.1f, moveDir, out RaycastHit hitLower, 0.45f, groundMask))
+        {
+            // stepHeight 높이에서 레이캐스트 (벽인지 확인)
+            if (!Physics.Raycast(transform.position + Vector3.up * stepHeight, moveDir, out RaycastHit hitUpper, 0.55f, groundMask))
+            {
+                // 아래는 걸리고 위는 뚫려있으면 계단/턱으로 판단하여 부드럽게 위치를 올림
+                rb.position += Vector3.up * stepSmooth * Time.deltaTime;
+            }
+        }
+    }
+void HandleCursorUpdate() { if (Input.GetKeyDown(KeyCode.Escape)) { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; } var _ces = UnityEngine.EventSystems.EventSystem.current; if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked && (_ces == null || !_ces.IsPointerOverGameObject())) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; } }
 }
