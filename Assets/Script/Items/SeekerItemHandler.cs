@@ -17,10 +17,14 @@ public class SeekerItemHandler : MonoBehaviourPun
     {
         if (photonView.IsMine)
         {
-            // Initialize items
+            // Initialize items (에셋 누락 시 null 방지)
             items.Clear();
-            items.Add(Resources.Load<ItemData>("Items/FreezeItem"));
-            items.Add(Resources.Load<ItemData>("Items/SwarmItem"));
+            var freeze = Resources.Load<ItemData>("Items/FreezeItem");
+            var swarm  = Resources.Load<ItemData>("Items/SwarmItem");
+            if (freeze != null) items.Add(freeze);
+            else Debug.LogError("[SeekerItem] Items/FreezeItem 에셋을 찾을 수 없습니다. Resources/Items/ 경로를 확인하세요.");
+            if (swarm != null) items.Add(swarm);
+            else Debug.LogError("[SeekerItem] Items/SwarmItem 에셋을 찾을 수 없습니다. Resources/Items/ 경로를 확인하세요.");
 
             cooldownTimers = new float[items.Count];
             itemTexts = new TextMeshProUGUI[items.Count];

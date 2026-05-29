@@ -1,5 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using System.Collections;   
 using System.Collections.Generic;
@@ -48,7 +49,9 @@ private const string RoleKey = "Role";
     public float playTime = 600f;
 
     [Header("승리 조건 설정")]
-    public int survivorCount = 0; // 현재 살아있는 생존자 수
+    public int survivorCount = -1; // -1 = 미초기화 (게임 시작 전 검거 오판 방지)
+
+    private double gameStartNetworkTime = 0;
 
     void Start()
     {
@@ -63,7 +66,6 @@ private const string RoleKey = "Role";
 
     IEnumerator SafeSpawnRoutine()
     {
-        // 맵 로딩 후 포톤 네트워크 안정화를 위해 대기
         yield return new WaitForSeconds(0.5f);
         
         try 
@@ -75,6 +77,9 @@ private const string RoleKey = "Role";
             Debug.LogError($"[GameManager] SpawnObjectives 에러: {e.Message}\n{e.StackTrace}");
         }
 
+        // GameFlowRoutine 시작 전 미리 초기화 → Setup 중 검거돼도 카운트 오류 방지
+        InitializeSurvivorCount();
+
         StartCoroutine(GameFlowRoutine());
     }
 
@@ -82,7 +87,7 @@ private const string RoleKey = "Role";
     {
         Debug.Log("[GameManager] 오브젝트 동적 스폰 시작...");
 
-        // 0. 자동 복구 로직: 리스트가 비어있으면 씬에서 검색
+        // 0. 스폰 포인트 자동 복구
         if (terminalSpawnPoints == null || terminalSpawnPoints.Count == 0)
         {
             Debug.LogWarning("terminalSpawnPoints 리스트가 비어있습니다. 'SpawnPoints' 오브젝트에서 자동 검색을 시도합니다.");
@@ -91,9 +96,7 @@ private const string RoleKey = "Role";
             {
                 terminalSpawnPoints = new List<Transform>();
                 foreach (Transform child in spawnRoot.transform)
-                {
                     terminalSpawnPoints.Add(child);
-                }
                 Debug.Log($"[GameManager] {terminalSpawnPoints.Count}개의 터미널 스폰 포인트를 자동으로 찾았습니다.");
             }
         }
@@ -106,89 +109,73 @@ private const string RoleKey = "Role";
             {
                 escapeSpawnPoints = new List<Transform>();
                 foreach (Transform child in escapeRoot.transform)
-                {
                     escapeSpawnPoints.Add(child);
-                }
                 Debug.Log($"[GameManager] {escapeSpawnPoints.Count}개의 탈출구 스폰 포인트를 자동으로 찾았습니다.");
             }
         }
 
-        if (terminalSpawnPoints == null || terminalSpawnPoints.Count == 0)
+        // 1. 터미널 스폰 (포인트 없으면 건너뜀 — 탈출구 스폰은 계속 진행)
+        if (terminalSpawnPoints != null && terminalSpawnPoints.Count > 0)
         {
-            Debug.LogWarning("terminalSpawnPoints 리스트가 여전히 비어있습니다. 인스펙터를 확인하세요.");
-            return;
-        }
+            List<Transform> availablePoints = new List<Transform>();
+            foreach (var p in terminalSpawnPoints) if (p != null) availablePoints.Add(p);
 
-        // 1. 터미널 스폰 (랜덤 위치 선택, 거리 고려)
-        List<Transform> availablePoints = new List<Transform>();
-        foreach(var p in terminalSpawnPoints) if(p != null) availablePoints.Add(p);
+            List<Vector3> spawnedPositions = new List<Vector3>();
+            float minDistanceBetweenTerminals = 20f;
+            int countToSpawn = Mathf.Min(totalObjectives, availablePoints.Count);
+            int spawnedCount = 0;
+            int maxAttempts = 50;
 
-        List<Vector3> spawnedPositions = new List<Vector3>();
-        float minDistanceBetweenTerminals = 20f; // 최소 거리 설정
-
-        int countToSpawn = Mathf.Min(totalObjectives, availablePoints.Count);
-        int spawnedCount = 0;
-        int maxAttempts = 50; // 무한 루프 방지
-
-        while (spawnedCount < countToSpawn && availablePoints.Count > 0 && maxAttempts > 0)
-        {
-            maxAttempts--;
-            int randomIndex = Random.Range(0, availablePoints.Count);
-            Transform spawnPoint = availablePoints[randomIndex];
-            
-            // 거리 체크
-            bool tooClose = false;
-            foreach (var pos in spawnedPositions)
+            while (spawnedCount < countToSpawn && availablePoints.Count > 0 && maxAttempts > 0)
             {
-                if (Vector3.Distance(spawnPoint.position, pos) < minDistanceBetweenTerminals)
+                maxAttempts--;
+                int randomIndex = Random.Range(0, availablePoints.Count);
+                Transform spawnPoint = availablePoints[randomIndex];
+
+                bool tooClose = false;
+                foreach (var pos in spawnedPositions)
                 {
-                    tooClose = true;
-                    break;
+                    if (Vector3.Distance(spawnPoint.position, pos) < minDistanceBetweenTerminals)
+                    { tooClose = true; break; }
+                }
+
+                if (!tooClose || availablePoints.Count <= (countToSpawn - spawnedCount))
+                {
+                    availablePoints.RemoveAt(randomIndex);
+                    Vector3 spawnPos = spawnPoint.position + Vector3.up * 0.5f;
+                    PhotonNetwork.InstantiateRoomObject("HackingTerminal", spawnPos, spawnPoint.rotation);
+                    spawnedPositions.Add(spawnPoint.position);
+                    spawnedCount++;
+                    Debug.Log($"[GameManager] 터미널 {spawnedCount} 생성됨 at {spawnPos}");
                 }
             }
-
-            if (!tooClose || availablePoints.Count <= (countToSpawn - spawnedCount))
-            {
-                // 충분히 멀거나, 남은 포인트가 부족해서 어쩔 수 없이 뽑아야 할 때
-                availablePoints.RemoveAt(randomIndex);
-                Vector3 spawnPos = spawnPoint.position + Vector3.up * 0.5f;
-                PhotonNetwork.InstantiateRoomObject("HackingTerminal", spawnPos, spawnPoint.rotation);
-                spawnedPositions.Add(spawnPoint.position);
-                spawnedCount++;
-                Debug.Log($"[GameManager] 터미널 {spawnedCount} 생성됨 at {spawnPos}");
-            }
-            else
-            {
-                // 너무 가까우면 리스트에서 잠시 제외했다가 나중에 다시 고려하거나 그냥 스킵
-                // 여기서는 그냥 스킵하고 다른 포인트를 찾음
-                continue;
-            }
+        }
+        else
+        {
+            Debug.LogWarning("[GameManager] 터미널 스폰 포인트가 없어 터미널 스폰을 건너뜁니다.");
         }
 
-            // 2. 탈출구 스폰
-            List<Transform> availableEscapePoints = new List<Transform>();
-            foreach(var p in escapeSpawnPoints) if(p != null) availableEscapePoints.Add(p);
+        // 2. 탈출구 스폰 — 터미널 유무와 무관하게 항상 실행
+        List<Transform> availableEscapePoints = new List<Transform>();
+        foreach (var p in escapeSpawnPoints) if (p != null) availableEscapePoints.Add(p);
 
-            if (availableEscapePoints.Count > 0)
-            {
+        if (availableEscapePoints.Count > 0)
+        {
             int randomIndex = Random.Range(0, availableEscapePoints.Count);
             Transform spawnPoint = availableEscapePoints[randomIndex];
-            
-            // Apply small Y-offset (+0.05f) for floor pad
             Vector3 spawnPos = spawnPoint.position + Vector3.up * 0.05f;
             GameObject escapeObj = PhotonNetwork.InstantiateRoomObject("EscapeZonePad", spawnPos, spawnPoint.rotation);
-            
             if (escapeObj != null)
             {
                 escapePoint = escapeObj.GetComponent<EscapePoint>();
                 Debug.Log($"[GameManager] 탈출구 생성됨 at {spawnPos}");
             }
-            }
-            else
-            {
-                Debug.LogWarning("escapeSpawnPoints 리스트가 비어있습니다.");
-            }
-            }
+        }
+        else
+        {
+            Debug.LogWarning("[GameManager] 탈출구 스폰 포인트가 없습니다.");
+        }
+    }
 
     // 게임 시작 시 생존자 수 초기화
     public void InitializeSurvivorCount()
@@ -224,7 +211,10 @@ private const string RoleKey = "Role";
             "<color=red>생존자를 찾으십시오.</color>",
             "<color=#00BFFF>완벽히 연기하여 살아남으십시오.</color>");
 
-        InitializeSurvivorCount();
+        // 마스터 교체 시 타이머 인계를 위해 시작 시간 저장
+        gameStartNetworkTime = PhotonNetwork.Time;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(
+            new ExitGames.Client.Photon.Hashtable { { "GST", gameStartNetworkTime } });
 
         yield return new WaitForSeconds(2f);
         photonView.RPC("SyncMessage", RpcTarget.All, "");
@@ -315,19 +305,57 @@ private const string RoleKey = "Role";
 
     [PunRPC]
     public void OnSurvivorCaught()
-{
-        // 마스터 클라이언트만 생존자 수를 관리
+    {
         if (!PhotonNetwork.IsMasterClient) return;
+
+        // 아직 초기화 전이면(Setup 단계) 무시
+        if (survivorCount < 0) return;
 
         survivorCount--;
         Debug.Log("생존자 검거! 남은 수: " + survivorCount);
 
-        // 생존자가 0명이면 술래 승리로 종료
         if (survivorCount <= 0 && currentState == GameState.Playing)
         {
             StopAllCoroutines();
             SetState(GameState.End);
             photonView.RPC("SyncMessage", RpcTarget.All, "All Caught!\nSeeker Victory!");
+        }
+    }
+
+    // 마스터 클라이언트 교체 시 게임 진행 인계
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+        Debug.Log("[GameManager] 마스터 교체됨 — 게임 진행 인계");
+
+        if (currentState == GameState.Playing)
+            StartCoroutine(TakeoverTimerCoroutine());
+        else if (currentState == GameState.Ready || currentState == GameState.Setup)
+            StartCoroutine(SafeSpawnRoutine());
+    }
+
+    IEnumerator TakeoverTimerCoroutine()
+    {
+        float remaining = playTime;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("GST", out object startObj))
+        {
+            double elapsed = PhotonNetwork.Time - (double)startObj;
+            remaining = Mathf.Max(0, playTime - (float)elapsed);
+        }
+
+        while (currentState == GameState.Playing && remaining > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            remaining -= 1f;
+            int min = Mathf.FloorToInt(remaining / 60f);
+            int sec = Mathf.FloorToInt(remaining % 60f);
+            photonView.RPC("SyncTimer", RpcTarget.All, string.Format("{0:00}:{1:00}", min, sec));
+        }
+
+        if (currentState == GameState.Playing && remaining <= 0)
+        {
+            SetState(GameState.End);
+            photonView.RPC("SyncMessage", RpcTarget.All, "Time Out!\nSurvivor Victory!");
         }
     }
 

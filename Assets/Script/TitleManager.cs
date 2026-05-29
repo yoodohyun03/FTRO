@@ -231,7 +231,16 @@ public class TitleManager : MonoBehaviourPunCallbacks
 
     void OnStartButtonClicked()
     {
-        StartCoroutine(EnsureMatchStartController().AssignRolesAndStart());
+        // 중복 클릭 방지: 버튼 즉시 비활성화
+        if (startButton != null) startButton.interactable = false;
+        StartCoroutine(StartGameRoutine());
+    }
+
+    System.Collections.IEnumerator StartGameRoutine()
+    {
+        yield return StartCoroutine(EnsureMatchStartController().AssignRolesAndStart());
+        // 만약 씬 전환 실패 시 버튼 복구
+        if (startButton != null) startButton.interactable = true;
     }
 
     void OnLeaveButtonClicked()

@@ -207,7 +207,8 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
         if (isDead) { SpectateUpdate(); return; }
 
-        if (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject != null) return;
+        var es = UnityEngine.EventSystems.EventSystem.current;
+        if (es != null && es.currentSelectedGameObject != null) return;
         
         HandleCursorUpdate(); CheckGrounded();
         
@@ -232,7 +233,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             isGrounded = false; wasGrounded = false; groundedIgnoreTimer = jumpGroundCheckDelay; coyoteCounter = 0f; jumpBufferCounter = 0f;
         }
 
-        if (Input.GetMouseButtonDown(0)) { if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() && myRole == SeekerRole && !isAttacking) StartCoroutine(PerformAttack()); }
+        if (Input.GetMouseButtonDown(0)) { var _es = UnityEngine.EventSystems.EventSystem.current; if ((_es == null || !_es.IsPointerOverGameObject()) && myRole == SeekerRole && !isAttacking) StartCoroutine(PerformAttack()); }
         
         HandleNoiseDetection();
         HandleInteraction();
@@ -523,5 +524,5 @@ void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject
             break;
         }
     }
-    void HandleCursorUpdate() { if (Input.GetKeyDown(KeyCode.Escape)) { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; } if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; } }
+    void HandleCursorUpdate() { if (Input.GetKeyDown(KeyCode.Escape)) { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; } var _ces = UnityEngine.EventSystems.EventSystem.current; if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked && (_ces == null || !_ces.IsPointerOverGameObject())) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; } }
 }

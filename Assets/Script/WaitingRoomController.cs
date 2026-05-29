@@ -455,12 +455,13 @@ public sealed class MatchStartController
         this.selectedMapKey = selectedMapKey;
     }
 
+    private bool isStarting = false;
+
     public System.Collections.IEnumerator AssignRolesAndStart()
     {
-        if (PhotonNetwork.CurrentRoom == null)
-        {
-            yield break;
-        }
+        if (PhotonNetwork.CurrentRoom == null) yield break;
+        if (isStarting) yield break; // 중복 호출 방지
+        isStarting = true;
 
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
@@ -477,7 +478,11 @@ public sealed class MatchStartController
 
         yield return new WaitForSeconds(0.5f);
 
-        string mapToLoad = (string)PhotonNetwork.CurrentRoom.CustomProperties[selectedMapKey];
+        string mapToLoad = "CityScene"; // 기본 폴백
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(selectedMapKey, out object mapObj) && mapObj != null)
+            mapToLoad = (string)mapObj;
+        else
+            Debug.LogWarning("[MatchStart] 맵 키를 찾지 못했습니다. 기본 맵(CityScene)으로 로드합니다.");
         PhotonNetwork.LoadLevel(mapToLoad);
     }
 }
