@@ -64,6 +64,12 @@ MonoBehaviour:
   - RPC_SetInvisibility
   - RPC_SetOpened
   - RPC_GiveItem
+  - RPC_SetAIState
+  - RPC_EMP
+  - RPC_FakeNoisePing
+  - RPC_GrantItem
+  - RPC_SpawnDecoy
+  - RPC_SpawnSmoke
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

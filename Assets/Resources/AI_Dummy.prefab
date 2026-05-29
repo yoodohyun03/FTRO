@@ -59,8 +59,8 @@ Animator:
   m_GameObject: {fileID: 3248236053432111382}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 91028badc63f59f43a9c5bda64fbd608, type: 3}
-  m_Controller: {fileID: 9100000, guid: cbb7920e9da429d4898e56b2441b78d2, type: 2}
-  m_CullingMode: 1
+  m_Controller: {fileID: 9100000, guid: 3e5d47c4e78bd9e418f7cbd744c16470, type: 2}
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -229,10 +229,10 @@ MonoBehaviour:
     SynchronizeType: 0
     Name: WalkStartAngle
   - Type: 1
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: Horizontal
   - Type: 1
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: Vertical
   - Type: 4
     SynchronizeType: 0
@@ -259,10 +259,10 @@ MonoBehaviour:
     SynchronizeType: 0
     Name: IsDead
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: IsFalling
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: IsJump
   - Type: 1
     SynchronizeType: 0
@@ -330,6 +330,12 @@ MonoBehaviour:
   - Type: 1
     SynchronizeType: 0
     Name: Damage
+  - Type: 1
+    SynchronizeType: 1
+    Name: MoveSpeed
+  - Type: 4
+    SynchronizeType: 1
+    Name: IsGrounded
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0

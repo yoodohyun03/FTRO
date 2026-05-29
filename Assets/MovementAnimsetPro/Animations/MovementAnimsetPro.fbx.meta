@@ -5,8 +5,15 @@ labels:
 - Animation
 - Male
 - Character
+AssetOrigin:
+  serializedVersion: 1
+  productId: 14047
+  packageName: Movement Animset Pro
+  packageVersion: 2.0.0
+  assetPath: Assets/MovementAnimsetPro/Animations/MovementAnimsetPro.fbx
+  uploadId: 644874
 ModelImporter:
-  serializedVersion: 20101
+  serializedVersion: 24200
   internalIDToNameTable:
   - first:
       1: 100000
@@ -757,19 +764,10 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: Root
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'JumpIdleStart' has import animation warnings
-      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'Spine' has translation animation that will
-      be discarded.\n\t'Spine1' has translation animation that will be discarded.\n\t'LeftShoulder'
-      has translation animation that will be discarded.\n\t'LeftArm' has translation
-      animation that will be discarded.\n\t'Neck' has translation animation that
-      will be discarded.\n\t'Head' has translation animation that will be discarded.\n\t'RightShoulder'
-      has translation animation that will be discarded.\n\t'RightArm' has translation
-      animation that will be discarded.\n"
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -785,7 +783,7 @@ ModelImporter:
     - serializedVersion: 16
       name: BindPose
       takeName: BindPose
-      internalID: 0
+      internalID: 7400000
       firstFrame: 0
       lastFrame: 30
       wrapMode: 0
@@ -796,12 +794,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -966,7 +964,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Idle
       takeName: Idle
-      internalID: 0
+      internalID: 7400002
       firstFrame: 0
       lastFrame: 200
       wrapMode: 0
@@ -980,9 +978,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -1147,7 +1145,7 @@ ModelImporter:
     - serializedVersion: 16
       name: TurnRt90_Loop
       takeName: TurnRt90_Loop
-      internalID: 0
+      internalID: 7400004
       firstFrame: 0
       lastFrame: 39
       wrapMode: 0
@@ -1158,12 +1156,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -1328,7 +1326,7 @@ ModelImporter:
     - serializedVersion: 16
       name: TurnLt90_Loop
       takeName: TurnLt90_Loop
-      internalID: 0
+      internalID: 7400006
       firstFrame: 0
       lastFrame: 39
       wrapMode: 0
@@ -1339,12 +1337,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -1509,7 +1507,7 @@ ModelImporter:
     - serializedVersion: 16
       name: TurnRt180
       takeName: TurnRt180
-      internalID: 0
+      internalID: 7400008
       firstFrame: 0
       lastFrame: 50
       wrapMode: 0
@@ -1520,12 +1518,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -1690,7 +1688,7 @@ ModelImporter:
     - serializedVersion: 16
       name: TurnLt180
       takeName: TurnLt180
-      internalID: 0
+      internalID: 7400010
       firstFrame: 0
       lastFrame: 50
       wrapMode: 0
@@ -1701,12 +1699,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -1871,7 +1869,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkFwdLoop
       takeName: WalkFwdLoop
-      internalID: 0
+      internalID: 7400012
       firstFrame: 0
       lastFrame: 30
       wrapMode: 0
@@ -1884,10 +1882,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -2052,7 +2050,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkFwdStart
       takeName: WalkFwdStart
-      internalID: 0
+      internalID: 7400014
       firstFrame: 0
       lastFrame: 23
       wrapMode: 0
@@ -2065,10 +2063,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -2233,7 +2231,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkFwdStart180_R
       takeName: WalkFwdStart180_R
-      internalID: 0
+      internalID: 7400016
       firstFrame: 0
       lastFrame: 42
       wrapMode: 0
@@ -2244,12 +2242,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -2414,7 +2412,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkFwdStart180_L
       takeName: WalkFwdStart180_L
-      internalID: 0
+      internalID: 7400018
       firstFrame: 0
       lastFrame: 27
       wrapMode: 0
@@ -2425,12 +2423,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -2595,7 +2593,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkFwdStart90_L
       takeName: WalkFwdStart90_L
-      internalID: 0
+      internalID: 7400020
       firstFrame: 0
       lastFrame: 25
       wrapMode: 0
@@ -2606,12 +2604,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -2776,7 +2774,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkFwdStart90_R
       takeName: WalkFwdStart90_R
-      internalID: 0
+      internalID: 7400022
       firstFrame: 0
       lastFrame: 38
       wrapMode: 0
@@ -2787,12 +2785,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -2957,7 +2955,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkFwdStop_LU
       takeName: WalkFwdStop_LU
-      internalID: 0
+      internalID: 7400024
       firstFrame: 0
       lastFrame: 40
       wrapMode: 0
@@ -2970,10 +2968,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -3138,7 +3136,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkFwdStop_RU
       takeName: WalkFwdStop_RU
-      internalID: 0
+      internalID: 7400026
       firstFrame: 0
       lastFrame: 46
       wrapMode: 0
@@ -3151,10 +3149,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -3319,7 +3317,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkFwdLoop_LeanR
       takeName: WalkFwdLoop_LeanR
-      internalID: 0
+      internalID: 7400028
       firstFrame: 0
       lastFrame: 30
       wrapMode: 0
@@ -3332,10 +3330,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -3500,7 +3498,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkArchLoop_R
       takeName: WalkArchLoop_R
-      internalID: 0
+      internalID: 7400030
       firstFrame: 0
       lastFrame: 30
       wrapMode: 0
@@ -3511,10 +3509,10 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -3681,7 +3679,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkFwdLoop_LeanL
       takeName: WalkFwdLoop_LeanL
-      internalID: 0
+      internalID: 7400032
       firstFrame: 0
       lastFrame: 30
       wrapMode: 0
@@ -3694,10 +3692,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -3862,7 +3860,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkArchLoop_L
       takeName: WalkArchLoop_L
-      internalID: 0
+      internalID: 7400034
       firstFrame: 0
       lastFrame: 30
       wrapMode: 0
@@ -3873,10 +3871,10 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -4043,7 +4041,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdLoop
       takeName: RunFwdLoop
-      internalID: 0
+      internalID: 7400036
       firstFrame: 0
       lastFrame: 23
       wrapMode: 0
@@ -4056,10 +4054,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -4224,7 +4222,7 @@ ModelImporter:
     - serializedVersion: 16
       name: SprintFwdLoop
       takeName: SprintFwdLoop
-      internalID: 0
+      internalID: 7400038
       firstFrame: 0
       lastFrame: 19
       wrapMode: 0
@@ -4237,10 +4235,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -4405,7 +4403,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdStart
       takeName: RunFwdStart
-      internalID: 0
+      internalID: 7400040
       firstFrame: 0
       lastFrame: 23
       wrapMode: 0
@@ -4418,10 +4416,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -4586,7 +4584,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdStart180_R
       takeName: RunFwdStart180_R
-      internalID: 0
+      internalID: 7400042
       firstFrame: 0
       lastFrame: 34
       wrapMode: 0
@@ -4597,12 +4595,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -4767,7 +4765,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdStart180_L
       takeName: RunFwdStart180_L
-      internalID: 0
+      internalID: 7400044
       firstFrame: 0
       lastFrame: 26
       wrapMode: 0
@@ -4778,12 +4776,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -4948,7 +4946,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdStart90_R
       takeName: RunFwdStart90_R
-      internalID: 0
+      internalID: 7400046
       firstFrame: 0
       lastFrame: 30
       wrapMode: 0
@@ -4959,12 +4957,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -5129,7 +5127,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdStart90_L
       takeName: RunFwdStart90_L
-      internalID: 0
+      internalID: 7400048
       firstFrame: 0
       lastFrame: 20
       wrapMode: 0
@@ -5140,12 +5138,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -5310,7 +5308,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdStop_RU
       takeName: RunFwdStop_RU
-      internalID: 0
+      internalID: 7400050
       firstFrame: 0
       lastFrame: 45
       wrapMode: 0
@@ -5323,8 +5321,8 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -5491,7 +5489,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdStop_LU
       takeName: RunFwdStop_LU
-      internalID: 0
+      internalID: 7400052
       firstFrame: 0
       lastFrame: 38
       wrapMode: 0
@@ -5504,8 +5502,8 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -5672,7 +5670,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdTurn180_R_LU
       takeName: RunFwdTurn180_R_LU
-      internalID: 0
+      internalID: 7400054
       firstFrame: 12
       lastFrame: 55
       wrapMode: 0
@@ -5683,10 +5681,10 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -5853,7 +5851,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdTurn180_R_RU
       takeName: RunFwdTurn180_R_RU
-      internalID: 0
+      internalID: 7400056
       firstFrame: 0
       lastFrame: 46
       wrapMode: 0
@@ -5864,12 +5862,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -6034,7 +6032,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdTurn180_L_RU
       takeName: RunFwdTurn180_L_RU
-      internalID: 0
+      internalID: 7400058
       firstFrame: 6
       lastFrame: 38
       wrapMode: 0
@@ -6045,12 +6043,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -6215,7 +6213,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdTurn180_L_LU
       takeName: RunFwdTurn180_L_LU
-      internalID: 0
+      internalID: 7400060
       firstFrame: 8
       lastFrame: 37
       wrapMode: 0
@@ -6226,12 +6224,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -6396,7 +6394,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunArchLoop_L
       takeName: RunArchLoop_L
-      internalID: 0
+      internalID: 7400062
       firstFrame: 0
       lastFrame: 23
       wrapMode: 0
@@ -6407,10 +6405,10 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -6577,7 +6575,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdLoop_LeanL
       takeName: RunFwdLoop_LeanL
-      internalID: 0
+      internalID: 7400064
       firstFrame: 0
       lastFrame: 23
       wrapMode: 0
@@ -6590,8 +6588,8 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -6758,7 +6756,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunArchLoop_R
       takeName: RunArchLoop_R
-      internalID: 0
+      internalID: 7400066
       firstFrame: 0
       lastFrame: 23
       wrapMode: 0
@@ -6769,10 +6767,10 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -6939,7 +6937,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunFwdLoop_LeanR
       takeName: RunFwdLoop_LeanR
-      internalID: 0
+      internalID: 7400068
       firstFrame: 0
       lastFrame: 23
       wrapMode: 0
@@ -6952,8 +6950,8 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -7120,7 +7118,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Jump_place_ALL
       takeName: Jump_place_ALL
-      internalID: 0
+      internalID: 7400070
       firstFrame: 0
       lastFrame: 68
       wrapMode: 0
@@ -7133,10 +7131,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -7301,7 +7299,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Jump_place_ALL_short
       takeName: Jump_place_ALL_short
-      internalID: 0
+      internalID: 7400072
       firstFrame: 14
       lastFrame: 68
       wrapMode: 0
@@ -7312,12 +7310,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -7482,7 +7480,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Jump_walk_ru_ALL
       takeName: Jump_walk_ru_ALL
-      internalID: 0
+      internalID: 7400074
       firstFrame: 0
       lastFrame: 35
       wrapMode: 0
@@ -7495,10 +7493,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -7663,7 +7661,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Jump_walk_lu_ALL
       takeName: Jump_walk_lu_ALL
-      internalID: 0
+      internalID: 7400076
       firstFrame: 0
       lastFrame: 45
       wrapMode: 0
@@ -7676,10 +7674,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -7844,7 +7842,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Jump_run_ru_ALL
       takeName: Jump_run_ru_ALL
-      internalID: 0
+      internalID: 7400078
       firstFrame: 0
       lastFrame: 59
       wrapMode: 0
@@ -7857,10 +7855,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -8025,7 +8023,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Jump_run_lu_ALL
       takeName: Jump_run_lu_ALL
-      internalID: 0
+      internalID: 7400080
       firstFrame: 0
       lastFrame: 59
       wrapMode: 0
@@ -8038,10 +8036,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -8206,7 +8204,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpIdleStart
       takeName: JumpIdleStart
-      internalID: 0
+      internalID: 7400082
       firstFrame: 14
       lastFrame: 120
       wrapMode: 0
@@ -8218,11 +8216,11 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -8387,7 +8385,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpIdleLand
       takeName: JumpIdleLand
-      internalID: 0
+      internalID: 7400084
       firstFrame: 37
       lastFrame: 68
       wrapMode: 0
@@ -8400,10 +8398,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -8568,7 +8566,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpIdleLand2Walk
       takeName: JumpIdleLand2Walk
-      internalID: 0
+      internalID: 7400086
       firstFrame: 0
       lastFrame: 39
       wrapMode: 0
@@ -8581,10 +8579,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -8749,7 +8747,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpIdleLandHard
       takeName: JumpIdleLandHard
-      internalID: 0
+      internalID: 7400088
       firstFrame: 0
       lastFrame: 47
       wrapMode: 0
@@ -8762,10 +8760,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -8930,7 +8928,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpWalkStart_RU
       takeName: JumpWalkStart_RU
-      internalID: 0
+      internalID: 7400090
       firstFrame: 0
       lastFrame: 120
       wrapMode: 0
@@ -8942,11 +8940,11 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -9111,7 +9109,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpWalk_RU_Land
       takeName: JumpWalk_RU_Land
-      internalID: 0
+      internalID: 7400092
       firstFrame: 17
       lastFrame: 59
       wrapMode: 0
@@ -9124,10 +9122,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -9292,7 +9290,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpWalk_RU_Land2Walk
       takeName: JumpWalk_RU_Land2Walk
-      internalID: 0
+      internalID: 7400094
       firstFrame: 18
       lastFrame: 35
       wrapMode: 0
@@ -9305,10 +9303,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -9473,7 +9471,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpWalkStart_LU
       takeName: JumpWalkStart_LU
-      internalID: 0
+      internalID: 7400096
       firstFrame: 0
       lastFrame: 120
       wrapMode: 0
@@ -9485,11 +9483,11 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -9654,7 +9652,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpWalk_LU_Land
       takeName: JumpWalk_LU_Land
-      internalID: 0
+      internalID: 7400098
       firstFrame: 21
       lastFrame: 59
       wrapMode: 0
@@ -9667,10 +9665,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -9835,7 +9833,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpWalk_LU_Land2Walk
       takeName: JumpWalk_LU_Land2Walk
-      internalID: 0
+      internalID: 7400100
       firstFrame: 18
       lastFrame: 45
       wrapMode: 0
@@ -9848,10 +9846,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -10016,7 +10014,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpRunStart_RU
       takeName: JumpRunStart_RU
-      internalID: 0
+      internalID: 7400102
       firstFrame: 0
       lastFrame: 120
       wrapMode: 0
@@ -10028,11 +10026,11 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -10197,7 +10195,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpRun_RU_Land
       takeName: JumpRun_RU_Land
-      internalID: 0
+      internalID: 7400104
       firstFrame: 17
       lastFrame: 59
       wrapMode: 0
@@ -10210,10 +10208,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -10378,7 +10376,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpRun_RU_Land2Run
       takeName: JumpRun_RU_Land2Run
-      internalID: 0
+      internalID: 7400106
       firstFrame: 0
       lastFrame: 13
       wrapMode: 0
@@ -10391,10 +10389,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -10559,7 +10557,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpRunStart_LU
       takeName: JumpRunStart_LU
-      internalID: 0
+      internalID: 7400108
       firstFrame: 0
       lastFrame: 120
       wrapMode: 0
@@ -10571,11 +10569,11 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -10740,7 +10738,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpRun_LU_Land
       takeName: JumpRun_LU_Land
-      internalID: 0
+      internalID: 7400110
       firstFrame: 21
       lastFrame: 59
       wrapMode: 0
@@ -10753,10 +10751,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -10921,7 +10919,7 @@ ModelImporter:
     - serializedVersion: 16
       name: JumpRun_LU_Land2Run
       takeName: JumpRun_LU_Land2Run
-      internalID: 0
+      internalID: 7400112
       firstFrame: 0
       lastFrame: 27
       wrapMode: 0
@@ -10934,10 +10932,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -11102,7 +11100,7 @@ ModelImporter:
     - serializedVersion: 16
       name: FallingLoop
       takeName: FallingLoop
-      internalID: 0
+      internalID: 7400114
       firstFrame: 70
       lastFrame: 170
       wrapMode: 0
@@ -11114,11 +11112,11 @@ ModelImporter:
       loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 1
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -11283,7 +11281,7 @@ ModelImporter:
     - serializedVersion: 16
       name: FallingLoop_RootMotion
       takeName: FallingLoop_RootMotion
-      internalID: 0
+      internalID: 7400116
       firstFrame: 70
       lastFrame: 170
       wrapMode: 0
@@ -11295,11 +11293,11 @@ ModelImporter:
       loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 1
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -11464,7 +11462,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Idle2Crouch
       takeName: Idle2Crouch
-      internalID: 0
+      internalID: 7400118
       firstFrame: 0
       lastFrame: 17
       wrapMode: 0
@@ -11473,12 +11471,12 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -11645,7 +11643,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Crouch_Idle
       takeName: Crouch_Idle
-      internalID: 0
+      internalID: 7400120
       firstFrame: 0
       lastFrame: 200
       wrapMode: 0
@@ -11658,8 +11656,8 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -11826,7 +11824,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Crouch2Idle
       takeName: Crouch2Idle
-      internalID: 0
+      internalID: 7400122
       firstFrame: 0
       lastFrame: 30
       wrapMode: 0
@@ -11835,12 +11833,12 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -12007,7 +12005,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Crouch_WalkFwdLoop
       takeName: Crouch_WalkFwdLoop
-      internalID: 0
+      internalID: 7400124
       firstFrame: 0
       lastFrame: 30
       wrapMode: 0
@@ -12020,10 +12018,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -12188,7 +12186,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Crouch_WalkFwdStart
       takeName: Crouch_WalkFwdStart
-      internalID: 0
+      internalID: 7400126
       firstFrame: 0
       lastFrame: 22
       wrapMode: 0
@@ -12201,10 +12199,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -12369,7 +12367,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Crouch_WalkFwdStop_LU
       takeName: Crouch_WalkFwdStop_LU
-      internalID: 0
+      internalID: 7400128
       firstFrame: 0
       lastFrame: 22
       wrapMode: 0
@@ -12382,10 +12380,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -12550,7 +12548,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Crouch_WalkFwdStop_RU
       takeName: Crouch_WalkFwdStop_RU
-      internalID: 0
+      internalID: 7400130
       firstFrame: 0
       lastFrame: 20
       wrapMode: 0
@@ -12563,10 +12561,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -12731,7 +12729,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Crouch_WalkFwdStart180_R
       takeName: Crouch_WalkFwdStart180_R
-      internalID: 0
+      internalID: 7400132
       firstFrame: 2
       lastFrame: 49
       wrapMode: 0
@@ -12742,12 +12740,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -12912,7 +12910,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Crouch_WalkFwdStart180_L
       takeName: Crouch_WalkFwdStart180_L
-      internalID: 0
+      internalID: 7400134
       firstFrame: 0
       lastFrame: 26
       wrapMode: 0
@@ -12923,12 +12921,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -13093,7 +13091,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Crouch_WalkFwdStart90_R
       takeName: Crouch_WalkFwdStart90_R
-      internalID: 0
+      internalID: 7400136
       firstFrame: 0
       lastFrame: 37
       wrapMode: 0
@@ -13104,12 +13102,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -13274,7 +13272,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Crouch_WalkFwdStart90_L
       takeName: Crouch_WalkFwdStart90_L
-      internalID: 0
+      internalID: 7400138
       firstFrame: 0
       lastFrame: 23
       wrapMode: 0
@@ -13285,12 +13283,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -13455,7 +13453,7 @@ ModelImporter:
     - serializedVersion: 16
       name: ButtonPush_RH
       takeName: ButtonPush_RH
-      internalID: 0
+      internalID: 7400140
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -13469,9 +13467,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -13636,7 +13634,7 @@ ModelImporter:
     - serializedVersion: 16
       name: ButtonPush_RH_90
       takeName: ButtonPush_RH_90
-      internalID: 0
+      internalID: 7400142
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -13650,9 +13648,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -13817,7 +13815,7 @@ ModelImporter:
     - serializedVersion: 16
       name: ButtonPush_LH
       takeName: ButtonPush_LH
-      internalID: 0
+      internalID: 7400144
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -13831,9 +13829,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -13998,7 +13996,7 @@ ModelImporter:
     - serializedVersion: 16
       name: ButtonPush_LH_90
       takeName: ButtonPush_LH_90
-      internalID: 0
+      internalID: 7400146
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -14012,9 +14010,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -14179,7 +14177,7 @@ ModelImporter:
     - serializedVersion: 16
       name: KeypadUse_RH
       takeName: KeypadUse_RH
-      internalID: 0
+      internalID: 7400148
       firstFrame: 0
       lastFrame: 80
       wrapMode: 0
@@ -14193,9 +14191,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -14360,7 +14358,7 @@ ModelImporter:
     - serializedVersion: 16
       name: KeypadUse_RH_90
       takeName: KeypadUse_RH_90
-      internalID: 0
+      internalID: 7400150
       firstFrame: 0
       lastFrame: 80
       wrapMode: 0
@@ -14374,9 +14372,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -14541,7 +14539,7 @@ ModelImporter:
     - serializedVersion: 16
       name: KeypadUse_LH
       takeName: KeypadUse_LH
-      internalID: 0
+      internalID: 7400152
       firstFrame: 0
       lastFrame: 80
       wrapMode: 0
@@ -14555,9 +14553,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -14722,7 +14720,7 @@ ModelImporter:
     - serializedVersion: 16
       name: KeypadUse_LH_90
       takeName: KeypadUse_LH_90
-      internalID: 0
+      internalID: 7400154
       firstFrame: 0
       lastFrame: 80
       wrapMode: 0
@@ -14736,9 +14734,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -14903,7 +14901,7 @@ ModelImporter:
     - serializedVersion: 16
       name: PickUp_RH
       takeName: PickUp_RH
-      internalID: 0
+      internalID: 7400156
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -14917,9 +14915,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -15084,7 +15082,7 @@ ModelImporter:
     - serializedVersion: 16
       name: PickUp_RH_90
       takeName: PickUp_RH_90
-      internalID: 0
+      internalID: 7400158
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -15098,9 +15096,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -15265,7 +15263,7 @@ ModelImporter:
     - serializedVersion: 16
       name: PickUp_LH
       takeName: PickUp_LH
-      internalID: 0
+      internalID: 7400160
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -15279,9 +15277,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -15446,7 +15444,7 @@ ModelImporter:
     - serializedVersion: 16
       name: PickUp_LH_90
       takeName: PickUp_LH_90
-      internalID: 0
+      internalID: 7400162
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -15460,9 +15458,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -15627,7 +15625,7 @@ ModelImporter:
     - serializedVersion: 16
       name: PullLever_RH
       takeName: PullLever_RH
-      internalID: 0
+      internalID: 7400164
       firstFrame: 0
       lastFrame: 70
       wrapMode: 0
@@ -15641,9 +15639,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -15808,7 +15806,7 @@ ModelImporter:
     - serializedVersion: 16
       name: PullLever_RH_90
       takeName: PullLever_RH_90
-      internalID: 0
+      internalID: 7400166
       firstFrame: 0
       lastFrame: 70
       wrapMode: 0
@@ -15822,9 +15820,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -15989,7 +15987,7 @@ ModelImporter:
     - serializedVersion: 16
       name: PullLever_LH
       takeName: PullLever_LH
-      internalID: 0
+      internalID: 7400168
       firstFrame: 0
       lastFrame: 70
       wrapMode: 0
@@ -16003,9 +16001,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -16170,7 +16168,7 @@ ModelImporter:
     - serializedVersion: 16
       name: PullLever_LH_90
       takeName: PullLever_LH_90
-      internalID: 0
+      internalID: 7400170
       firstFrame: 0
       lastFrame: 70
       wrapMode: 0
@@ -16184,9 +16182,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -16351,7 +16349,7 @@ ModelImporter:
     - serializedVersion: 16
       name: DontKnow
       takeName: DontKnow
-      internalID: 0
+      internalID: 7400172
       firstFrame: 0
       lastFrame: 50
       wrapMode: 0
@@ -16365,9 +16363,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -16532,7 +16530,7 @@ ModelImporter:
     - serializedVersion: 16
       name: ThrowAway_RH
       takeName: ThrowAway_RH
-      internalID: 0
+      internalID: 7400174
       firstFrame: 0
       lastFrame: 50
       wrapMode: 0
@@ -16546,9 +16544,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -16713,7 +16711,7 @@ ModelImporter:
     - serializedVersion: 16
       name: ThrowAway_LH
       takeName: ThrowAway_LH
-      internalID: 0
+      internalID: 7400176
       firstFrame: 0
       lastFrame: 50
       wrapMode: 0
@@ -16727,9 +16725,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -16894,7 +16892,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkThroughDoor_RH
       takeName: WalkThroughDoor_RH
-      internalID: 0
+      internalID: 7400178
       firstFrame: 0
       lastFrame: 86
       wrapMode: 0
@@ -16907,10 +16905,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -17075,7 +17073,7 @@ ModelImporter:
     - serializedVersion: 16
       name: WalkThroughDoor_LH
       takeName: WalkThroughDoor_LH
-      internalID: 0
+      internalID: 7400180
       firstFrame: 0
       lastFrame: 86
       wrapMode: 0
@@ -17088,10 +17086,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -17261,10 +17259,12 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 0
     importBlendShapes: 1
     importCameras: 0
     importLights: 0
+    nodeNameCollisionStrategy: 0
     fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
@@ -17276,6 +17276,10 @@ ModelImporter:
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
+    optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
     meshOptimizationFlags: -1
     indexFormat: 1
     secondaryUVAngleDistortion: 8
@@ -17286,6 +17290,7 @@ ModelImporter:
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 0
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -17736,8 +17741,7 @@ ModelImporter:
     - name: RightUpLegRoll
       parentName: 
       position: {x: 0.25699177, y: 0.000000017943513, z: 0.00000022397667}
-      rotation: {x: -0.000000037983202, y: -0.00000003613614, z: 0.00000005009321,
-        w: 1}
+      rotation: {x: -0.000000037983202, y: -0.00000003613614, z: 0.00000005009321, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: RightLeg
       parentName: 
@@ -17772,8 +17776,7 @@ ModelImporter:
     - name: LeftUpLegRoll
       parentName: 
       position: {x: -0.25699112, y: 4.440892e-18, z: -1.7763568e-17}
-      rotation: {x: -0.0000003726248, y: -0.00000022873148, z: -0.00000007801417,
-        w: 1}
+      rotation: {x: -0.0000003726248, y: -0.00000022873148, z: -0.00000007801417, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: LeftLeg
       parentName: 
@@ -17823,8 +17826,7 @@ ModelImporter:
     - name: RightArmRoll
       parentName: 
       position: {x: 0.12099669, y: 0.00000457359, z: 0.00000093895443}
-      rotation: {x: -0.0000002104309, y: -0.00000029665108, z: -0.000000015340492,
-        w: 1}
+      rotation: {x: -0.0000002104309, y: -0.00000029665108, z: -0.000000015340492, w: 1}
       scale: {x: 1.0000001, y: 1, z: 1.0000002}
     - name: RightForeArm
       parentName: 
@@ -17844,8 +17846,7 @@ ModelImporter:
     - name: RightHandProp
       parentName: 
       position: {x: 0.07249579, y: 0.020210598, z: -0.0037980953}
-      rotation: {x: 0.00000002245396, y: -0.000000014289001, z: -0.0000000056911436,
-        w: 1}
+      rotation: {x: 0.00000002245396, y: -0.000000014289001, z: -0.0000000056911436, w: 1}
       scale: {x: 1, y: 1.0000002, z: 1}
     - name: RightHandThumb1
       parentName: 
@@ -17925,8 +17926,7 @@ ModelImporter:
     - name: RightHandMiddle4
       parentName: 
       position: {x: 0.026083775, y: -0.0000036223148, z: -0.0000006955289}
-      rotation: {x: -0.000000021378272, y: -0.0000019941228, z: -0.0000006359559,
-        w: 1}
+      rotation: {x: -0.000000021378272, y: -0.0000019941228, z: -0.0000006359559, w: 1}
       scale: {x: 1.0000001, y: 1, z: 1.0000001}
     - name: RightHandIndex1
       parentName: 
@@ -17971,8 +17971,7 @@ ModelImporter:
     - name: LeftArmRoll
       parentName: 
       position: {x: -0.12099714, y: -0.000003967285, z: -0.00000091453967}
-      rotation: {x: -0.00000016138416, y: -0.00000026877396, z: -0.00000034783926,
-        w: 1}
+      rotation: {x: -0.00000016138416, y: -0.00000026877396, z: -0.00000034783926, w: 1}
       scale: {x: 1.0000001, y: 1, z: 1.0000002}
     - name: LeftForeArm
       parentName: 
@@ -17982,8 +17981,7 @@ ModelImporter:
     - name: LeftForeArmRoll
       parentName: 
       position: {x: -0.14891969, y: 0.0000021362305, z: 0.0000022411346}
-      rotation: {x: -0.00000050798593, y: -0.00000013528394, z: -0.0000011502489,
-        w: 1}
+      rotation: {x: -0.00000050798593, y: -0.00000013528394, z: -0.0000011502489, w: 1}
       scale: {x: 1, y: 1.0000001, z: 1.0000001}
     - name: LeftHand
       parentName: 
@@ -17993,8 +17991,7 @@ ModelImporter:
     - name: LeftHandProp
       parentName: 
       position: {x: -0.07249725, y: -0.02020166, z: 0.0037999721}
-      rotation: {x: 0.000000022226013, y: 0.0000000037368815, z: -0.000000014416183,
-        w: 1}
+      rotation: {x: 0.000000022226013, y: 0.0000000037368815, z: -0.000000014416183, w: 1}
       scale: {x: 1, y: 1.0000002, z: 1}
     - name: LeftHandThumb1
       parentName: 
@@ -18113,14 +18110,10 @@ ModelImporter:
   animationType: 3
   humanoidOversampling: 1
   avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 14047
-  packageName: Movement Animset Pro
-  packageVersion: 2.0.0
-  assetPath: Assets/MovementAnimsetPro/Animations/MovementAnimsetPro.fbx
-  uploadId: 644874

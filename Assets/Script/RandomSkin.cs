@@ -154,10 +154,16 @@ public class RandomSkin : MonoBehaviourPunCallbacks
     {
         yield return null;
         if (a == null) yield break;
+        
+        // 초기 파라미터 강제 설정
         a.SetFloat("IsControl", 1f);
         a.SetBool("IsDead", false);
+        a.SetBool("IsGrounded", true); // 기본적으로 땅에 있다고 가정하여 낙하 애니메이션 방지
         a.SetBool("IsFalling", false);
         a.SetBool("IsJump", false);
+        a.SetFloat("MoveSpeed", 0f);
+        a.SetFloat("Horizontal", 0f);
+        a.SetFloat("Vertical", 0f);
     }
 
     // ── 뼈대 유틸 ───────────────────────────────────────

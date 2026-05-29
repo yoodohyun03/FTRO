@@ -196,8 +196,8 @@ Animator:
   m_GameObject: {fileID: 4227893057856370313}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 91028badc63f59f43a9c5bda64fbd608, type: 3}
-  m_Controller: {fileID: 9100000, guid: cbb7920e9da429d4898e56b2441b78d2, type: 2}
-  m_CullingMode: 1
+  m_Controller: {fileID: 9100000, guid: 3e5d47c4e78bd9e418f7cbd744c16470, type: 2}
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -265,113 +265,35 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 1
+    SynchronizeType: 1
+    Name: MoveSpeed
+  - Type: 9
     SynchronizeType: 0
-    Name: InputAngle
+    Name: Jump
+  - Type: 9
+    SynchronizeType: 0
+    Name: Punch
+  - Type: 4
+    SynchronizeType: 1
+    Name: IsGrounded
+  - Type: 4
+    SynchronizeType: 1
+    Name: IsJump
+  - Type: 4
+    SynchronizeType: 1
+    Name: IsFalling
   - Type: 1
-    SynchronizeType: 0
-    Name: WalkStartAngle
-  - Type: 1
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: Horizontal
   - Type: 1
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: Vertical
-  - Type: 4
-    SynchronizeType: 0
-    Name: IsStopRU
-  - Type: 4
-    SynchronizeType: 0
-    Name: IsStopLU
-  - Type: 1
-    SynchronizeType: 0
-    Name: IsRU
-  - Type: 1
-    SynchronizeType: 0
-    Name: InputMagnitude
-  - Type: 1
-    SynchronizeType: 0
-    Name: HorAimAngle
-  - Type: 1
-    SynchronizeType: 0
-    Name: VerAimAngle
-  - Type: 1
-    SynchronizeType: 0
-    Name: WalkStopAngle
-  - Type: 4
-    SynchronizeType: 0
-    Name: IsDead
-  - Type: 4
-    SynchronizeType: 0
-    Name: IsFalling
-  - Type: 4
-    SynchronizeType: 0
-    Name: IsJump
-  - Type: 1
-    SynchronizeType: 0
-    Name: Crouch_notUsed
-  - Type: 4
-    SynchronizeType: 0
-    Name: IsCrouch
   - Type: 1
     SynchronizeType: 0
     Name: IsControl
-  - Type: 1
-    SynchronizeType: 0
-    Name: X
-  - Type: 1
-    SynchronizeType: 0
-    Name: Z
-  - Type: 1
-    SynchronizeType: 0
-    Name: RawInputAngle
-  - Type: 1
-    SynchronizeType: 0
-    Name: InteractAngle
   - Type: 4
     SynchronizeType: 0
-    Name: Running
-  - Type: 1
-    SynchronizeType: 0
-    Name: SprintFactor
-  - Type: 1
-    SynchronizeType: 0
-    Name: FloorAngle
-  - Type: 9
-    SynchronizeType: 0
-    Name: Vault
-  - Type: 9
-    SynchronizeType: 0
-    Name: Vault2m
-  - Type: 9
-    SynchronizeType: 0
-    Name: HitWall
-  - Type: 9
-    SynchronizeType: 0
-    Name: Vault05m
-  - Type: 9
-    SynchronizeType: 0
-    Name: Vault1m
-  - Type: 4
-    SynchronizeType: 0
-    Name: IsAvoidMode
-  - Type: 9
-    SynchronizeType: 0
-    Name: Slide
-  - Type: 1
-    SynchronizeType: 0
-    Name: FallingTime
-  - Type: 9
-    SynchronizeType: 0
-    Name: IsPunch
-  - Type: 9
-    SynchronizeType: 0
-    Name: IsPunch2
-  - Type: 9
-    SynchronizeType: 0
-    Name: IsPunchStart
-  - Type: 1
-    SynchronizeType: 0
-    Name: Damage
+    Name: IsDead
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
@@ -401,6 +323,7 @@ MonoBehaviour:
   penaltyStunTime: 1.5
   attackRadius: 1.2
   sprintNoiseThreshold: 1.5
+  hackSpeedBoost: 0
   jumpPower: 5
   rayLength: 0.5
   groundCheckRadius: 0.2

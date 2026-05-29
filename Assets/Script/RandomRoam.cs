@@ -4,9 +4,14 @@ using Photon.Pun;
 
 public class RandomRoam : MonoBehaviourPun
 {
+    public enum AIState { Normal, Frozen, Swarming }
+    private AIState currentState = AIState.Normal;
+    private float stateTimer = 0f;
+    private Transform currentSwarmTarget;
+
     private NavMeshAgent agent;
     [HideInInspector] public Animator anim;
-    private Rigidbody rb;
+private Rigidbody rb;
 
     public float roamRadius = 30f;
     public float waitTime = 2f;
@@ -51,7 +56,7 @@ public class RandomRoam : MonoBehaviourPun
         if (anim != null)
         {
             anim.applyRootMotion = false;
-            anim.SetBool("IsControl", true);
+            anim.SetFloat("IsControl", 1f);
         }
 
         if (rb != null)
@@ -70,10 +75,16 @@ public class RandomRoam : MonoBehaviourPun
             // NavMeshAgent 크기 설정
             agent.radius = agentRadius;
             agent.height = agentHeight;
+            agent.baseOffset = 0f; // 발바닥 기준
 
-            if (!agent.isOnNavMesh && NavMesh.SamplePosition(transform.position, out NavMeshHit startHit, 3f, NavMesh.AllAreas))
+            // 땅 파고들기 방지: 소환 시점에 NavMesh 위에 정확히 있는지 확인
+            if (NavMesh.SamplePosition(transform.position, out NavMeshHit startHit, 5f, NavMesh.AllAreas))
             {
-                agent.Warp(startHit.position);
+                // 현재 위치와 NavMesh 위치 차이가 너무 크면(땅 밑이면) 워프
+                if (Mathf.Abs(transform.position.y - startHit.position.y) > 0.5f)
+                {
+                    agent.Warp(startHit.position);
+                }
             }
         }
 
@@ -86,8 +97,52 @@ public class RandomRoam : MonoBehaviourPun
         if (agent == null) return;
         if (!agent.isOnNavMesh) return;
 
+        // 상태 타이머 관리
+        if (currentState != AIState.Normal)
+        {
+            stateTimer -= Time.deltaTime;
+            if (stateTimer <= 0f)
+            {
+                currentState = AIState.Normal;
+                if (agent.isOnNavMesh) agent.isStopped = false;
+                currentSwarmTarget = null;
+            }
+        }
+
+        // 상태별 로직 처리
+        if (currentState == AIState.Frozen)
+        {
+            if (agent.isOnNavMesh) agent.isStopped = true;
+            UpdateAnimation(0f, false);
+            return;
+        }
+        else if (currentState == AIState.Swarming && currentSwarmTarget != null)
+        {
+            // Only the Master Client should decide where to go to avoid jitter
+            if (PhotonNetwork.IsMasterClient)
+            {
+                timer += Time.deltaTime;
+                // Update destination every 0.5 seconds to track moving target
+                if (timer >= 0.5f)
+                {
+                    if (agent.isOnNavMesh)
+                    {
+                        agent.isStopped = false;
+                        agent.SetDestination(currentSwarmTarget.position);
+                        agent.speed = runSpeed;
+                    }
+                    timer = 0f;
+                }
+            }
+            
+            UpdateAnimation(1.0f, true);
+            return;
+        }
+
+        if (agent.isOnNavMesh && agent.isStopped) agent.isStopped = false;
+
         // 땅에 닿았는지 확인
-        CheckGrounded();
+CheckGrounded();
 
         // 마스터만 AI 목적지 설정
         if (PhotonNetwork.IsMasterClient)
@@ -141,40 +196,19 @@ public class RandomRoam : MonoBehaviourPun
         }
 
         // 모든 클라이언트에서 애니메이션 업데이트
-        if (anim != null)
-        {
-            float currentSpeed = Mathf.Max(agent.velocity.magnitude, agent.desiredVelocity.magnitude);
-            bool hasMoveIntent = agent.hasPath && agent.remainingDistance > Mathf.Max(agent.stoppingDistance, 0.1f);
-            float positionDelta = Vector3.Distance(transform.position, lastPosition);
-            bool movedByTransform = positionDelta > 0.0015f;
-            bool isMoving = currentSpeed >= moveThreshold || hasMoveIntent || movedByTransform;
+        float currentSpeed = Mathf.Max(agent.velocity.magnitude, agent.desiredVelocity.magnitude);
+        bool hasMoveIntent = agent.hasPath && agent.remainingDistance > Mathf.Max(agent.stoppingDistance, 0.1f);
+        float positionDelta = Vector3.Distance(transform.position, lastPosition);
+        bool movedByTransform = positionDelta > 0.0015f;
+        bool isMoving = currentSpeed >= moveThreshold || hasMoveIntent || movedByTransform;
 
-            float magnitude = 0f;
-            if (isMoving) magnitude = isRunning ? 1.0f : 0.5f;
+        float magnitude = 0f;
+        if (isMoving) magnitude = isRunning ? 1.0f : 0.5f;
 
-            anim.SetFloat("InputMagnitude", magnitude);
-            anim.SetBool("Running", isRunning && isMoving);
-
-            if (isMoving)
-            {
-                Vector3 localVel = transform.InverseTransformDirection(agent.velocity.normalized);
-                anim.SetFloat("Vertical", localVel.z);
-                anim.SetFloat("Horizontal", localVel.x);
-                anim.SetFloat("Z", localVel.z);
-                anim.SetFloat("X", localVel.x);
-            }
-            else
-            {
-                anim.SetFloat("Vertical", 0f);
-                anim.SetFloat("Horizontal", 0f);
-                anim.SetFloat("Z", 0f);
-                anim.SetFloat("X", 0f);
-            }
-            anim.SetFloat("SprintFactor", (isRunning && isMoving) ? 1f : 0f);
-        }
+        UpdateAnimation(magnitude, isRunning);
 
         lastPosition = transform.position;
-    }
+        }
 
     void CheckGrounded()
     {
@@ -190,8 +224,79 @@ public class RandomRoam : MonoBehaviourPun
         isGrounded = Physics.Raycast(transform.position, Vector3.down, rayLength);
     }
 
-    public void UpdateAnimator(Animator newAnim)
+    private void UpdateAnimation(float magnitude, bool running)
     {
+        if (anim == null) return;
+
+        // Use new PlayerAnim parameters
+        anim.SetBool("IsGrounded", isGrounded);
+        
+        if (magnitude > 0.05f)
+        {
+            Vector3 localVel = transform.InverseTransformDirection(agent.velocity.normalized);
+            float speedFactor = running ? 1.1f : 0.5f;
+            
+            float targetH = localVel.x * speedFactor;
+            float targetV = localVel.z * speedFactor;
+
+            float curH = anim.GetFloat("Horizontal");
+            float curV = anim.GetFloat("Vertical");
+            float lerpSpeed = Time.deltaTime * 8f;
+
+            anim.SetFloat("Horizontal", Mathf.Lerp(curH, targetH, lerpSpeed));
+            anim.SetFloat("Vertical", Mathf.Lerp(curV, targetV, lerpSpeed));
+            anim.SetFloat("MoveSpeed", Mathf.Max(Mathf.Abs(targetH), Mathf.Abs(targetV)));
+        }
+        else
+        {
+            float curH = anim.GetFloat("Horizontal");
+            float curV = anim.GetFloat("Vertical");
+            float lerpSpeed = Time.deltaTime * 8f;
+
+            anim.SetFloat("Horizontal", Mathf.Lerp(curH, 0f, lerpSpeed));
+            anim.SetFloat("Vertical", Mathf.Lerp(curV, 0f, lerpSpeed));
+            anim.SetFloat("MoveSpeed", 0f);
+        }
+
+        // Falling/Jump states for AI (simpler than player but keep consistent)
+        if (!isGrounded)
+        {
+            float yVel = (agent != null) ? agent.velocity.y : 0f; 
+            // Note: NavMeshAgent velocity.y is usually 0, but if we have a Rigidbody...
+            anim.SetBool("IsJump", yVel > 0.1f);
+            anim.SetBool("IsFalling", yVel <= 0.1f);
+        }
+        else
+        {
+            anim.SetBool("IsJump", false);
+            anim.SetBool("IsFalling", false);
+        }
+    }
+
+    [PunRPC]
+    public void RPC_SetAIState(int state, int targetViewID, float duration)
+    {
+        currentState = (AIState)state;
+        stateTimer = duration;
+
+        if (currentState == AIState.Swarming)
+        {
+            PhotonView targetView = PhotonView.Find(targetViewID);
+            if (targetView != null) currentSwarmTarget = targetView.transform;
+        }
+        else if (currentState == AIState.Frozen)
+        {
+            if (agent != null && agent.isOnNavMesh) agent.isStopped = true;
+        }
+        else
+        {
+            if (agent != null && agent.isOnNavMesh) agent.isStopped = false;
+            currentSwarmTarget = null;
+        }
+    }
+
+    public void UpdateAnimator(Animator newAnim)
+{
         anim = newAnim;
     }
 

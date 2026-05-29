@@ -90,6 +90,15 @@ public class TitleManager : MonoBehaviourPunCallbacks
         {
             ShowWaitingRoom();
         }
+
+        // [자동 테스트] 에디터에서 실행 시 닉네임 자동 설정 (테스트용)
+        if (Application.isEditor && string.IsNullOrEmpty(PhotonNetwork.NickName))
+        {
+            if (string.IsNullOrEmpty(nameInput.text))
+            {
+                nameInput.text = "Player_" + UnityEngine.Random.Range(1000, 9999);
+            }
+        }
     }
 
     public override void OnConnectedToMaster()

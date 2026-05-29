@@ -1,7 +1,14 @@
 fileFormatVersion: 2
 guid: 95035dd95572462438afc3b2cdd8a79d
+AssetOrigin:
+  serializedVersion: 1
+  productId: 14047
+  packageName: Movement Animset Pro
+  packageVersion: 2.0.0
+  assetPath: Assets/MovementAnimsetPro/Animations/MovementAnimsetPro_SlideClimb.fbx
+  uploadId: 644874
 ModelImporter:
-  serializedVersion: 20300
+  serializedVersion: 24200
   internalIDToNameTable:
   - first:
       1: 100000
@@ -491,9 +498,8 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: Root
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -511,7 +517,7 @@ ModelImporter:
     - serializedVersion: 16
       name: BindPose
       takeName: BindPose
-      internalID: 0
+      internalID: 7400000
       firstFrame: 0
       lastFrame: 30
       wrapMode: 0
@@ -523,12 +529,12 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
+      keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
-      heightFromFeet: 0
+      heightFromFeet: 1
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
@@ -692,7 +698,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Slide
       takeName: Slide
-      internalID: 0
+      internalID: 7400002
       firstFrame: 0
       lastFrame: 72
       wrapMode: 0
@@ -707,9 +713,9 @@ ModelImporter:
       loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
+      keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
-      heightFromFeet: 0
+      heightFromFeet: 1
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
@@ -873,7 +879,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Vault1m
       takeName: Vault1m
-      internalID: 0
+      internalID: 7400004
       firstFrame: 10
       lastFrame: 97
       wrapMode: 0
@@ -885,12 +891,12 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
+      keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
-      heightFromFeet: 0
+      heightFromFeet: 1
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
@@ -1054,7 +1060,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Climb2m
       takeName: Climb2m
-      internalID: 0
+      internalID: 7400006
       firstFrame: 0
       lastFrame: 108
       wrapMode: 0
@@ -1066,12 +1072,12 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
+      keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
-      heightFromFeet: 0
+      heightFromFeet: 1
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
@@ -1240,10 +1246,12 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 0
     importBlendShapes: 1
     importCameras: 0
     importLights: 0
+    nodeNameCollisionStrategy: 0
     fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
@@ -1255,6 +1263,10 @@ ModelImporter:
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
+    optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
     meshOptimizationFlags: -1
     indexFormat: 1
     secondaryUVAngleDistortion: 8
@@ -1265,6 +1277,7 @@ ModelImporter:
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -1700,14 +1713,12 @@ ModelImporter:
     - name: Root
       parentName: 
       position: {x: -0, y: -0.0000002010899, z: -0.00000015258789}
-      rotation: {x: 0.00000011088588, y: -0.000000008322396, z: -0.00000013243346,
-        w: 1}
+      rotation: {x: 0.00000011088588, y: -0.000000008322396, z: -0.00000013243346, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Hips
       parentName: 
       position: {x: -0.0000039775605, y: 0.9782696, z: 0.0000002384649}
-      rotation: {x: -0.00000012252741, y: -0.000000038243734, z: 0.00000018190997,
-        w: 1}
+      rotation: {x: -0.00000012252741, y: -0.000000038243734, z: 0.00000018190997, w: 1}
       scale: {x: 0.99999994, y: 0.9999999, z: 0.99999994}
     - name: RightUpLeg
       parentName: 
@@ -1822,8 +1833,7 @@ ModelImporter:
     - name: RightHandProp
       parentName: 
       position: {x: 0.07249563, y: 0.020210814, z: -0.0037997465}
-      rotation: {x: -0.000000041875573, y: -0.000000025466804, z: 0.000000051349694,
-        w: 1}
+      rotation: {x: -0.000000041875573, y: -0.000000025466804, z: 0.000000051349694, w: 1}
       scale: {x: 1, y: 1.0000002, z: 1}
     - name: RightHandThumb1
       parentName: 
@@ -1948,8 +1958,7 @@ ModelImporter:
     - name: LeftArmRoll
       parentName: 
       position: {x: -0.12099714, y: -0.000003967285, z: -0.00000091453967}
-      rotation: {x: 0.000000016952049, y: -0.00000017605817, z: -0.0000026398618,
-        w: 1}
+      rotation: {x: 0.000000016952049, y: -0.00000017605817, z: -0.0000026398618, w: 1}
       scale: {x: 1.0000001, y: 1, z: 1.0000002}
     - name: LeftForeArm
       parentName: 
@@ -1969,8 +1978,7 @@ ModelImporter:
     - name: LeftHandProp
       parentName: 
       position: {x: -0.0724977, y: -0.020200474, z: 0.0037999717}
-      rotation: {x: 0.000000003611707, y: -0.000000017631722, z: 0.000000023546685,
-        w: 1}
+      rotation: {x: 0.000000003611707, y: -0.000000017631722, z: 0.000000023546685, w: 1}
       scale: {x: 1, y: 1.0000002, z: 1}
     - name: LeftHandThumb1
       parentName: 
@@ -2090,15 +2098,9 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
   remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 14047
-  packageName: Movement Animset Pro
-  packageVersion: 2.0.0
-  assetPath: Assets/MovementAnimsetPro/Animations/MovementAnimsetPro_SlideClimb.fbx
-  uploadId: 644874

@@ -8,16 +8,19 @@ public class AISpawner : MonoBehaviourPun
     public string aiPrefabName = "AI_Dummy";
     public int spawnCount = 50;
     public float spawnRadius = 80f;
-    [Range(-0.2f, 0.5f)]
-    public float heightOffset = 0.05f;
+    [Range(0.0f, 1.0f)]
+    public float heightOffset = 0.5f; // 0.05에서 0.5로 상향 (안전성 확보)
 
     void Start()
     {
-        // 방장만 AI 생성
         if (PhotonNetwork.IsMasterClient)
-        {
-            SpawnAIs();
-        }
+            StartCoroutine(SpawnWithDelay());
+    }
+
+    System.Collections.IEnumerator SpawnWithDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        SpawnAIs();
     }
 
     void SpawnAIs()
@@ -26,30 +29,26 @@ public class AISpawner : MonoBehaviourPun
 
         int spawned = 0;
         int maxAttempts = spawnCount * 10;
+        LayerMask groundMask = LayerMask.GetMask("Default", "Ground"); // 캐릭터 제외 바닥만 감지
 
         for (int attempts = 0; spawned < spawnCount && attempts < maxAttempts; attempts++)
         {
             Vector2 randomCircle = Random.insideUnitCircle * spawnRadius;
-            Vector3 randomPos = new Vector3(randomCircle.x, 0f, randomCircle.y);
+            Vector3 randomPos = new Vector3(randomCircle.x, 10f, randomCircle.y); // 높은 곳에서 샘플링
 
             NavMeshHit hit;
-            if (!NavMesh.SamplePosition(randomPos, out hit, 10f, NavMesh.AllAreas))
+            if (!NavMesh.SamplePosition(randomPos, out hit, 20f, NavMesh.AllAreas))
             {
                 continue;
             }
 
-            Vector3 rayStart = hit.position + Vector3.up * 20f;
+            Vector3 rayStart = hit.position + Vector3.up * 5f;
             float finalSpawnY = hit.position.y + heightOffset;
 
-            if (Physics.Raycast(rayStart, Vector3.down, out RaycastHit rayHit, 30f))
+            // 바닥 레이캐스트 시 캐릭터(Player) 레이어 제외
+            if (Physics.Raycast(rayStart, Vector3.down, out RaycastHit rayHit, 10f, groundMask))
             {
                 finalSpawnY = rayHit.point.y + heightOffset;
-            }
-
-            Vector3 headCheck = new Vector3(hit.position.x, finalSpawnY + 2f, hit.position.z);
-            if (Physics.Raycast(headCheck, Vector3.up, 1.5f))
-            {
-                continue;
             }
 
             Vector3 spawnPos = new Vector3(hit.position.x, finalSpawnY, hit.position.z);

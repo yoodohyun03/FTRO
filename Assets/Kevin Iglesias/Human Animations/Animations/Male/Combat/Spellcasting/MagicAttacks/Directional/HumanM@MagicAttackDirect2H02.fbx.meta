@@ -1,7 +1,14 @@
 fileFormatVersion: 2
 guid: 4636b4252770e1c48b55aa8cb353a94f
+AssetOrigin:
+  serializedVersion: 1
+  productId: 162341
+  packageName: Human Mega Animations Pack
+  packageVersion: 2.0
+  assetPath: Assets/Kevin Iglesias/Human Animations/Animations/Male/Combat/Spellcasting/MagicAttacks/Directional/HumanM@MagicAttackDirect2H02.fbx
+  uploadId: 821226
 ModelImporter:
-  serializedVersion: 22200
+  serializedVersion: 24200
   internalIDToNameTable: []
   externalObjects: {}
   materials:
@@ -17,52 +24,7 @@ ModelImporter:
     removeConstantScaleCurves: 0
     motionNodeName: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'Untitled' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'B-hand.R' has scale animation that will
-      be discarded.\n\t'B-indexFinger01.R' has translation animation that will be
-      discarded.\n\t'B-indexFinger01.R' has scale animation that will be discarded.\n\t'B-indexFinger02.R'
-      has scale animation that will be discarded.\n\t'B-indexFinger03.R' has translation
-      animation that will be discarded.\n\t'B-indexFinger03.R' has scale animation
-      that will be discarded.\n\t'B-middleFinger01.R' has translation animation that
-      will be discarded.\n\t'B-middleFinger01.R' has scale animation that will be
-      discarded.\n\t'B-middleFinger02.R' has scale animation that will be discarded.\n\t'B-middleFinger03.R'
-      has translation animation that will be discarded.\n\t'B-middleFinger03.R' has
-      scale animation that will be discarded.\n\t'B-ringFinger01.R' has translation
-      animation that will be discarded.\n\t'B-ringFinger01.R' has scale animation
-      that will be discarded.\n\t'B-ringFinger02.R' has scale animation that will
-      be discarded.\n\t'B-ringFinger03.R' has translation animation that will be
-      discarded.\n\t'B-ringFinger03.R' has scale animation that will be discarded.\n\t'B-pinky01.R'
-      has translation animation that will be discarded.\n\t'B-pinky01.R' has scale
-      animation that will be discarded.\n\t'B-pinky03.R' has translation animation
-      that will be discarded.\n\t'B-pinky03.R' has scale animation that will be discarded.\n\t'B-thumb01.R'
-      has translation animation that will be discarded.\n\t'B-thumb01.R' has scale
-      animation that will be discarded.\n\t'B-thumb02.R' has scale animation that
-      will be discarded.\n\t'B-thumb03.R' has translation animation that will be
-      discarded.\n\t'B-thumb03.R' has scale animation that will be discarded.\n\t'B-hand.L'
-      has scale animation that will be discarded.\n\t'B-indexFinger01.L' has translation
-      animation that will be discarded.\n\t'B-indexFinger01.L' has scale animation
-      that will be discarded.\n\t'B-indexFinger02.L' has scale animation that will
-      be discarded.\n\t'B-indexFinger03.L' has translation animation that will be
-      discarded.\n\t'B-indexFinger03.L' has scale animation that will be discarded.\n\t'B-middleFinger01.L'
-      has translation animation that will be discarded.\n\t'B-middleFinger01.L' has
-      scale animation that will be discarded.\n\t'B-middleFinger02.L' has scale animation
-      that will be discarded.\n\t'B-middleFinger03.L' has translation animation that
-      will be discarded.\n\t'B-middleFinger03.L' has scale animation that will be
-      discarded.\n\t'B-ringFinger01.L' has translation animation that will be discarded.\n\t'B-ringFinger01.L'
-      has scale animation that will be discarded.\n\t'B-ringFinger02.L' has scale
-      animation that will be discarded.\n\t'B-ringFinger03.L' has translation animation
-      that will be discarded.\n\t'B-ringFinger03.L' has scale animation that will
-      be discarded.\n\t'B-pinky01.L' has translation animation that will be discarded.\n\t'B-pinky01.L'
-      has scale animation that will be discarded.\n\t'B-pinky02.L' has scale animation
-      that will be discarded.\n\t'B-pinky03.L' has translation animation that will
-      be discarded.\n\t'B-pinky03.L' has scale animation that will be discarded.\n\t'B-thumb01.L'
-      has translation animation that will be discarded.\n\t'B-thumb01.L' has scale
-      animation that will be discarded.\n\t'B-thumb02.L' has scale animation that
-      will be discarded.\n\t'B-thumb03.L' has translation animation that will be
-      discarded.\n\t'B-thumb03.L' has scale animation that will be discarded.\n\t'B-shin.R'
-      has scale animation that will be discarded.\n\t'B-toe.R' has scale animation
-      that will be discarded.\n"
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -93,9 +55,9 @@ ModelImporter:
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
-      keepOriginalPositionY: 1
+      keepOriginalPositionY: 0
       keepOriginalPositionXZ: 1
-      heightFromFeet: 0
+      heightFromFeet: 1
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
@@ -248,6 +210,9 @@ ModelImporter:
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
@@ -996,8 +961,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 2faa610713d3b3c439473daa55e8c60a,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 2faa610713d3b3c439473daa55e8c60a, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
@@ -1009,10 +973,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 162341
-  packageName: Human Mega Animations Pack
-  packageVersion: 2.0
-  assetPath: Assets/Kevin Iglesias/Human Animations/Animations/Male/Combat/Spellcasting/MagicAttacks/Directional/HumanM@MagicAttackDirect2H02.fbx
-  uploadId: 821226

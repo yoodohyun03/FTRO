@@ -82,9 +82,40 @@ private const string RoleKey = "Role";
     {
         Debug.Log("[GameManager] 오브젝트 동적 스폰 시작...");
 
+        // 0. 자동 복구 로직: 리스트가 비어있으면 씬에서 검색
         if (terminalSpawnPoints == null || terminalSpawnPoints.Count == 0)
         {
-            Debug.LogWarning("terminalSpawnPoints 리스트가 비어있습니다. 인스펙터를 확인하세요.");
+            Debug.LogWarning("terminalSpawnPoints 리스트가 비어있습니다. 'SpawnPoints' 오브젝트에서 자동 검색을 시도합니다.");
+            GameObject spawnRoot = GameObject.Find("SpawnPoints") ?? GameObject.Find("SpawnPoints (1)");
+            if (spawnRoot != null)
+            {
+                terminalSpawnPoints = new List<Transform>();
+                foreach (Transform child in spawnRoot.transform)
+                {
+                    terminalSpawnPoints.Add(child);
+                }
+                Debug.Log($"[GameManager] {terminalSpawnPoints.Count}개의 터미널 스폰 포인트를 자동으로 찾았습니다.");
+            }
+        }
+
+        if (escapeSpawnPoints == null || escapeSpawnPoints.Count == 0)
+        {
+            Debug.LogWarning("escapeSpawnPoints 리스트가 비어있습니다. 'EscapePoints' 오브젝트에서 자동 검색을 시도합니다.");
+            GameObject escapeRoot = GameObject.Find("EscapePoints") ?? GameObject.Find("EscapeSpawnPoints");
+            if (escapeRoot != null)
+            {
+                escapeSpawnPoints = new List<Transform>();
+                foreach (Transform child in escapeRoot.transform)
+                {
+                    escapeSpawnPoints.Add(child);
+                }
+                Debug.Log($"[GameManager] {escapeSpawnPoints.Count}개의 탈출구 스폰 포인트를 자동으로 찾았습니다.");
+            }
+        }
+
+        if (terminalSpawnPoints == null || terminalSpawnPoints.Count == 0)
+        {
+            Debug.LogWarning("terminalSpawnPoints 리스트가 여전히 비어있습니다. 인스펙터를 확인하세요.");
             return;
         }
 

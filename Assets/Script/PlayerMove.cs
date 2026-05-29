@@ -45,6 +45,8 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     public float sprintNoiseThreshold = 1.5f;
     private float sprintNoiseTimer = 0f;
 
+    [HideInInspector] public bool hackSpeedBoost = false;
+
     [Header("점프 및 땅 감지 설정")]
     public float jumpPower = 6.5f;
     public float rayLength = 0.35f;
@@ -97,11 +99,19 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         rb = GetComponent<Rigidbody>();
         if (anim == null) Debug.LogError($"[{gameObject.name}] Animator 컴포넌트를 찾을 수 없습니다!");
         if (rb == null) Debug.LogError($"[{gameObject.name}] Rigidbody 컴포넌트를 찾을 수 없습니다!");
-        if (anim != null) anim.SetFloat("IsControl", 1f);
 
         if (photonView.Owner.CustomProperties.ContainsKey(RoleKey))
         {
             myRole = (string)photonView.Owner.CustomProperties[RoleKey];
+            
+            // Add item handlers for all clients so RPCs can be found
+            if (myRole == SeekerRole)
+                gameObject.AddComponent<SeekerItemHandler>();
+            else
+                gameObject.AddComponent<SurvivorItemHandler>();
+                
+            // Refresh RPC cache since components were added at runtime
+            photonView.RefreshRpcMonoBehaviourCache();
         }
 
         if (photonView.IsMine)
@@ -253,7 +263,9 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             if (Input.GetKey(KeyCode.E) && nearest != null)
             {
                 currentInteractionTarget = nearest;
-                currentInteractionTarget.photonView.RPC("RPC_AddProgress", RpcTarget.MasterClient, Time.deltaTime);
+                float progressAmount = hackSpeedBoost ? Time.deltaTime * 2f : Time.deltaTime;
+                currentInteractionTarget.photonView.RPC("RPC_AddProgress", RpcTarget.MasterClient, progressAmount);
+                if (currentInteractionTarget.isCompleted) hackSpeedBoost = false;
             
                 if (progressBar != null)
                 {
@@ -381,45 +393,86 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         bool isRun = photonView.IsMine ? Input.GetKey(KeyCode.LeftShift) : isRunningSync;
         bool hasInput = (currentH != 0 || currentV != 0);
         
-        if (!hasInput)
+        Vector3 moveDir = Vector3.zero;
+        if (hasInput)
         {
-            ResetMovementAnimatorParameters();
-            if (isGrounded && groundedIgnoreTimer <= 0f)
+            if (cachedMainCam == null) cachedMainCam = Camera.main;
+            if (cachedMainCam != null)
             {
-                float velMag = (rb != null) ? new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude : 0f;
-                if (velMag < 0.5f)
-                {
-                    AnimatorStateInfo s = anim.GetCurrentAnimatorStateInfo(0);
-                    if (s.IsName("No Weapon.Walking.Walking Blend Tree") || s.IsName("No Weapon.Walking.Start Walking Blend Tree") || s.IsName("Walking Blend Tree") || s.IsName("Start Walking Blend Tree"))
-                        anim.CrossFadeInFixedTime("No Weapon.Standing.Idle", 0.1f);
-                }
+                Vector3 f = cachedMainCam.transform.forward; f.y = 0;
+                Vector3 r = cachedMainCam.transform.right; r.y = 0;
+                moveDir = (f.normalized * currentV + r.normalized * currentH).normalized;
             }
+            else moveDir = new Vector3(currentH, 0, currentV).normalized;
+        }
+
+        float targetH = 0f;
+        float targetV = 0f;
+
+        if (hasInput && moveDir != Vector3.zero)
+        {
+            // Use 1.1f to ensure it definitely crosses the 1.0 threshold in the blend tree
+            float speedFactor = isRun ? 1.1f : 0.5f;
+            Vector3 localDir = transform.InverseTransformDirection(moveDir);
+            
+            targetH = localDir.x * speedFactor;
+            targetV = localDir.z * speedFactor;
+        }
+
+        // Use a faster and more consistent smoothing method
+        float smoothTime = isGrounded ? 15f : 3f; // Snappier on ground
+float curH = anim.GetFloat("Horizontal");
+        float curV = anim.GetFloat("Vertical");
+        float curSpeed = anim.GetFloat("MoveSpeed");
+
+        anim.SetFloat("Horizontal", Mathf.MoveTowards(curH, targetH, Time.deltaTime * smoothTime));
+        anim.SetFloat("Vertical", Mathf.MoveTowards(curV, targetV, Time.deltaTime * smoothTime));
+        anim.SetFloat("MoveSpeed", Mathf.MoveTowards(curSpeed, Mathf.Max(Mathf.Abs(targetH), Mathf.Abs(targetV)), Time.deltaTime * smoothTime));
+        
+        // Sync ground/jump/fall states
+        anim.SetBool("IsGrounded", isGrounded);
+        
+        float yVel = (rb != null) ? rb.linearVelocity.y : 0f;
+        if (!isGrounded)
+        {
+            anim.SetBool("IsJump", yVel > 0.1f);
+            anim.SetBool("IsFalling", yVel <= 0.1f);
         }
         else
         {
-            float targetMag = isRun ? 1.0f : 0.5f; 
-            float curMag = anim.GetFloat("InputMagnitude"); 
-            if (curMag < 0.1f) curMag = 0.25f;
-            
-            anim.SetFloat("InputMagnitude", Mathf.MoveTowards(curMag, targetMag, Time.deltaTime * 30f)); 
-            anim.SetFloat("InputAngle", 0f);
-            anim.SetFloat("Vertical", targetMag); 
-            anim.SetFloat("Horizontal", 0f); 
-            anim.SetFloat("Z", targetMag); 
-            anim.SetFloat("X", 0f);
-            anim.SetBool("Running", isRun); 
-            anim.SetFloat("SprintFactor", isRun ? 1f : 0f);
+            anim.SetBool("IsJump", false);
+            anim.SetBool("IsFalling", false);
         }
-        
-        float yVel = (rb != null) ? rb.linearVelocity.y : 0f;
-        anim.SetBool("IsJump", !isGrounded && yVel > 0.1f); 
-        anim.SetBool("IsFalling", !isGrounded && yVel <= 0.1f);
     }
 
-    void ResetMovementAnimatorParameters() { if (anim == null) return; anim.SetFloat("InputMagnitude", 0f); anim.SetFloat("InputAngle", 0f); anim.SetFloat("Vertical", 0f); anim.SetFloat("Horizontal", 0f); anim.SetFloat("Z", 0f); anim.SetFloat("X", 0f); anim.SetBool("Running", false); anim.SetFloat("SprintFactor", 0f); }
+    void ResetMovementAnimatorParameters() 
+    { 
+        if (anim == null) return; 
+        anim.SetFloat("MoveSpeed", 0f); 
+        anim.SetFloat("Horizontal", 0f);
+        anim.SetFloat("Vertical", 0f);
+    }
+
     bool CheckPunchHitOwner() { if (rb == null) return false; RaycastHit[] hits = Physics.SphereCastAll(transform.position + Vector3.up * 1f, attackRadius, transform.forward, 1.5f); foreach (RaycastHit hit in hits) { if (hit.collider.CompareTag("Player")) { PhotonView tv = hit.collider.GetComponent<PhotonView>(); PlayerMove tp = hit.collider.GetComponent<PlayerMove>(); if (tv != null && !tv.IsMine && tp != null && !tp.isDead) { tv.RPC("GetCaught", RpcTarget.All); return true; } } } return false; }
-    [PunRPC] void RPC_PlayPunchAnimation() { if (anim != null) { anim.CrossFadeInFixedTime("Punch", 0.02f); anim.SetTrigger("IsPunch"); anim.SetTrigger("IsPunchStart"); } }
-    [PunRPC] void RPC_PlayJumpAnimation() { if (anim != null) { anim.SetBool("IsJump", true); anim.SetBool("IsFalling", false); bool hasInput = (currentH != 0 || currentV != 0); anim.CrossFadeInFixedTime(hasInput ? "Jump" : "Jump", 0.1f); } }
+
+    [PunRPC] 
+void RPC_PlayPunchAnimation() 
+    { 
+        if (anim != null) 
+        { 
+            anim.SetTrigger("Punch"); 
+        } 
+    }
+
+    [PunRPC] 
+    void RPC_PlayJumpAnimation() 
+    { 
+        if (anim != null) 
+        { 
+            anim.SetTrigger("Jump");
+            anim.SetBool("IsGrounded", false);
+        } 
+    }
 [PunRPC] void RPC_PlayLandAnimation() { if (anim != null) { anim.SetBool("IsJump", false); anim.SetBool("IsFalling", false); } }
     
     [PunRPC] 
@@ -442,6 +495,33 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     }
 void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject.FindGameObjectsWithTag("Player"); foreach (GameObject p in ps) { Renderer r = p.GetComponentInChildren<Renderer>(); if (p != this.gameObject && r != null && r.enabled) aliveSurvivors.Add(p.transform); } }
     void SpectateUpdate() { if (aliveSurvivors.Count == 0) return; if (Input.GetMouseButtonDown(0)) { spectateIndex = (spectateIndex + 1) % aliveSurvivors.Count; UpdateSurvivorList(); } if (spectateIndex < aliveSurvivors.Count) { Transform t = aliveSurvivors[spectateIndex]; if (t != null) transform.position = t.position + new Vector3(0, 2f, 0); else UpdateSurvivorList(); } }
-    void CheckGrounded() { if (groundedIgnoreTimer > 0f) { groundedIgnoreTimer -= Time.deltaTime; isGrounded = false; return; } Vector3 p = transform.position + (Vector3.up * 0.15f); RaycastHit[] hits = Physics.SphereCastAll(p, 0.25f, Vector3.down, rayLength, groundMask, QueryTriggerInteraction.Ignore); isGrounded = false; foreach (RaycastHit h in hits) { if (h.collider == null || h.collider.isTrigger || h.collider.transform.IsChildOf(transform) || h.normal.y < minGroundNormalY) continue; isGrounded = true; break; } }
+    void CheckGrounded()
+    {
+        if (groundedIgnoreTimer > 0f)
+        {
+            groundedIgnoreTimer -= Time.deltaTime;
+            isGrounded = false;
+            return;
+        }
+
+        // 레이캐스트 시작 지점을 약간 높여서(0.3) 바닥에 묻혔을 때도 감지되게 함
+        Vector3 origin = transform.position + Vector3.up * 0.3f;
+        float checkDistance = 0.45f; // 0.3 + 여유분 0.15
+        
+        isGrounded = false;
+        RaycastHit[] hits = Physics.SphereCastAll(origin, 0.25f, Vector3.down, checkDistance, groundMask, QueryTriggerInteraction.Ignore);
+
+        foreach (RaycastHit h in hits)
+        {
+            if (h.collider == null || h.collider.isTrigger || h.collider.transform.IsChildOf(transform))
+                continue;
+
+            if (h.normal.y < minGroundNormalY)
+                continue;
+
+            isGrounded = true;
+            break;
+        }
+    }
     void HandleCursorUpdate() { if (Input.GetKeyDown(KeyCode.Escape)) { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; } if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; } }
 }
