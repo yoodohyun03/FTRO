@@ -41,6 +41,14 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     public float attackRadius = 1.2f;
     private bool isAttacking = false;
 
+    [Header("오인폭행 패널티 설정")]
+    public int overkillThreshold = 5;       // 몇 번 때리면 패널티
+    public float overkillPenaltyDuration = 10f;
+    public float overkillSpeedMultiplier = 0.4f; // 이동속도 40%로 감소
+    private int aiHitCount = 0;
+    private bool isOverkillPenalty = false;
+    private TextMeshProUGUI penaltyText;
+
     [Header("소음 시스템 설정")]
     public float sprintNoiseThreshold = 1.5f;
     private float sprintNoiseTimer = 0f;
@@ -56,9 +64,15 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     public float jumpBufferTime = 0.15f;
     public float jumpGroundCheckDelay = 0.1f;
     public LayerMask groundMask = ~0;
+
+    [Header("계단/턱 오르기 설정")]
+    public float stepHeight = 0.3f;
+    public float stepSmooth = 4.0f;
+
     private float coyoteCounter;
     private float jumpBufferCounter;
     private float groundedIgnoreTimer;
+    private Vector3 groundNormal = Vector3.up;
 
     private float currentH = 0f;
     private float currentV = 0f;
@@ -251,12 +265,21 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
         if (jumpBufferCounter > 0f && coyoteCounter > 0f)
         {
-            if (rb != null) { rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z); rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse); }
-            photonView.RPC("RPC_PlayJumpAnimation", RpcTarget.All); 
-            
+            if (rb != null)
+            {
+                // 점프 시 수직 속도를 즉시 설정하여 물리 엔진의 씹힘 현상 방지
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpPower, rb.linearVelocity.z);
+            }
+            photonView.RPC("RPC_PlayJumpAnimation", RpcTarget.All);
+
             if (myRole != SeekerRole) TriggerNoise();
 
-            isGrounded = false; wasGrounded = false; groundedIgnoreTimer = jumpGroundCheckDelay; coyoteCounter = 0f; jumpBufferCounter = 0f;
+            isGrounded = false;
+            wasGrounded = false;
+            groundedIgnoreTimer = 0.15f;
+            coyoteCounter = 0f;
+            jumpBufferCounter = 0f;
+            airTime = 0f;
         }
 
         if (Input.GetMouseButtonDown(0)) { var _es = UnityEngine.EventSystems.EventSystem.current; if ((_es == null || !_es.IsPointerOverGameObject()) && myRole == SeekerRole && !isAttacking) StartCoroutine(PerformAttack()); }
@@ -355,11 +378,66 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
     IEnumerator PerformAttack()
     {
-        if (isAttacking) yield break;
+        if (isAttacking || isOverkillPenalty) yield break;
         isAttacking = true; if (rb != null) rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
         photonView.RPC("RPC_PlayPunchAnimation", RpcTarget.All);
         bool hit = CheckPunchHitOwner(); yield return new WaitForSeconds(hit ? hitStunTime : penaltyStunTime);
         isAttacking = false;
+    }
+
+    IEnumerator OverkillPenaltyRoutine()
+    {
+        isOverkillPenalty = true;
+
+        float originalWalkSpeed = walkSpeed;
+        float originalSeekerRunSpeed = seekerRunSpeed;
+        walkSpeed *= overkillSpeedMultiplier;
+        seekerRunSpeed *= overkillSpeedMultiplier;
+
+        EnsurePenaltyText();
+
+        float remaining = overkillPenaltyDuration;
+        while (remaining > 0f)
+        {
+            if (penaltyText != null)
+                penaltyText.text = $"⚠ 오인폭행 패널티\n공격 불가 · 이동 감소\n{Mathf.CeilToInt(remaining)}초";
+            yield return new WaitForSeconds(1f);
+            remaining -= 1f;
+        }
+
+        walkSpeed = originalWalkSpeed;
+        seekerRunSpeed = originalSeekerRunSpeed;
+        isOverkillPenalty = false;
+
+        if (penaltyText != null)
+        {
+            penaltyText.text = "";
+            penaltyText.gameObject.SetActive(false);
+        }
+    }
+
+    void EnsurePenaltyText()
+    {
+        if (penaltyText != null) { penaltyText.gameObject.SetActive(true); return; }
+
+        GameObject canvas = GameObject.Find("Canvas") ?? GameObject.Find("HUDCanvas") ?? GameObject.Find("GameCanvas");
+        if (canvas == null) return;
+
+        GameObject obj = new GameObject("PenaltyText");
+        obj.transform.SetParent(canvas.transform, false);
+
+        penaltyText = obj.AddComponent<TextMeshProUGUI>();
+        penaltyText.fontSize = 22;
+        penaltyText.color = new Color(1f, 0.3f, 0.3f, 1f);
+        penaltyText.alignment = TextAlignmentOptions.Center;
+        penaltyText.fontStyle = FontStyles.Bold;
+
+        RectTransform rt = obj.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0.5f, 0.85f);
+        rt.anchorMax = new Vector2(0.5f, 0.85f);
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = Vector2.zero;
+        rt.sizeDelta = new Vector2(400f, 100f);
     }
 
     void MoveUpdate()
@@ -414,9 +492,12 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
                 targetVel.y = rb.linearVelocity.y;
                 rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundAcceleration : airAcceleration));
 
-                // Ground Snapping: 빠른 이동 시 지형 굴곡에서 튀어오르는 현상 방지
-                if (isGrounded && groundedIgnoreTimer <= 0f && rb.linearVelocity.y > -0.1f)
-                    rb.AddForce(Vector3.down * 10f, ForceMode.Acceleration);
+                // 계단/턱 오르기
+                HandleStepOffset(moveDir);
+
+                // Ground Snapping
+                if (isGrounded && groundedIgnoreTimer <= 0f && rb.linearVelocity.y > -0.5f)
+                    rb.AddForce(Vector3.down * 15f, ForceMode.Acceleration);
             }
         }
         else if (rb != null)
@@ -425,8 +506,8 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundDeceleration : airDeceleration));
 
             // 정지 중에도 지면 밀착 유지
-            if (isGrounded && groundedIgnoreTimer <= 0f && rb.linearVelocity.y > -0.1f)
-                rb.AddForce(Vector3.down * 5f, ForceMode.Acceleration);
+            if (isGrounded && groundedIgnoreTimer <= 0f && rb.linearVelocity.y > -0.5f)
+                rb.AddForce(Vector3.down * 10f, ForceMode.Acceleration);
         }
     }
 
@@ -498,7 +579,43 @@ float curH = anim.GetFloat("Horizontal");
         anim.SetFloat("Vertical", 0f);
     }
 
-    bool CheckPunchHitOwner() { if (rb == null) return false; RaycastHit[] hits = Physics.SphereCastAll(transform.position + Vector3.up * 1f, attackRadius, transform.forward, 1.5f); foreach (RaycastHit hit in hits) { if (hit.collider.CompareTag("Player")) { PhotonView tv = hit.collider.GetComponent<PhotonView>(); PlayerMove tp = hit.collider.GetComponent<PlayerMove>(); if (tv != null && !tv.IsMine && tp != null && !tp.isDead) { tv.RPC("GetCaught", RpcTarget.All); return true; } } } return false; }
+    bool CheckPunchHitOwner()
+    {
+        if (rb == null) return false;
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position + Vector3.up * 1f, attackRadius, transform.forward, 1.5f);
+        foreach (RaycastHit hit in hits)
+        {
+            // 생존자(플레이어) 적중
+            if (hit.collider.CompareTag("Player"))
+            {
+                PhotonView tv = hit.collider.GetComponent<PhotonView>();
+                PlayerMove tp = hit.collider.GetComponent<PlayerMove>();
+                if (tv != null && !tv.IsMine && tp != null && !tp.isDead)
+                {
+                    tv.RPC("GetCaught", RpcTarget.All);
+                    return true;
+                }
+            }
+
+            // AI 시민 적중
+            RandomRoam ai = hit.collider.GetComponent<RandomRoam>() ?? hit.collider.GetComponentInParent<RandomRoam>();
+            if (ai != null)
+            {
+                PhotonView tv = ai.GetComponent<PhotonView>();
+                if (tv != null)
+                    tv.RPC("RPC_PlayHitAnimation", RpcTarget.All);
+
+                aiHitCount++;
+                if (aiHitCount >= overkillThreshold && !isOverkillPenalty)
+                {
+                    aiHitCount = 0;
+                    StartCoroutine(OverkillPenaltyRoutine());
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
     [PunRPC] 
 void RPC_PlayPunchAnimation() 
@@ -573,13 +690,34 @@ void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject
         RaycastHit[] hits = Physics.SphereCastAll(p, groundCheckRadius, Vector3.down, rayLength, groundMask, QueryTriggerInteraction.Ignore);
 
         isGrounded = false;
+        groundNormal = Vector3.up;
         foreach (RaycastHit h in hits)
         {
             if (h.collider == null || h.collider.isTrigger || h.collider.transform.IsChildOf(transform) || h.normal.y < minGroundNormalY)
                 continue;
             isGrounded = true;
+            groundNormal = h.normal;
             break;
         }
     }
+
+    void HandleStepOffset(Vector3 moveDir)
+    {
+        if (!isGrounded || moveDir == Vector3.zero || rb == null) return;
+
+        // 발 위치 근처에서 이동 방향으로 레이캐스트 (낮은 턱 감지)
+        if (Physics.Raycast(transform.position + Vector3.up * 0.1f, moveDir, out RaycastHit hitLower, 0.45f, groundMask))
+        {
+            // 바닥(normal.y가 높음)은 제외, 수직에 가까운 벽/계단 면만 처리
+            if (hitLower.normal.y > 0.4f) return;
+
+            // stepHeight 높이에서는 안 걸리면 계단/턱으로 판단
+            if (!Physics.Raycast(transform.position + Vector3.up * stepHeight, moveDir, out RaycastHit hitUpper, 0.55f, groundMask))
+            {
+                rb.position += Vector3.up * stepSmooth * Time.deltaTime;
+            }
+        }
+    }
+
     void HandleCursorUpdate() { if (Input.GetKeyDown(KeyCode.Escape)) { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; } var _ces = UnityEngine.EventSystems.EventSystem.current; if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked && (_ces == null || !_ces.IsPointerOverGameObject())) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; } }
 }

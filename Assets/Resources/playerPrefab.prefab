@@ -322,10 +322,13 @@ MonoBehaviour:
   hitStunTime: 0.5
   penaltyStunTime: 1.5
   attackRadius: 1.2
+  overkillThreshold: 5
+  overkillPenaltyDuration: 10
+  overkillSpeedMultiplier: 0.4
   sprintNoiseThreshold: 1.5
   hackSpeedBoost: 0
   jumpPower: 5
-  rayLength: 0.15
+  rayLength: 0.35
   groundCheckRadius: 0.25
   minGroundNormalY: 0.55
   coyoteTime: 0.12
@@ -334,6 +337,8 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  stepHeight: 0.3
+  stepSmooth: 4
 --- !u!136 &4591711836902174258
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using Photon.Pun;
@@ -11,7 +12,8 @@ public class RandomRoam : MonoBehaviourPun
 
     private NavMeshAgent agent;
     [HideInInspector] public Animator anim;
-private Rigidbody rb;
+    private Rigidbody rb;
+    private bool isHitStunned = false;
 
     public float roamRadius = 30f;
     public float waitTime = 2f;
@@ -139,6 +141,7 @@ private Rigidbody rb;
             return;
         }
 
+        if (isHitStunned) return;
         if (agent.isOnNavMesh && agent.isStopped) agent.isStopped = false;
 
         // 땅에 닿았는지 확인
@@ -322,6 +325,30 @@ CheckGrounded();
         {
             agent.speed = running ? runSpeed : walkSpeed;
         }
+    }
+
+    [PunRPC]
+    void RPC_PlayHitAnimation()
+    {
+        if (anim != null)
+            anim.CrossFadeInFixedTime("Idle_Hit_Strong_Left", 0.05f);
+        StartCoroutine(HitStunRoutine());
+    }
+
+    IEnumerator HitStunRoutine()
+    {
+        isHitStunned = true;
+        if (agent != null && agent.isOnNavMesh)
+            agent.isStopped = true;
+
+        yield return new WaitForSeconds(1.2f); // Idle_Hit_Strong_Left 길이에 맞게 조절
+
+        isHitStunned = false;
+        if (agent != null && agent.isOnNavMesh)
+            agent.isStopped = false;
+
+        if (anim != null)
+            anim.CrossFadeInFixedTime("Grounded", 0.2f);
     }
 
     [PunRPC]
