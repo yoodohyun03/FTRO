@@ -196,6 +196,8 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         yield return new WaitForSeconds(5f); if (blindObj != null) blindObj.SetActive(false);
     }
 
+    private float airTime = 0f;
+
     void Update()
     {
         if (!photonView.IsMine)
@@ -210,14 +212,38 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         var es = UnityEngine.EventSystems.EventSystem.current;
         if (es != null && es.currentSelectedGameObject != null) return;
         
-        HandleCursorUpdate(); CheckGrounded();
-        
-        if (isGrounded) coyoteCounter = coyoteTime; else coyoteCounter -= Time.deltaTime;
+        HandleCursorUpdate();
+        CheckGrounded();
+
+        if (isGrounded)
+        {
+            coyoteCounter = coyoteTime;
+
+            // 공중 체류 0.15초 이상 또는 낙하 속도가 있을 때만 착지 처리 (낮은 턱에서 팔 흔들림 방지)
+            if (!wasGrounded && (airTime > 0.15f || (rb != null && rb.linearVelocity.y < -2.0f)))
+            {
+                bool isRunAtLand = Input.GetKey(KeyCode.LeftShift);
+                photonView.RPC("RPC_PlayLandAnimation", RpcTarget.All, isRunAtLand);
+
+                if (rb != null)
+                {
+                    float reduction = isRunAtLand ? 0.95f : 0.8f;
+                    Vector3 vel = rb.linearVelocity;
+                    vel.x *= reduction;
+                    vel.z *= reduction;
+                    rb.linearVelocity = vel;
+                }
+            }
+            airTime = 0f;
+        }
+        else
+        {
+            coyoteCounter -= Time.deltaTime;
+            airTime += Time.deltaTime;
+        }
+
         jumpBufferCounter -= Time.deltaTime;
-        
-        if (!wasGrounded && isGrounded) photonView.RPC("RPC_PlayLandAnimation", RpcTarget.All);
-        wasGrounded = isGrounded;
-        
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             jumpBufferCounter = jumpBufferTime;
@@ -237,9 +263,11 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         
         HandleNoiseDetection();
         HandleInteraction();
-        MoveUpdate(); 
+        MoveUpdate();
         UpdateAnimation();
-        }
+
+        wasGrounded = isGrounded; // 마지막에 업데이트해야 착지 판정이 정확함
+    }
 
         void HandleInteraction()
         {
@@ -381,9 +409,25 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             float speed = isRun ? (myRole == SeekerRole ? seekerRunSpeed : survivorRunSpeed) : walkSpeed; 
             Vector3 targetVel = moveDir * speed;
             
-            if (rb != null) { targetVel.y = rb.linearVelocity.y; rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundAcceleration : airAcceleration)); }
+            if (rb != null)
+            {
+                targetVel.y = rb.linearVelocity.y;
+                rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundAcceleration : airAcceleration));
+
+                // Ground Snapping: 빠른 이동 시 지형 굴곡에서 튀어오르는 현상 방지
+                if (isGrounded && groundedIgnoreTimer <= 0f && rb.linearVelocity.y > -0.1f)
+                    rb.AddForce(Vector3.down * 10f, ForceMode.Acceleration);
+            }
         }
-        else if (rb != null) { Vector3 targetVel = new Vector3(0, rb.linearVelocity.y, 0); rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundDeceleration : airDeceleration)); }
+        else if (rb != null)
+        {
+            Vector3 targetVel = new Vector3(0, rb.linearVelocity.y, 0);
+            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVel, Time.deltaTime * (isGrounded ? groundDeceleration : airDeceleration));
+
+            // 정지 중에도 지면 밀착 유지
+            if (isGrounded && groundedIgnoreTimer <= 0f && rb.linearVelocity.y > -0.1f)
+                rb.AddForce(Vector3.down * 5f, ForceMode.Acceleration);
+        }
     }
 
     void UpdateAnimation()
@@ -474,7 +518,26 @@ void RPC_PlayPunchAnimation()
             anim.SetBool("IsGrounded", false);
         } 
     }
-[PunRPC] void RPC_PlayLandAnimation() { if (anim != null) { anim.SetBool("IsJump", false); anim.SetBool("IsFalling", false); } }
+    [PunRPC]
+    void RPC_PlayLandAnimation(bool wasRunningAtLand)
+    {
+        if (anim == null) return;
+        anim.SetBool("IsJump", false);
+        anim.SetBool("IsFalling", false);
+
+        bool hasInput = (currentH != 0 || currentV != 0);
+        if (hasInput)
+        {
+            if (wasRunningAtLand)
+                anim.CrossFadeInFixedTime("No Weapon.Jumping.JumpRun_RU_Land2Run", 0.05f);
+            else
+                anim.CrossFadeInFixedTime("No Weapon.Falling.JumpIdleLand2Walk", 0.05f);
+        }
+        else
+        {
+            anim.CrossFadeInFixedTime("No Weapon.Falling.JumpIdleLandHard", 0.1f);
+        }
+    }
     
     [PunRPC] 
     public void GetCaught() 
@@ -505,21 +568,15 @@ void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject
             return;
         }
 
-        // 레이캐스트 시작 지점을 약간 높여서(0.3) 바닥에 묻혔을 때도 감지되게 함
-        Vector3 origin = transform.position + Vector3.up * 0.3f;
-        float checkDistance = 0.45f; // 0.3 + 여유분 0.15
-        
-        isGrounded = false;
-        RaycastHit[] hits = Physics.SphereCastAll(origin, 0.25f, Vector3.down, checkDistance, groundMask, QueryTriggerInteraction.Ignore);
+        // 구체 캐스팅 시작점을 groundCheckRadius 높이에서 시작해 정확도 향상
+        Vector3 p = transform.position + (Vector3.up * groundCheckRadius);
+        RaycastHit[] hits = Physics.SphereCastAll(p, groundCheckRadius, Vector3.down, rayLength, groundMask, QueryTriggerInteraction.Ignore);
 
+        isGrounded = false;
         foreach (RaycastHit h in hits)
         {
-            if (h.collider == null || h.collider.isTrigger || h.collider.transform.IsChildOf(transform))
+            if (h.collider == null || h.collider.isTrigger || h.collider.transform.IsChildOf(transform) || h.normal.y < minGroundNormalY)
                 continue;
-
-            if (h.normal.y < minGroundNormalY)
-                continue;
-
             isGrounded = true;
             break;
         }
