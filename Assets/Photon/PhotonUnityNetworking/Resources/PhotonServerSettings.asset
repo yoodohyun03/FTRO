@@ -70,6 +70,7 @@ MonoBehaviour:
   - RPC_GrantItem
   - RPC_SpawnDecoy
   - RPC_SpawnSmoke
+  - RPC_PlayHitAnimation
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

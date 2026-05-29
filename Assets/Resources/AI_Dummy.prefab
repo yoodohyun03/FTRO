@@ -223,38 +223,11 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 1
-    SynchronizeType: 0
-    Name: InputAngle
-  - Type: 1
-    SynchronizeType: 0
-    Name: WalkStartAngle
-  - Type: 1
     SynchronizeType: 1
     Name: Horizontal
   - Type: 1
     SynchronizeType: 1
     Name: Vertical
-  - Type: 4
-    SynchronizeType: 0
-    Name: IsStopRU
-  - Type: 4
-    SynchronizeType: 0
-    Name: IsStopLU
-  - Type: 1
-    SynchronizeType: 0
-    Name: IsRU
-  - Type: 1
-    SynchronizeType: 0
-    Name: InputMagnitude
-  - Type: 1
-    SynchronizeType: 0
-    Name: HorAimAngle
-  - Type: 1
-    SynchronizeType: 0
-    Name: VerAimAngle
-  - Type: 1
-    SynchronizeType: 0
-    Name: WalkStopAngle
   - Type: 4
     SynchronizeType: 0
     Name: IsDead
@@ -266,76 +239,19 @@ MonoBehaviour:
     Name: IsJump
   - Type: 1
     SynchronizeType: 0
-    Name: Crouch_notUsed
-  - Type: 4
-    SynchronizeType: 0
-    Name: IsCrouch
-  - Type: 1
-    SynchronizeType: 0
     Name: IsControl
-  - Type: 1
-    SynchronizeType: 0
-    Name: X
-  - Type: 1
-    SynchronizeType: 0
-    Name: Z
-  - Type: 1
-    SynchronizeType: 0
-    Name: RawInputAngle
-  - Type: 1
-    SynchronizeType: 0
-    Name: InteractAngle
-  - Type: 4
-    SynchronizeType: 0
-    Name: Running
-  - Type: 1
-    SynchronizeType: 0
-    Name: SprintFactor
-  - Type: 1
-    SynchronizeType: 0
-    Name: FloorAngle
-  - Type: 9
-    SynchronizeType: 0
-    Name: Vault
-  - Type: 9
-    SynchronizeType: 0
-    Name: Vault2m
-  - Type: 9
-    SynchronizeType: 0
-    Name: HitWall
-  - Type: 9
-    SynchronizeType: 0
-    Name: Vault05m
-  - Type: 9
-    SynchronizeType: 0
-    Name: Vault1m
-  - Type: 4
-    SynchronizeType: 0
-    Name: IsAvoidMode
-  - Type: 9
-    SynchronizeType: 0
-    Name: Slide
-  - Type: 1
-    SynchronizeType: 0
-    Name: FallingTime
-  - Type: 9
-    SynchronizeType: 0
-    Name: IsPunch
-  - Type: 9
-    SynchronizeType: 0
-    Name: IsPunch2
-  - Type: 9
-    SynchronizeType: 0
-    Name: IsPunchStart
-  - Type: 1
-    SynchronizeType: 0
-    Name: Damage
   - Type: 1
     SynchronizeType: 1
     Name: MoveSpeed
   - Type: 4
     SynchronizeType: 1
     Name: IsGrounded
+  - Type: 9
+    SynchronizeType: 0
+    Name: Jump
+  - Type: 9
+    SynchronizeType: 0
+    Name: Punch
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
