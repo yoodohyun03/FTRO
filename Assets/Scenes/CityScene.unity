@@ -2233,7 +2233,7 @@ GameObject:
   - component: {fileID: 24482167}
   - component: {fileID: 24482166}
   m_Layer: 0
-  m_Name: AI_Spawner (1)
+  m_Name: AI_Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15712,7 +15712,7 @@ GameObject:
   - component: {fileID: 246774869}
   - component: {fileID: 246774868}
   m_Layer: 0
-  m_Name: NetworkManager (1)
+  m_Name: NetworkManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18632,7 +18632,7 @@ GameObject:
   - component: {fileID: 282147034}
   - component: {fileID: 282147033}
   m_Layer: 0
-  m_Name: Main Camera (1)
+  m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20862,7 +20862,7 @@ GameObject:
   - component: {fileID: 311043721}
   - component: {fileID: 311043720}
   m_Layer: 0
-  m_Name: NavMesh Setup (1)
+  m_Name: NavMesh Setup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38114,7 +38114,7 @@ GameObject:
   - component: {fileID: 566308976}
   - component: {fileID: 566308975}
   m_Layer: 0
-  m_Name: GameManager (1)
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68380,7 +68380,7 @@ GameObject:
   - component: {fileID: 1023600694}
   - component: {fileID: 1023600693}
   m_Layer: 0
-  m_Name: ChatManager (1)
+  m_Name: ChatManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72732,7 +72732,7 @@ GameObject:
   - component: {fileID: 1090561763}
   - component: {fileID: 1090561762}
   m_Layer: 0
-  m_Name: EventSystem (1)
+  m_Name: EventSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95393,7 +95393,7 @@ GameObject:
   - component: {fileID: 1417633070}
   - component: {fileID: 1417633069}
   m_Layer: 0
-  m_Name: FreeLookCamera (1)
+  m_Name: FreeLookCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143361,7 +143361,7 @@ GameObject:
   - component: {fileID: 2096897009}
   - component: {fileID: 2096897008}
   m_Layer: 5
-  m_Name: Canvas (1)
+  m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
