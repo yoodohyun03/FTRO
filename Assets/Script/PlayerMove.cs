@@ -29,6 +29,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     public string myRole = "";
     private bool isGrounded = true;
     private bool wasGrounded = true;
+    private bool isGroundedOnAI = false;
 
     [Header("관전 모드 설정")]
     public bool isDead = false;
@@ -263,7 +264,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             jumpBufferCounter = jumpBufferTime;
         }
 
-        if (jumpBufferCounter > 0f && coyoteCounter > 0f)
+        if (jumpBufferCounter > 0f && coyoteCounter > 0f && !isGroundedOnAI)
         {
             if (rb != null)
             {
@@ -297,16 +298,21 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             if (myRole == SeekerRole || isDead || !photonView.IsMine) return;
 
             ObjectivePoint nearest = null;
-            float interactRange = 6.0f; // Increased range
-            Collider[] hits = Physics.OverlapSphere(transform.position, interactRange);
+            float interactRange = 6.0f;
+            float nearestDist = float.MaxValue;
+            // QueryTriggerInteraction.Collide 명시 - 터미널이 Trigger 콜라이더여도 감지
+            Collider[] hits = Physics.OverlapSphere(transform.position, interactRange, ~0, QueryTriggerInteraction.Collide);
             foreach (var hit in hits)
             {
-                // Search in self or parents
                 ObjectivePoint op = hit.GetComponent<ObjectivePoint>() ?? hit.GetComponentInParent<ObjectivePoint>();
-                if (op != null && !op.isCompleted)
+                if (op == null || op.isCompleted) continue;
+
+                // 가장 가까운 터미널 선택
+                float dist = Vector3.Distance(transform.position, op.transform.position);
+                if (dist < nearestDist)
                 {
+                    nearestDist = dist;
                     nearest = op;
-                    break;
                 }
             }
 
@@ -700,6 +706,7 @@ void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject
         RaycastHit[] hits = Physics.SphereCastAll(p, groundCheckRadius, Vector3.down, rayLength, groundMask, QueryTriggerInteraction.Ignore);
 
         isGrounded = false;
+        isGroundedOnAI = false;
         groundNormal = Vector3.up;
         foreach (RaycastHit h in hits)
         {
@@ -707,6 +714,8 @@ void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject
                 continue;
             isGrounded = true;
             groundNormal = h.normal;
+            if (h.collider.GetComponentInParent<RandomRoam>() != null)
+                isGroundedOnAI = true;
             break;
         }
     }

@@ -17,6 +17,8 @@ public sealed class WaitingRoomController
     private readonly string isReadyKey;
     private readonly string selectedMapKey;
 
+    public const string SeekerSelectionKey = "SelectedSeeker";
+
     private bool isReady;
 
     public WaitingRoomController(
@@ -78,6 +80,21 @@ public sealed class WaitingRoomController
 
         RefreshPlayerList();
         RefreshActionButtons();
+    }
+
+    public void SelectSeeker(int actorNumber)
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        // 같은 플레이어 다시 클릭 시 선택 해제 (랜덤으로 복귀)
+        object current;
+        int currentSelected = -1;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(SeekerSelectionKey, out current))
+            currentSelected = (int)current;
+
+        int newValue = (currentSelected == actorNumber) ? -1 : actorNumber;
+        Hashtable props = new Hashtable { { SeekerSelectionKey, newValue } };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
     }
 
     public void ToggleReady()
@@ -147,21 +164,62 @@ public sealed class WaitingRoomController
                 continue;
             }
 
-            nameText.text = $"[{player.NickName}]";
+            // 현재 선택된 술래 actorNumber 읽기
+            int selectedSeekerActor = -1;
+            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(SeekerSelectionKey, out object selObj) && selObj is int selInt)
+                selectedSeekerActor = selInt;
+
+            bool isSelectedSeeker = selectedSeekerActor == player.ActorNumber;
+            nameText.text = isSelectedSeeker
+                ? $"<color=red>⚔ [{player.NickName}]</color>"
+                : $"[{player.NickName}]";
 
             if (player.IsMasterClient)
             {
                 readyText.text = "<color=yellow>[방장]</color>";
-                continue;
             }
-
-            bool playerReady = false;
-            if (player.CustomProperties.TryGetValue(isReadyKey, out object isReadyObj) && isReadyObj is bool ready)
+            else
             {
-                playerReady = ready;
+                bool playerReady = false;
+                if (player.CustomProperties.TryGetValue(isReadyKey, out object isReadyObj) && isReadyObj is bool ready)
+                    playerReady = ready;
+                readyText.text = playerReady ? "<color=green>Ready!</color>" : "대기 중...";
             }
 
-            readyText.text = playerReady ? "<color=green>Ready!</color>" : "대기 중...";
+            // 방장에게만 술래 지정 버튼 표시
+            if (PhotonNetwork.IsMasterClient)
+            {
+                GameObject btnObj = new GameObject("SeekerBtn");
+                btnObj.transform.SetParent(slot.transform, false);
+
+                Image btnImg = btnObj.AddComponent<Image>();
+                btnImg.color = isSelectedSeeker ? new Color(0.9f, 0.2f, 0.2f, 0.9f) : new Color(0.2f, 0.2f, 0.2f, 0.7f);
+
+                Button seekerBtn = btnObj.AddComponent<Button>();
+
+                GameObject textObj = new GameObject("Label");
+                textObj.transform.SetParent(btnObj.transform, false);
+                TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
+                label.text = isSelectedSeeker ? "술래 ✓" : "술래 지정";
+                label.fontSize = 11;
+                label.alignment = TextAlignmentOptions.Center;
+                label.color = Color.white;
+                RectTransform labelRt = textObj.GetComponent<RectTransform>();
+                labelRt.anchorMin = Vector2.zero; labelRt.anchorMax = Vector2.one; labelRt.sizeDelta = Vector2.zero;
+
+                RectTransform rt = btnObj.GetComponent<RectTransform>();
+                rt.anchorMin = new Vector2(1f, 0.5f);
+                rt.anchorMax = new Vector2(1f, 0.5f);
+                rt.pivot = new Vector2(1f, 0.5f);
+                rt.anchoredPosition = new Vector2(-4f, 0f);
+                rt.sizeDelta = new Vector2(72f, 24f);
+
+                int actorNum = player.ActorNumber;
+                seekerBtn.onClick.AddListener(() =>
+                {
+                    SelectSeeker(actorNum);
+                });
+            }
         }
     }
 
@@ -467,12 +525,21 @@ public sealed class MatchStartController
         PhotonNetwork.CurrentRoom.IsVisible = false;
 
         Player[] players = PhotonNetwork.PlayerList;
-        int seekerIndex = Random.Range(0, players.Length);
+
+        // 방장이 술래를 직접 선택했는지 확인
+        int selectedSeekerActor = -1;
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(WaitingRoomController.SeekerSelectionKey, out object selObj) && selObj is int selInt)
+            selectedSeekerActor = selInt;
+
+        // 선택된 술래가 없거나 유효하지 않으면 랜덤
+        bool validSelection = false;
+        foreach (var p in players) if (p.ActorNumber == selectedSeekerActor) { validSelection = true; break; }
+        if (!validSelection) selectedSeekerActor = players[Random.Range(0, players.Length)].ActorNumber;
 
         for (int i = 0; i < players.Length; i++)
         {
             Hashtable props = new Hashtable();
-            props.Add(roleKey, i == seekerIndex ? "Seeker" : "Survivor");
+            props.Add(roleKey, players[i].ActorNumber == selectedSeekerActor ? "Seeker" : "Survivor");
             players[i].SetCustomProperties(props);
         }
 

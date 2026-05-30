@@ -214,6 +214,13 @@ public class TitleManager : MonoBehaviourPunCallbacks
         EnsureWaitingRoomController().HandlePlayerPropertiesUpdate(changedProps);
     }
 
+    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+    {
+        // 술래 선택 변경 시 플레이어 목록 갱신
+        if (propertiesThatChanged.ContainsKey(WaitingRoomController.SeekerSelectionKey))
+            EnsureWaitingRoomController().RefreshPlayerList();
+    }
+
     void UpdatePlayerList()
     {
         EnsureWaitingRoomController().RefreshPlayerList();
