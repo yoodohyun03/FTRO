@@ -256,12 +256,16 @@ private const string RoleKey = "Role";
         
         if (completedObjectives >= totalObjectives)
         {
-            if (escapePoint == null) escapePoint = Object.FindFirstObjectByType<EscapePoint>();
-            if (escapePoint != null)
+            // 마스터 클라이언트만 탈출구 활성화 처리
+            if (PhotonNetwork.IsMasterClient)
             {
-                escapePoint.photonView.RPC("RPC_ActivateEscape", RpcTarget.All);
-                photonView.RPC("SyncMessage", RpcTarget.All, "모든 터미널 활성화! 탈출구로 이동하세요!");
+                if (escapePoint == null) escapePoint = Object.FindFirstObjectByType<EscapePoint>();
+                if (escapePoint != null)
+                    escapePoint.photonView.RPC("RPC_ActivateEscape", RpcTarget.AllBuffered);
+                else
+                    Debug.LogError("[GameManager] 탈출구를 찾을 수 없음!");
             }
+            photonView.RPC("SyncMessage", RpcTarget.All, "모든 터미널 활성화! 탈출구로 이동하세요!");
         }
         else
         {

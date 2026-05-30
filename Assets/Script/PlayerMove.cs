@@ -668,11 +668,21 @@ void RPC_PlayPunchAnimation()
 
     void SyncDeadState()
     {
-        if (anim != null) anim.SetBool("IsDead", true); 
-        Renderer[] rs = GetComponentsInChildren<Renderer>(); 
-        foreach (Renderer r in rs) r.enabled = false; 
-        Collider c = GetComponent<Collider>(); 
-        if (c != null) c.enabled = false; 
+        // 콜라이더는 즉시 비활성화 (중복 피격 방지)
+        Collider c = GetComponent<Collider>();
+        if (c != null) c.enabled = false;
+
+        // 사망 애니메이션 재생 후 캐릭터 숨김
+        if (anim != null) anim.SetBool("IsDead", true);
+        StartCoroutine(HideAfterDeathAnimation());
+    }
+
+    IEnumerator HideAfterDeathAnimation()
+    {
+        // 사망 애니메이션 길이만큼 대기 (Die 클립 길이에 맞게 조절)
+        yield return new WaitForSeconds(2.0f);
+        Renderer[] rs = GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in rs) r.enabled = false;
     }
 void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject.FindGameObjectsWithTag("Player"); foreach (GameObject p in ps) { Renderer r = p.GetComponentInChildren<Renderer>(); if (p != this.gameObject && r != null && r.enabled) aliveSurvivors.Add(p.transform); } }
     void SpectateUpdate() { if (aliveSurvivors.Count == 0) return; if (Input.GetMouseButtonDown(0)) { spectateIndex = (spectateIndex + 1) % aliveSurvivors.Count; UpdateSurvivorList(); } if (spectateIndex < aliveSurvivors.Count) { Transform t = aliveSurvivors[spectateIndex]; if (t != null) transform.position = t.position + new Vector3(0, 2f, 0); else UpdateSurvivorList(); } }
