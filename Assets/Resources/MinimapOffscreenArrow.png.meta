@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a3851870471c9eb438fae5fe3a51514a
+guid: 78bf7c7b1a2109243b14e691e0fe42e4
 labels:
 - UnityAI
 TextureImporter:
@@ -74,7 +74,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0

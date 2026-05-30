@@ -1,0 +1,28 @@
+{
+    "asset": "5fa37eece409e67418ab097c07be6e05",
+    "fileName": "019e77df-326d-7160-b910-62093c048955.png",
+    "prompt": "A UI icon set for a sci-fi minimap in Retro Sci-Fi style. Icons include: 1. A CRT monitor terminal icon, 2. An EXIT sign escape icon, 3. A compass needle player pointer, 4. A double triangle direction arrow, 5. A jagged retro noise exclamation mark. Pixelated feel, amber and green colors, scanlines, dark background. Arranged in a 2x3 grid.",
+    "negativePrompt": "",
+    "model": "flux-2-dev",
+    "modelName": "Flux 2 (Dev)",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

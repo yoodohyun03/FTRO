@@ -1,0 +1,28 @@
+{
+    "asset": "a288954e4c4a26345903b910290eeff4",
+    "fileName": "019e7813-4689-7cd3-b5bc-c37696baddd4.png",
+    "prompt": "A single sharp directional arrow icon (V-shape). Solid cyan color. NO GLOW, NO BLUR. Sharp edges, high contrast, black background. For a game minimap indicator.",
+    "negativePrompt": "",
+    "model": "flux-2-dev",
+    "modelName": "Flux 2 (Dev)",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

@@ -1,0 +1,28 @@
+{
+    "asset": "f8f9376ba71e6a3429d85c9bc60a2bfe",
+    "fileName": "019e781b-b9ed-71ca-a389-65236d65b06e.png",
+    "prompt": "A white delta-wing style arrow icon for a minimap. Sharp but not overly elongated. The base is V-shaped (cut out/indented) like a chevron or a stealth fighter silhouette. Solid white, no glow, razor sharp edges, black background. Flat design.",
+    "negativePrompt": "",
+    "model": "flux-2-dev",
+    "modelName": "Flux 2 (Dev)",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

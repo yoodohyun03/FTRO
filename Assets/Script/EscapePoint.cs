@@ -7,9 +7,14 @@ public class EscapePoint : MonoBehaviourPunCallbacks
     public bool isActive = false;
     private List<PhotonView> survivorsInZone = new List<PhotonView>();
     private SpriteRenderer minimapIcon;
+    private Transform minimapCamTransform;
 
     void Start()
     {
+        // Find Minimap Camera to match rotation
+        MinimapFollow mf = Object.FindFirstObjectByType<MinimapFollow>();
+        if (mf != null) minimapCamTransform = mf.transform;
+
         CreateMinimapIcon();
     }
 
@@ -17,18 +22,25 @@ public class EscapePoint : MonoBehaviourPunCallbacks
     {
         GameObject iconObj = new GameObject("MinimapIcon");
         iconObj.transform.SetParent(transform, false);
-        iconObj.transform.localPosition = Vector3.up * 7f;
+        iconObj.transform.localPosition = Vector3.up * 20f; // Higher up
         iconObj.transform.rotation = Quaternion.Euler(90, 0, 0);
         iconObj.layer = 7; 
 
         minimapIcon = iconObj.AddComponent<SpriteRenderer>();
         minimapIcon.sprite = Resources.Load<Sprite>("EscapeIcon");
         minimapIcon.color = new Color(0.3f, 0.3f, 0.3f, 0.5f); 
-        iconObj.transform.localScale = Vector3.one * 25f; 
+        iconObj.transform.localScale = Vector3.one * 35f; 
     }
 
     void Update()
 {
+        // Sync rotation with Minimap Camera
+        if (minimapCamTransform != null && minimapIcon != null)
+        {
+            float camY = minimapCamTransform.eulerAngles.y;
+            minimapIcon.transform.rotation = Quaternion.Euler(90f, camY, 0f);
+        }
+
         if (!isActive || !PhotonNetwork.IsMasterClient) return;
 
         int aliveSurvivors = 0;

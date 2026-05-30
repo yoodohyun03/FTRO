@@ -1,0 +1,28 @@
+{
+    "asset": "a33992e656a6ed046a643bc07f71a664",
+    "fileName": "019e7813-142a-78e4-bb1e-b74135ba3de9.png",
+    "prompt": "A single sharp, thin isosceles triangle pointer. Solid white color. NO GLOW, NO BLUR. Sharp edges, high contrast, black background. For a game minimap player icon.",
+    "negativePrompt": "",
+    "model": "flux-2-dev",
+    "modelName": "Flux 2 (Dev)",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

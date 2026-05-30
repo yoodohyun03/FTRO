@@ -1,0 +1,38 @@
+{
+    "asset": "a95462ba20acec94e84da3f6987fcaa9",
+    "fileName": "019e77f1-0bcd-7704-9d88-a5f011317288.png",
+    "prompt": "A single sharp directional arrow icon (V-shape) in Minimalist Neon style (pink/purple glow). Flat design, high contrast, black background. To be used as an off-screen indicator on a minimap.",
+    "negativePrompt": "",
+    "model": "flux-2-dev",
+    "modelName": "Flux 2 (Dev)",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": [
+            {
+                "doodleReferenceType": 7,
+                "doodle": [],
+                "label": "Image",
+                "strength": 0.25,
+                "invertStrength": false,
+                "assetReferenceGuid": "09bae0ab29bae8042ab0944958d1de1d",
+                "unlabeledIndex": -1
+            }
+        ]
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

@@ -1,0 +1,28 @@
+{
+    "asset": "09bae0ab29bae8042ab0944958d1de1d",
+    "fileName": "019e77df-5e8b-762e-b5cf-56a16e3d4e70.png",
+    "prompt": "A UI icon set for a sci-fi minimap in Minimalist Neon style. Icons include: 1. A simple bracketed dot terminal icon [ . ], 2. A C-shape gate escape icon, 3. A delta wing player pointer, 4. A solid triangle direction arrow with fade, 5. A circle with a dot noise exclamation mark. Neon glow, pink and purple colors, minimal shapes, dark background. Arranged in a 2x3 grid.",
+    "negativePrompt": "",
+    "model": "flux-2-dev",
+    "modelName": "Flux 2 (Dev)",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

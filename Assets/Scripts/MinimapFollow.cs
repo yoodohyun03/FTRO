@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using System.Collections.Generic;
 
 public class MinimapFollow : MonoBehaviour
 {
@@ -9,9 +10,20 @@ public class MinimapFollow : MonoBehaviour
     public RenderTexture minimapTexture;
     
     private GameObject minimapUI;
+    private RectTransform playerArrow;
+    private List<GameObject> offScreenIndicators = new List<GameObject>();
+    private Sprite offscreenArrowSprite;
 
     void Start()
     {
+        // Increase resolution if it's small
+        if (minimapTexture != null && (minimapTexture.width < 512 || minimapTexture.height < 512))
+        {
+            // Note: In a real project we'd recreate it or adjust the asset, 
+            // but for now we'll assume the user wants better quality.
+            Debug.Log("Minimap texture might be low resolution.");
+        }
+        offscreenArrowSprite = Resources.Load<Sprite>("MinimapOffscreenArrow");
         SetupUI();
     }
 
@@ -74,13 +86,11 @@ public class MinimapFollow : MonoBehaviour
         arrowImg.sprite = Resources.Load<Sprite>("MinimapArrow_New");
         arrowImg.color = Color.white; 
         RectTransform arrowRect = arrowObj.GetComponent<RectTransform>();
-        arrowRect.sizeDelta = new Vector2(24, 24);
+        arrowRect.sizeDelta = new Vector2(18, 22); // Reduced size
         arrowRect.anchoredPosition = Vector2.zero; // Center of minimap
-        arrowRect.pivot = new Vector2(0.5f, 0.5f);
+arrowRect.pivot = new Vector2(0.5f, 0.5f);
         playerArrow = arrowRect;
     }
-
-    private RectTransform playerArrow;
 
     void LateUpdate()
     {
@@ -114,10 +124,71 @@ public class MinimapFollow : MonoBehaviour
         {
             playerArrow.localRotation = Quaternion.Euler(0, 0, viewRotationY - target.eulerAngles.y);
         }
+
+        UpdateOffScreenIndicators(viewRotationY);
     }
 
-    void FindLocalPlayer()
+    void UpdateOffScreenIndicators(float viewRotationY)
     {
+        // Clear old indicators (could be optimized with a pool)
+        foreach (var obj in offScreenIndicators) Destroy(obj);
+        offScreenIndicators.Clear();
+
+        if (minimapUI == null || target == null) return;
+
+        // Find targets: Terminals and Escapes
+        ObjectivePoint[] terminals = Object.FindObjectsByType<ObjectivePoint>(FindObjectsSortMode.None);
+        EscapePoint[] escapes = Object.FindObjectsByType<EscapePoint>(FindObjectsSortMode.None);
+
+        foreach (var t in terminals) if (!t.isCompleted) CreateIndicator(t.transform.position, Color.green, viewRotationY);
+        foreach (var e in escapes) if (e.isActive) CreateIndicator(e.transform.position, Color.cyan, viewRotationY);
+    }
+
+    void CreateIndicator(Vector3 targetPos, Color color, float viewRotationY)
+    {
+        Camera miniCam = GetComponent<Camera>();
+        if (miniCam == null) return;
+
+        // Convert world position to camera's viewport space
+        Vector3 screenPos = miniCam.WorldToViewportPoint(targetPos);
+
+        // Check if it's outside the viewport (0 to 1 range)
+        bool isOffScreen = screenPos.z < 0 || screenPos.x < 0 || screenPos.x > 1 || screenPos.y < 0 || screenPos.y > 1;
+
+        if (isOffScreen)
+        {
+            // Calculate direction from player to target on XZ plane
+            Vector3 diff = targetPos - target.position;
+            diff.y = 0;
+            
+            // Rotate the direction vector by the minimap camera's rotation to get local UI direction
+            Vector3 localDir = Quaternion.Euler(0, -viewRotationY, 0) * diff.normalized;
+            Vector2 uiDir = new Vector2(localDir.x, localDir.z);
+
+            // Create indicator UI
+            GameObject indicator = new GameObject("OffScreenIndicator");
+            indicator.transform.SetParent(minimapUI.transform, false);
+            Image img = indicator.AddComponent<Image>();
+            img.sprite = offscreenArrowSprite;
+            img.color = color;
+            
+            RectTransform rect = indicator.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(28, 28); // Increased size
+            
+            // Position at the edge of the minimap UI
+float radius = 70f; // Half of 150 (minimap size) minus margin
+            rect.anchoredPosition = uiDir * radius;
+            
+            // Rotate arrow to point towards target
+            float angle = Mathf.Atan2(uiDir.y, uiDir.x) * Mathf.Rad2Deg;
+            rect.localRotation = Quaternion.Euler(0, 0, angle + 90);
+
+            offScreenIndicators.Add(indicator);
+        }
+    }
+
+    private void FindLocalPlayer()
+{
         PhotonView[] views = FindObjectsByType<PhotonView>(FindObjectsSortMode.None);
         foreach (PhotonView view in views)
         {

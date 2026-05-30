@@ -1,0 +1,38 @@
+{
+    "asset": "99f7c20b2c137834592a92cd955d2cd9",
+    "fileName": "019e77ed-1371-7161-b312-aa261c016e14.png",
+    "prompt": "More Terminal Icon variations in 'Minimalist Neon' (pink/purple glow) style. 1. A classic floppy disk icon, 2. A lightning bolt inside a hexagon, 3. A circle with a diagonal slash (hacker style), 4. A binary code pattern (0101) inside a square. Simple, flat, neon glow. Arranged in a grid on a dark background.",
+    "negativePrompt": "",
+    "model": "flux-2-dev",
+    "modelName": "Flux 2 (Dev)",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": [
+            {
+                "doodleReferenceType": 7,
+                "doodle": [],
+                "label": "Image",
+                "strength": 0.25,
+                "invertStrength": false,
+                "assetReferenceGuid": "09bae0ab29bae8042ab0944958d1de1d",
+                "unlabeledIndex": -1
+            }
+        ]
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

@@ -1,0 +1,38 @@
+{
+    "asset": "cc1c52b1b0c52e34ea0c7ad6b9e5a078",
+    "fileName": "019e77e8-b704-78df-98a0-25bcd1b33bcf.png",
+    "prompt": "New Minimalist Neon (pink/purple glow) icon variations. Terminal: 1. A stylized motherboard chip, 2. A node with connecting lines, 3. A minimal data tower. Escape: 1. A glowing spiral/vortex portal, 2. A flag icon, 3. An arrow pointing out of a square frame. Player: A sharp, thin isosceles triangle pointer. All icons on a dark background, flat design, high contrast.",
+    "negativePrompt": "",
+    "model": "flux-2-dev",
+    "modelName": "Flux 2 (Dev)",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": [
+            {
+                "doodleReferenceType": 7,
+                "doodle": [],
+                "label": "Image",
+                "strength": 0.25,
+                "invertStrength": false,
+                "assetReferenceGuid": "09bae0ab29bae8042ab0944958d1de1d",
+                "unlabeledIndex": -1
+            }
+        ]
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

@@ -8,6 +8,7 @@ public class ObjectivePoint : MonoBehaviourPunCallbacks, IPunObservable
     public float currentProgress = 0f;
 
     private SpriteRenderer minimapIcon;
+    private Transform minimapCamTransform;
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -30,21 +31,35 @@ public class ObjectivePoint : MonoBehaviourPunCallbacks, IPunObservable
 
     void Start()
     {
+        // Find Minimap Camera to match rotation
+        MinimapFollow mf = Object.FindFirstObjectByType<MinimapFollow>();
+        if (mf != null) minimapCamTransform = mf.transform;
+
         CreateMinimapIcon();
+    }
+
+    void Update()
+    {
+        // Sync rotation with Minimap Camera so it's always "upright" on the map
+        if (minimapCamTransform != null && minimapIcon != null)
+        {
+            float camY = minimapCamTransform.eulerAngles.y;
+            minimapIcon.transform.rotation = Quaternion.Euler(90f, camY, 0f);
+        }
     }
 
     void CreateMinimapIcon()
     {
         GameObject iconObj = new GameObject("MinimapIcon");
         iconObj.transform.SetParent(transform, false);
-        iconObj.transform.localPosition = Vector3.up * 7f; 
+        iconObj.transform.localPosition = Vector3.up * 20f; // Higher up to be above buildings
         iconObj.transform.rotation = Quaternion.Euler(90, 0, 0);
         iconObj.layer = 7; 
 
         minimapIcon = iconObj.AddComponent<SpriteRenderer>();
         minimapIcon.sprite = Resources.Load<Sprite>("TerminalIcon_New");
-        minimapIcon.color = Color.green;
-        iconObj.transform.localScale = Vector3.one * 15f; 
+        minimapIcon.color = Color.white; // Keep neon colors
+        iconObj.transform.localScale = Vector3.one * 20f; 
     }
 
     // 일반 등급 아이템 (60% 확률)

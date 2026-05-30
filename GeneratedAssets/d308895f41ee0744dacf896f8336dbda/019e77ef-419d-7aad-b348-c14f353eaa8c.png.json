@@ -1,0 +1,38 @@
+{
+    "asset": "d308895f41ee0744dacf896f8336dbda",
+    "fileName": "019e77ef-419d-7aad-b348-c14f353eaa8c.png",
+    "prompt": "Star-shaped icon variations for a Terminal in 'Minimalist Neon' (pink/purple glow) style. 1. A classic 5-pointed neon star, 2. A 4-pointed sharp star (compass star), 3. A star made of digital dots, 4. A star inside a circular glow. Simple, flat design, high contrast on a dark background.",
+    "negativePrompt": "",
+    "model": "flux-2-dev",
+    "modelName": "Flux 2 (Dev)",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": [
+            {
+                "doodleReferenceType": 7,
+                "doodle": [],
+                "label": "Image",
+                "strength": 0.25,
+                "invertStrength": false,
+                "assetReferenceGuid": "09bae0ab29bae8042ab0944958d1de1d",
+                "unlabeledIndex": -1
+            }
+        ]
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}
