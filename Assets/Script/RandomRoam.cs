@@ -81,6 +81,16 @@ public class RandomRoam : MonoBehaviourPun
     {
         if (agent == null) return;
 
+        if (!agent.isOnNavMesh)
+        {
+            if (NavMesh.SamplePosition(transform.position, out NavMeshHit recoverHit, 3f, NavMesh.AllAreas))
+            {
+                agent.Warp(recoverHit.position);
+            }
+
+            return;
+        }
+
         // 땅에 닿았는지 확인
         CheckGrounded();
 
@@ -94,7 +104,8 @@ public class RandomRoam : MonoBehaviourPun
                 currentWalkTime += Time.deltaTime;
             }
 
-            if ((agent.remainingDistance <= agent.stoppingDistance && timer >= waitTime) || currentWalkTime >= maxWalkTime)
+            if (!agent.pathPending &&
+                ((agent.remainingDistance <= agent.stoppingDistance && timer >= waitTime) || currentWalkTime >= maxWalkTime))
             {
                 Vector3 randomDirection = Random.insideUnitSphere * roamRadius;
                 randomDirection += transform.position;
@@ -125,7 +136,9 @@ public class RandomRoam : MonoBehaviourPun
         if (anim != null)
         {
             float currentSpeed = Mathf.Max(agent.velocity.magnitude, agent.desiredVelocity.magnitude);
-            bool hasMoveIntent = agent.hasPath && agent.remainingDistance > Mathf.Max(agent.stoppingDistance, 0.1f);
+            bool hasMoveIntent = !agent.pathPending &&
+                agent.hasPath &&
+                agent.remainingDistance > Mathf.Max(agent.stoppingDistance, 0.1f);
             float positionDelta = Vector3.Distance(transform.position, lastPosition);
             bool movedByTransform = positionDelta > 0.0015f;
             float animValue = 0f;

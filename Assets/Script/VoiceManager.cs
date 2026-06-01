@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 #if USE_PHOTON_VOICE
 using System.Collections;
 using Photon.Pun;
@@ -38,6 +39,7 @@ public class VoiceManager : MonoBehaviour
 
     Recorder _recorder;
     Coroutine _bindRoutine;
+    bool _micUsageLogged;
 
     void Awake()
     {
@@ -58,6 +60,31 @@ public class VoiceManager : MonoBehaviour
         ApplyPunVoiceClientSettings();
     }
 
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (PhotonNetwork.InRoom && IsVoiceGameplayScene(scene.name))
+        {
+            _recorder = null;
+            _micUsageLogged = false;
+            RequestBindRecorder();
+        }
+    }
+
+    static bool IsVoiceGameplayScene(string sceneName)
+    {
+        return sceneName != "TitleScene";
+    }
+
     void OnDestroy()
     {
         if (_instance == this)
@@ -67,21 +94,29 @@ public class VoiceManager : MonoBehaviour
     void Start()
     {
         ApplyPunVoiceClientSettings();
-        if (PhotonNetwork.InRoom)
-            RequestBindRecorder();
+        RequestBindRecorderIfNeeded();
     }
 
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
         ApplyPunVoiceClientSettings();
-        RequestBindRecorder();
+        RequestBindRecorderIfNeeded();
+    }
+
+    void RequestBindRecorderIfNeeded()
+    {
+        if (PhotonNetwork.InRoom && IsVoiceGameplayScene(SceneManager.GetActiveScene().name))
+        {
+            RequestBindRecorder();
+        }
     }
 
     public override void OnLeftRoom()
     {
         base.OnLeftRoom();
         _recorder = null;
+        _micUsageLogged = false;
         if (_bindRoutine != null)
         {
             StopCoroutine(_bindRoutine);
@@ -135,7 +170,7 @@ public class VoiceManager : MonoBehaviour
 
         ResolveRecorder();
         ApplyInitialTransmit();
-        if (_recorder == null)
+        if (_recorder == null && IsVoiceGameplayScene(SceneManager.GetActiveScene().name))
             Debug.LogWarning(
                 "[VoiceManager] Recorder를 찾지 못했습니다. " +
                 "PhotonNetwork.Instantiate로 쓰는 프리팹(예: male01_1) 루트에 PhotonView + PhotonVoiceView + Recorder가 있는지, " +
@@ -157,6 +192,13 @@ public class VoiceManager : MonoBehaviour
             if (pv != null && pv.IsMine)
             {
                 _recorder = voiceView.RecorderInUse;
+                if (_recorder == null)
+                {
+                    _recorder = voiceView.GetComponent<Recorder>();
+                    if (_recorder == null)
+                        _recorder = voiceView.GetComponentInChildren<Recorder>(true);
+                }
+
                 if (_recorder != null)
                     return;
             }
@@ -184,12 +226,31 @@ public class VoiceManager : MonoBehaviour
         if (_recorder == null)
             return;
         _recorder.TransmitEnabled = !pushToTalk;
+        TryLogMicInUse();
+    }
+
+    void TryLogMicInUse()
+    {
+        if (_micUsageLogged || _recorder == null || !PhotonNetwork.InRoom)
+            return;
+
+        if (!_recorder.RecordingEnabled || !_recorder.TransmitEnabled)
+            return;
+
+        _micUsageLogged = true;
+        Debug.Log("[VoiceManager] 사용 중!");
     }
 
     void Update()
     {
-        if (_recorder == null || !pushToTalk)
+        if (_recorder == null)
             return;
+
+        if (!pushToTalk)
+        {
+            TryLogMicInUse();
+            return;
+        }
 
         if (!PhotonNetwork.InRoom)
         {
@@ -198,19 +259,26 @@ public class VoiceManager : MonoBehaviour
         }
 
         _recorder.TransmitEnabled = Input.GetKey(pushToTalkKey);
+        TryLogMicInUse();
     }
 
     public void SetPushToTalk(bool enabled)
     {
         pushToTalk = enabled;
         if (_recorder != null && !pushToTalk)
+        {
             _recorder.TransmitEnabled = true;
+            TryLogMicInUse();
+        }
     }
 
     public void SetMicTransmit(bool transmit)
     {
         if (_recorder != null)
+        {
             _recorder.TransmitEnabled = transmit;
+            TryLogMicInUse();
+        }
     }
 #else
     void Awake()
