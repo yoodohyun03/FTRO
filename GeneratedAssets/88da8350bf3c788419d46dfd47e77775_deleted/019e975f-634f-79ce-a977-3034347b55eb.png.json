@@ -1,0 +1,28 @@
+{
+    "asset": "88da8350bf3c788419d46dfd47e77775",
+    "fileName": "019e975f-634f-79ce-a977-3034347b55eb.png",
+    "prompt": "low-poly 2D UI button, clean and simple, flat shaded, solid bluish gray color, opaque, white background, no text, game asset icon",
+    "negativePrompt": "",
+    "model": "game-ui-essentials-2",
+    "modelName": "Game UI Essentials 2.0",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

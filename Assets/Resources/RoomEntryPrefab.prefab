@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5074268097064718314}
   - component: {fileID: 6173614642022198820}
   - component: {fileID: 7584342372681107073}
+  - component: {fileID: -1054588784536924792}
   m_Layer: 5
   m_Name: RoomEntryPrefab
   m_TagString: Untagged
@@ -143,6 +144,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &-1054588784536924792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5362698685741272751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77ffde4fef527c94a92b10a9f100b512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverScale
+  hoverScale: 1.1
+  duration: 0.1
 --- !u!1 &6398473334406097396
 GameObject:
   m_ObjectHideFlags: 0

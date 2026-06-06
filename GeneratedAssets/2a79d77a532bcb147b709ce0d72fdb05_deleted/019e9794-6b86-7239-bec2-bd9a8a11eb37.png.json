@@ -1,0 +1,38 @@
+{
+    "asset": "2a79d77a532bcb147b709ce0d72fdb05",
+    "fileName": "019e9794-6b86-7239-bec2-bd9a8a11eb37.png",
+    "prompt": "A single, clean, solid orange 2D UI button sprite, rounded rectangle shape, 3D depth effect on the bottom, flat shaded top, NO text, NO icons, professional game asset, white background. Match the style and color of the reference image.",
+    "negativePrompt": "",
+    "model": "game-ui-essentials-2",
+    "modelName": "Game UI Essentials 2.0",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": [
+            {
+                "doodleReferenceType": 7,
+                "doodle": [],
+                "label": "Image",
+                "strength": 0.25,
+                "invertStrength": false,
+                "assetReferenceGuid": "65dc2627e4cf60d4f9627fcedce0a648",
+                "unlabeledIndex": -1
+            }
+        ]
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}

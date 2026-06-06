@@ -1,0 +1,38 @@
+{
+    "asset": "4da7cdf403088b647a7dae6d06e3e440",
+    "fileName": "019e9775-7fe7-72cc-a8f4-c436a89fc88f.png",
+    "prompt": "A single, clean, completely flat 2D UI button sprite, rounded rectangle shape, solid teal color, NO text, NO words, NO icons, NO 3D depth, NO side shadows, NO bottom shadow, uniform solid color, minimal flat design, white background.",
+    "negativePrompt": "",
+    "model": "game-ui-essentials-2",
+    "modelName": "Game UI Essentials 2.0",
+    "customSeed": -1,
+    "w3CTraceId": "",
+    "feedback": 0,
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelatePixelGridSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": [
+            {
+                "doodleReferenceType": 7,
+                "doodle": [],
+                "label": "Image",
+                "strength": 0.25,
+                "invertStrength": false,
+                "assetReferenceGuid": "3f5e921604e07d8439e5ee8f8ff8aea4",
+                "unlabeledIndex": -1
+            }
+        ]
+    },
+    "upscaleFactor": 0,
+    "dimensions": {
+        "width": 1024,
+        "height": 1024
+    },
+    "spriteSheet": false,
+    "duration": 0.0
+}
