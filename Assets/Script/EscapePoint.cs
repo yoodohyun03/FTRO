@@ -1,5 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 
 public class EscapePoint : MonoBehaviourPunCallbacks
@@ -8,6 +9,8 @@ public class EscapePoint : MonoBehaviourPunCallbacks
     private List<PhotonView> survivorsInZone = new List<PhotonView>();
     private SpriteRenderer minimapIcon;
     private Transform minimapCamTransform;
+    private EscapeBeamEffect beamEffect;
+    private bool hasTriggeredWin;
 
     void Start()
     {
@@ -16,6 +19,9 @@ public class EscapePoint : MonoBehaviourPunCallbacks
         if (mf != null) minimapCamTransform = mf.transform;
 
         CreateMinimapIcon();
+
+        if (isActive)
+            ShowBeam();
     }
 
     void CreateMinimapIcon()
@@ -54,10 +60,11 @@ public class EscapePoint : MonoBehaviourPunCallbacks
             }
         }
 
-        if (aliveSurvivors > 0 && survivorsInZone.Count >= aliveSurvivors)
+        if (!hasTriggeredWin && aliveSurvivors > 0 && survivorsInZone.Count >= aliveSurvivors)
         {
-            // All alive survivors are in the zone
-            GameManager.instance.photonView.RPC("RPC_GameOver", RpcTarget.All, "Survivors Escaped!");
+            hasTriggeredWin = true;
+            if (GameManager.instance != null)
+                GameManager.instance.photonView.RPC("RPC_GameOver", RpcTarget.All, "Survivors Escaped!");
         }
 }
 
@@ -88,7 +95,27 @@ public class EscapePoint : MonoBehaviourPunCallbacks
     public void RPC_ActivateEscape()
     {
         isActive = true;
-        if (minimapIcon != null) minimapIcon.color = Color.cyan; // Bright cyan when active
+        if (minimapIcon != null) minimapIcon.color = Color.cyan;
+        StartCoroutine(ShowBeamNextFrame());
         Debug.Log("[Escape] Escape Zone Activated!");
+    }
+
+    IEnumerator ShowBeamNextFrame()
+    {
+        yield return null;
+        ShowBeam();
+    }
+
+    void ShowBeam()
+    {
+        if (beamEffect == null)
+        {
+            beamEffect = GetComponent<EscapeBeamEffect>();
+            if (beamEffect == null)
+                beamEffect = gameObject.AddComponent<EscapeBeamEffect>();
+        }
+
+        if (beamEffect != null)
+            beamEffect.SetBeamActive(true);
     }
 }

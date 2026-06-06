@@ -59,6 +59,7 @@ MonoBehaviour:
   - RPC_AddProgress
   - RPC_SetCompleted
   - OnObjectiveCompleted
+  - SyncObjectiveCount
   - RPC_GameOver
   - RPC_FlashbangEffect
   - RPC_SetInvisibility
