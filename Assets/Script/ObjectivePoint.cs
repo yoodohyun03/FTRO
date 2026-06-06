@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class ObjectivePoint : MonoBehaviourPunCallbacks, IPunObservable
 {
@@ -82,15 +84,20 @@ public class ObjectivePoint : MonoBehaviourPunCallbacks, IPunObservable
 
             if (PhotonNetwork.IsMasterClient && GameManager.instance != null)
             {
-                GameManager.instance.photonView.RPC("OnObjectiveCompleted", RpcTarget.All);
+                GameManager.instance.NotifyTerminalCompleted();
 
-                // 터미널을 완료한 생존자에게 랜덤 아이템 지급
                 SurvivorItemType[] pool = Random.value < 0.6f ? CommonItems : RareItems;
-                SurvivorItemType   grant = pool[Random.Range(0, pool.Length)];
-                photonView.RPC("RPC_GrantItem", info.Sender, (int)grant);
-                Debug.Log($"[Objective] 아이템 지급 → {info.Sender.NickName}: {grant}");
+                SurvivorItemType grant = pool[Random.Range(0, pool.Length)];
+                StartCoroutine(GrantItemNextFrame(info.Sender, grant));
             }
         }
+    }
+
+    IEnumerator GrantItemNextFrame(Player target, SurvivorItemType grant)
+    {
+        yield return null;
+        photonView.RPC("RPC_GrantItem", target, (int)grant);
+        Debug.Log($"[Objective] 아이템 지급 → {target.NickName}: {grant}");
     }
 
     [PunRPC]

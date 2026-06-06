@@ -248,23 +248,31 @@ private const string RoleKey = "Role";
     }
 
 
-    [PunRPC]
-    public void OnObjectiveCompleted()
+    public void NotifyTerminalCompleted()
     {
+        if (!PhotonNetwork.IsMasterClient) return;
+
         completedObjectives++;
         UpdateObjectiveStatusUI();
-        
+
+        // RPC_AddProgress 안에서 바로 RPC를 연쇄 호출하면 멈출 수 있어 한 프레임 뒤에 처리
+        StartCoroutine(NotifyTerminalCompletedDeferred());
+    }
+
+    IEnumerator NotifyTerminalCompletedDeferred()
+    {
+        yield return null;
+
+        photonView.RPC("SyncObjectiveCount", RpcTarget.All, completedObjectives);
+
         if (completedObjectives >= totalObjectives)
         {
-            // 마스터 클라이언트만 탈출구 활성화 처리
-            if (PhotonNetwork.IsMasterClient)
-            {
-                if (escapePoint == null) escapePoint = Object.FindFirstObjectByType<EscapePoint>();
-                if (escapePoint != null)
-                    escapePoint.photonView.RPC("RPC_ActivateEscape", RpcTarget.AllBuffered);
-                else
-                    Debug.LogError("[GameManager] 탈출구를 찾을 수 없음!");
-            }
+            if (escapePoint == null) escapePoint = Object.FindFirstObjectByType<EscapePoint>();
+            if (escapePoint != null)
+                escapePoint.photonView.RPC("RPC_ActivateEscape", RpcTarget.AllBuffered);
+            else
+                Debug.LogError("[GameManager] 탈출구를 찾을 수 없음!");
+
             photonView.RPC("SyncMessage", RpcTarget.All, "모든 터미널 활성화! 탈출구로 이동하세요!");
         }
         else
@@ -272,11 +280,22 @@ private const string RoleKey = "Role";
             photonView.RPC("SyncMessage", RpcTarget.All, $"터미널 활성화 ({completedObjectives}/{totalObjectives})");
         }
 
-        // 3초 후 중앙 메세지 삭제 (작은 텍스트는 유지)
-        if (PhotonNetwork.IsMasterClient)
-        {
-            StartCoroutine(ClearCenterMessageAfterDelay(3f));
-        }
+        StartCoroutine(ClearCenterMessageAfterDelay(3f));
+    }
+
+    [PunRPC]
+    public void SyncObjectiveCount(int count)
+    {
+        completedObjectives = count;
+        UpdateObjectiveStatusUI();
+    }
+
+    [PunRPC]
+    public void OnObjectiveCompleted()
+    {
+        // 구버전 호환용 — 실제 처리는 NotifyTerminalCompleted에서만 수행
+        if (!PhotonNetwork.IsMasterClient) return;
+        NotifyTerminalCompleted();
     }
 
     void UpdateObjectiveStatusUI()
