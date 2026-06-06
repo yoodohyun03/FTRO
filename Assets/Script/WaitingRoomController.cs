@@ -51,7 +51,7 @@ public sealed class WaitingRoomController
         if (selectedMapText != null && PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(selectedMapKey))
         {
             string mapName = (string)PhotonNetwork.CurrentRoom.CustomProperties[selectedMapKey];
-            selectedMapText.text = "현재 맵: " + mapName;
+            selectedMapText.text = "맵 · " + mapName;
         }
 
         Hashtable props = new Hashtable { { isReadyKey, false } };
@@ -63,7 +63,7 @@ public sealed class WaitingRoomController
             TextMeshProUGUI readyLabel = readyButton.GetComponentInChildren<TextMeshProUGUI>();
             if (readyLabel != null)
             {
-                readyLabel.text = "Ready";
+                readyLabel.text = "준비";
             }
         }
 
@@ -112,7 +112,7 @@ public sealed class WaitingRoomController
         TextMeshProUGUI readyLabel = readyButton.GetComponentInChildren<TextMeshProUGUI>();
         if (readyLabel != null)
         {
-            readyLabel.text = isReady ? "Cancel" : "Ready";
+            readyLabel.text = isReady ? "준비 취소" : "준비";
         }
     }
 
@@ -171,55 +171,60 @@ public sealed class WaitingRoomController
 
             bool isSelectedSeeker = selectedSeekerActor == player.ActorNumber;
             nameText.text = isSelectedSeeker
-                ? $"<color=red>⚔ [{player.NickName}]</color>"
-                : $"[{player.NickName}]";
+                ? $"<color=#FF6B6B>술래 · {player.NickName}</color>"
+                : player.NickName;
 
             if (player.IsMasterClient)
             {
-                readyText.text = "<color=yellow>[방장]</color>";
+                readyText.text = "<color=#FFD54F>방장</color>";
             }
             else
             {
                 bool playerReady = false;
                 if (player.CustomProperties.TryGetValue(isReadyKey, out object isReadyObj) && isReadyObj is bool ready)
                     playerReady = ready;
-                readyText.text = playerReady ? "<color=green>Ready!</color>" : "대기 중...";
+                readyText.text = playerReady ? "<color=#7CFC8A>준비 완료</color>" : "<color=#B0BEC5>대기 중</color>";
             }
 
-            // 방장에게만 술래 지정 버튼 표시
-            if (PhotonNetwork.IsMasterClient)
-            {
-                GameObject btnObj = new GameObject("SeekerBtn");
-                btnObj.transform.SetParent(slot.transform, false);
+            ConfigureSeekerButton(slot.transform, player.ActorNumber, isSelectedSeeker);
+        }
+    }
 
-                Image btnImg = btnObj.AddComponent<Image>();
-                btnImg.color = isSelectedSeeker ? new Color(0.9f, 0.2f, 0.2f, 0.9f) : new Color(0.2f, 0.2f, 0.2f, 0.7f);
+    void ConfigureSeekerButton(Transform slotTransform, int actorNumber, bool isSelectedSeeker)
+    {
+        Transform seekerButtonTransform = slotTransform.Find("SeekerButton");
+        if (seekerButtonTransform == null)
+        {
+            return;
+        }
 
-                Button seekerBtn = btnObj.AddComponent<Button>();
+        bool showSeekerButton = PhotonNetwork.IsMasterClient;
+        seekerButtonTransform.gameObject.SetActive(showSeekerButton);
+        if (!showSeekerButton)
+        {
+            return;
+        }
 
-                GameObject textObj = new GameObject("Label");
-                textObj.transform.SetParent(btnObj.transform, false);
-                TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
-                label.text = isSelectedSeeker ? "술래 ✓" : "술래 지정";
-                label.fontSize = 11;
-                label.alignment = TextAlignmentOptions.Center;
-                label.color = Color.white;
-                RectTransform labelRt = textObj.GetComponent<RectTransform>();
-                labelRt.anchorMin = Vector2.zero; labelRt.anchorMax = Vector2.one; labelRt.sizeDelta = Vector2.zero;
+        Button seekerButton = seekerButtonTransform.GetComponent<Button>();
+        Image buttonImage = seekerButtonTransform.GetComponent<Image>();
+        TextMeshProUGUI buttonLabel = seekerButtonTransform.GetComponentInChildren<TextMeshProUGUI>();
 
-                RectTransform rt = btnObj.GetComponent<RectTransform>();
-                rt.anchorMin = new Vector2(1f, 0.5f);
-                rt.anchorMax = new Vector2(1f, 0.5f);
-                rt.pivot = new Vector2(1f, 0.5f);
-                rt.anchoredPosition = new Vector2(-4f, 0f);
-                rt.sizeDelta = new Vector2(72f, 24f);
+        if (buttonLabel != null)
+        {
+            buttonLabel.text = isSelectedSeeker ? "선택됨" : "술래 지정";
+        }
 
-                int actorNum = player.ActorNumber;
-                seekerBtn.onClick.AddListener(() =>
-                {
-                    SelectSeeker(actorNum);
-                });
-            }
+        if (buttonImage != null)
+        {
+            buttonImage.color = isSelectedSeeker
+                ? new Color(1f, 0.72f, 0.35f, 1f)
+                : Color.white;
+        }
+
+        if (seekerButton != null)
+        {
+            seekerButton.onClick.RemoveAllListeners();
+            seekerButton.onClick.AddListener(() => SelectSeeker(actorNumber));
         }
     }
 

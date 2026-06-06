@@ -49,11 +49,12 @@ public class TitleManager : MonoBehaviourPunCallbacks
     public string selectedMap = "CityScene";
     public string[] mapList = { "CityScene", "WesternScene", "CityMapScene" };
 
-    [Header("6. 맵 선택 토글 (위 순서와 동일: city→1, japan→2, forest→3, random→4)")]
-    public Toggle cityMapToggle;
-    public Toggle japanMapToggle;
-    public Toggle forestMapToggle;
-    public Toggle randomMapToggle;
+    [Header("6. 맵 선택 (캐러셀: city→0, west→1, citymap→2, random→3)")]
+    public MapCarouselSelector mapCarouselSelector;
+    [HideInInspector] public Toggle cityMapToggle;
+    [HideInInspector] public Toggle japanMapToggle;
+    [HideInInspector] public Toggle forestMapToggle;
+    [HideInInspector] public Toggle randomMapToggle;
 
     void Start()
     {
@@ -75,17 +76,11 @@ public class TitleManager : MonoBehaviourPunCallbacks
         if (startButton != null) startButton.onClick.AddListener(OnStartButtonClicked);
         if (readyButton != null) readyButton.onClick.AddListener(OnReadyButtonClicked);
         if (leaveButton != null) leaveButton.onClick.AddListener(OnLeaveButtonClicked);
+        WireQuickJoinButton();
 
         EnsureWaitingRoomController();
         selectedMap = EnsureRoomCreationController().SelectedMap;
-
-        // 맵 선택 토글 이벤트 연결
-        if (cityMapToggle != null) cityMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectCityMap(); });
-        if (japanMapToggle != null) japanMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectJapanMap(); });
-        if (forestMapToggle != null) forestMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectForestMap(); });
-        if (randomMapToggle != null) randomMapToggle.onValueChanged.AddListener(isOn => { if (isOn) SelectRandomMap(); });
-
-        SyncSelectedMapFromActiveToggle();
+        EnsureMapCarouselSelector();
         if (PhotonNetwork.InRoom)
         {
             ShowWaitingRoom();
@@ -107,12 +102,36 @@ public class TitleManager : MonoBehaviourPunCallbacks
         Debug.Log("서버 접속 및 로비 진입 완료!");
     }
 
-    void SyncSelectedMapFromActiveToggle()
+    void EnsureMapCarouselSelector()
     {
-        if (cityMapToggle != null && cityMapToggle.isOn) SelectCityMap();
-        else if (japanMapToggle != null && japanMapToggle.isOn) SelectJapanMap();
-        else if (forestMapToggle != null && forestMapToggle.isOn) SelectForestMap();
-        else if (randomMapToggle != null && randomMapToggle.isOn) SelectRandomMap();
+        if (mapCarouselSelector == null && createRoomPanel != null)
+        {
+            mapCarouselSelector = createRoomPanel.GetComponent<MapCarouselSelector>();
+            if (mapCarouselSelector == null)
+            {
+                mapCarouselSelector = createRoomPanel.AddComponent<MapCarouselSelector>();
+            }
+        }
+
+        if (mapCarouselSelector == null)
+        {
+            return;
+        }
+
+        mapCarouselSelector.OnIndexChanged -= OnMapCarouselIndexChanged;
+        mapCarouselSelector.OnIndexChanged += OnMapCarouselIndexChanged;
+        OnMapCarouselIndexChanged(mapCarouselSelector.CurrentIndex);
+    }
+
+    void OnMapCarouselIndexChanged(int index)
+    {
+        switch (index)
+        {
+            case 0: SelectCityMap(); break;
+            case 1: SelectJapanMap(); break;
+            case 2: SelectForestMap(); break;
+            case 3: SelectRandomMap(); break;
+        }
     }
 
     // 로그인/방 목록
@@ -127,12 +146,45 @@ public class TitleManager : MonoBehaviourPunCallbacks
     {
         roomListPanel.SetActive(false);
         createRoomPanel.SetActive(true);
+        EnsureMapCarouselSelector();
     }
 
     public void CloseCreateRoomPanel()
     {
         createRoomPanel.SetActive(false);
         roomListPanel.SetActive(true);
+    }
+
+    void WireQuickJoinButton()
+    {
+        GameObject joinButtonObject = GameObject.Find("JoinRoomButton");
+        if (joinButtonObject == null)
+        {
+            return;
+        }
+
+        Button quickJoinButton = joinButtonObject.GetComponent<Button>();
+        if (quickJoinButton != null)
+        {
+            quickJoinButton.onClick.RemoveAllListeners();
+            quickJoinButton.onClick.AddListener(ClickQuickJoin);
+        }
+
+        TextMeshProUGUI label = joinButtonObject.GetComponentInChildren<TextMeshProUGUI>();
+        if (label != null)
+        {
+            label.text = "빠른 입장";
+        }
+    }
+
+    public void ClickQuickJoin()
+    {
+        PhotonNetwork.JoinRandomRoom();
+    }
+
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        Debug.LogWarning("참가 가능한 방이 없습니다. 왼쪽 목록에서 방을 선택하거나 새 방을 만들어 주세요.");
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
