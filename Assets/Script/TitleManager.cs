@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -44,6 +45,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
     private RoomCreationController roomCreationController;
     private LobbyController lobbyController;
     private MatchStartController matchStartController;
+    private Action pendingMatchmakingAction;
 
     [Header("5. 맵 선택 시스템 (순서: 1 CityScene, 2 WesternScene, 3 CityMapScene, 4 랜덤)")]
     public string selectedMap = "CityScene";
@@ -63,10 +65,13 @@ public class TitleManager : MonoBehaviourPunCallbacks
         PhotonNetwork.SendRate = 30;
         PhotonNetwork.SerializationRate = 15;
 
-        // 연결이 끊긴 상태면 재연결
         if (!PhotonNetwork.IsConnected)
         {
             PhotonNetwork.ConnectUsingSettings();
+        }
+        else
+        {
+            EnsureLobbyReady();
         }
 
         // 처음 켰을 때 패널 초기화
@@ -99,7 +104,23 @@ public class TitleManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinLobby();
+    }
+
+    public override void OnJoinedLobby()
+    {
         Debug.Log("서버 접속 및 로비 진입 완료!");
+        ProcessPendingMatchmaking();
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        if (cause == DisconnectCause.ApplicationQuit)
+        {
+            return;
+        }
+
+        Debug.Log($"[TitleManager] Photon 연결 해제: {cause}");
+        PhotonNetwork.ConnectUsingSettings();
     }
 
     void EnsureMapCarouselSelector()
@@ -179,7 +200,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
 
     public void ClickQuickJoin()
     {
-        PhotonNetwork.JoinRandomRoom();
+        RunWhenLobbyReady(() => PhotonNetwork.JoinRandomRoom());
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -234,8 +255,11 @@ public class TitleManager : MonoBehaviourPunCallbacks
     public void ClickCreateRoomReal()
     {
         RoomCreationController controller = EnsureRoomCreationController();
-        controller.CreateRoom();
-        selectedMap = controller.SelectedMap;
+        RunWhenLobbyReady(() =>
+        {
+            controller.CreateRoom();
+            selectedMap = controller.SelectedMap;
+        });
     }
 
     // 대기방
@@ -253,8 +277,9 @@ public class TitleManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        // 방 나가면 다시 방 목록 패널로!
         SetPanelState(showLogin: false, showRoomList: true, showCreateRoom: false, showPasswordPopup: false, showWaitingRoom: false);
+        EnsureLobbyReady();
+        ProcessPendingMatchmaking();
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) { UpdatePlayerList(); CheckStartButton(); }
@@ -305,6 +330,87 @@ public class TitleManager : MonoBehaviourPunCallbacks
     void OnLeaveButtonClicked()
     {
         PhotonNetwork.LeaveRoom();
+    }
+
+    bool IsLobbyReadyForMatchmaking()
+    {
+        return PhotonNetwork.IsConnectedAndReady
+            && PhotonNetwork.InLobby
+            && !PhotonNetwork.InRoom;
+    }
+
+    void EnsureLobbyReady()
+    {
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+            return;
+        }
+
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+            return;
+        }
+
+        if (IsLobbyReadyForMatchmaking())
+        {
+            return;
+        }
+
+        ClientState state = PhotonNetwork.NetworkClientState;
+        switch (state)
+        {
+            case ClientState.ConnectedToMasterServer:
+                PhotonNetwork.JoinLobby();
+                break;
+            case ClientState.ConnectingToMasterServer:
+            case ClientState.JoiningLobby:
+                break;
+            case ClientState.ConnectedToGameServer:
+            case ClientState.Joining:
+            case ClientState.DisconnectingFromGameServer:
+                Debug.Log($"[TitleManager] GameServer 상태 복구: {state}");
+                PhotonNetwork.Disconnect();
+                break;
+            default:
+                if (!PhotonNetwork.InLobby)
+                {
+                    Debug.Log($"[TitleManager] 로비 복구 시도: {state}");
+                    PhotonNetwork.Disconnect();
+                }
+                break;
+        }
+    }
+
+    void RunWhenLobbyReady(Action action)
+    {
+        if (IsLobbyReadyForMatchmaking())
+        {
+            action();
+            return;
+        }
+
+        pendingMatchmakingAction = action;
+        EnsureLobbyReady();
+        Debug.Log("[TitleManager] 로비 준비 대기 중...");
+    }
+
+    void ProcessPendingMatchmaking()
+    {
+        if (pendingMatchmakingAction == null || !IsLobbyReadyForMatchmaking())
+        {
+            return;
+        }
+
+        Action action = pendingMatchmakingAction;
+        pendingMatchmakingAction = null;
+        action();
+    }
+
+    void TryJoinRoom(string roomName)
+    {
+        RunWhenLobbyReady(() => PhotonNetwork.JoinRoom(roomName));
     }
 
     void SetPanelState(bool showLogin, bool showRoomList, bool showCreateRoom, bool showPasswordPopup, bool showWaitingRoom)
@@ -361,7 +467,8 @@ public class TitleManager : MonoBehaviourPunCallbacks
                 roomListContent,
                 passwordPopupPanel,
                 joinPwdInput,
-                PasswordKey);
+                PasswordKey,
+                TryJoinRoom);
         }
 
         return lobbyController;

@@ -44,6 +44,7 @@ private const string RoleKey = "Role";
     public TextMeshProUGUI centerText;
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI objectiveStatusText;
+    public TextMeshProUGUI roleIndicatorText;
 
     [Header("게임 설정")]
     public float playTime = 600f;
@@ -57,6 +58,8 @@ private const string RoleKey = "Role";
     {
         completedObjectives = 0;
         UpdateObjectiveStatusUI();
+        EnsureRoleIndicator();
+        if (centerText != null) centerText.text = "";
 
         if (PhotonNetwork.IsMasterClient)
 {
@@ -196,20 +199,15 @@ private const string RoleKey = "Role";
 
     IEnumerator GameFlowRoutine()
     {
-        // 1. [Setup] 시작하자마자 직업 확인 + 5초 대기 (멘트 통합!)
+        // 1. [Setup] 5초 대기 (가운데 안내 멘트 없음, 직업은 우측 상단 표시)
         SetState(GameState.Setup);
-
-        photonView.RPC("SyncRoleMessage", RpcTarget.All,
-            "<color=red>You Are Seeker!</color>\n생존자들이 숨고 있습니다... (5초)",
-            "<color=#00BFFF>You Are Surviver!</color>\n술래가 눈을 감고 있습니다...");
+        photonView.RPC("SyncRoleIndicator", RpcTarget.All);
 
         yield return new WaitForSeconds(5f);
 
         // 2. [Playing] 본 게임 시작
         SetState(GameState.Playing);
-        photonView.RPC("SyncRoleMessage", RpcTarget.All,
-            "<color=red>생존자를 찾으십시오.</color>",
-            "<color=#00BFFF>완벽히 연기하여 살아남으십시오.</color>");
+        photonView.RPC("SyncRoleIndicator", RpcTarget.All);
 
         // 마스터 교체 시 타이머 인계를 위해 시작 시간 저장
         gameStartNetworkTime = PhotonNetwork.Time;
@@ -411,23 +409,20 @@ private const string RoleKey = "Role";
     }
 
     [PunRPC]
-    public void SyncRoleMessage(string seekerMsg, string survivorMsg)
+    public void SyncRoleIndicator()
     {
-        if (centerText == null) return;
+        if (centerText != null) centerText.text = "";
 
         if (!PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(RoleKey))
         {
-            StartCoroutine(ApplyRoleMessageWhenReady(seekerMsg, survivorMsg));
+            StartCoroutine(ApplyRoleIndicatorWhenReady());
             return;
         }
 
-        string myRole = (string)PhotonNetwork.LocalPlayer.CustomProperties[RoleKey];
-
-        if (myRole == SeekerRole) centerText.text = seekerMsg;
-        else centerText.text = survivorMsg;
+        UpdateRoleIndicator();
     }
 
-    IEnumerator ApplyRoleMessageWhenReady(string seekerMsg, string survivorMsg)
+    IEnumerator ApplyRoleIndicatorWhenReady()
     {
         float timeout = 1.5f;
         float elapsed = 0f;
@@ -438,19 +433,66 @@ private const string RoleKey = "Role";
             yield return null;
         }
 
-        string myRole = SurvivorRole;
-        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(RoleKey))
-        {
-            myRole = (string)PhotonNetwork.LocalPlayer.CustomProperties[RoleKey];
-        }
-
-        if (centerText == null) yield break;
-
-        if (myRole == SeekerRole) centerText.text = seekerMsg;
-        else centerText.text = survivorMsg;
+        UpdateRoleIndicator();
     }
 
+    void EnsureRoleIndicator()
+    {
+        if (roleIndicatorText != null) return;
 
+        Canvas canvas = FindOverlayCanvas();
+        if (canvas == null) return;
+
+        GameObject indicatorObject = new GameObject("RoleIndicator");
+        indicatorObject.transform.SetParent(canvas.transform, false);
+
+        RectTransform rect = indicatorObject.AddComponent<RectTransform>();
+        rect.anchorMin = new Vector2(1f, 1f);
+        rect.anchorMax = new Vector2(1f, 1f);
+        rect.pivot = new Vector2(1f, 1f);
+        rect.anchoredPosition = new Vector2(-28f, -28f);
+        rect.sizeDelta = new Vector2(300f, 80f);
+
+        roleIndicatorText = indicatorObject.AddComponent<TextMeshProUGUI>();
+        roleIndicatorText.fontSize = 44f;
+        roleIndicatorText.fontStyle = FontStyles.Bold;
+        roleIndicatorText.alignment = TextAlignmentOptions.MidlineRight;
+        roleIndicatorText.raycastTarget = false;
+
+        TMP_FontAsset font = Resources.Load<TMP_FontAsset>("Font_1-4Regular SDF");
+        if (font != null) roleIndicatorText.font = font;
+    }
+
+    void UpdateRoleIndicator()
+    {
+        EnsureRoleIndicator();
+        if (roleIndicatorText == null) return;
+
+        if (!PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(RoleKey))
+        {
+            roleIndicatorText.text = string.Empty;
+            return;
+        }
+
+        string myRole = (string)PhotonNetwork.LocalPlayer.CustomProperties[RoleKey];
+        roleIndicatorText.text = myRole == SeekerRole
+            ? "<color=#FF6B6B>술래</color>"
+            : "<color=#66CCFF>생존자</color>";
+    }
+
+    static Canvas FindOverlayCanvas()
+    {
+        Canvas[] canvases = Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None);
+        foreach (Canvas canvas in canvases)
+        {
+            if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            {
+                return canvas;
+            }
+        }
+
+        return Object.FindFirstObjectByType<Canvas>();
+    }
 
     public void OnClickExit()
     {

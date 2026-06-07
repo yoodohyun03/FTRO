@@ -81,18 +81,18 @@ public class SeekerItemHandler : MonoBehaviourPun
         rtContainer.anchorMin = new Vector2(0.5f, 0);
         rtContainer.anchorMax = new Vector2(0.5f, 0);
         rtContainer.pivot = new Vector2(0.5f, 0);
-        rtContainer.anchoredPosition = new Vector2(0, 30); // Lower position
-        rtContainer.sizeDelta = new Vector2(400, 80);
+        rtContainer.anchoredPosition = new Vector2(0, 42);
+        rtContainer.sizeDelta = new Vector2(560, 110);
 
         for (int i = 0; i < items.Count; i++)
         {
-            float posX = (i == 0) ? -90 : 90;
+            float posX = (i == 0) ? -135 : 135;
             string key = (i == 0) ? "Q" : "R";
 
             GameObject itemSlot = new GameObject($"ItemSlot_{i}");
             itemSlot.transform.SetParent(uiContainer.transform, false);
             RectTransform rtSlot = itemSlot.AddComponent<RectTransform>();
-            rtSlot.sizeDelta = new Vector2(160, 50); // Smaller
+            rtSlot.sizeDelta = new Vector2(220, 72);
             rtSlot.anchoredPosition = new Vector2(posX, 0);
 
             // Background
@@ -113,7 +113,7 @@ public class SeekerItemHandler : MonoBehaviourPun
             // If not in Resources, it will be null at runtime, but we can't use AssetDatabase in a runtime script.
             if (customFont != null) itemTexts[i].font = customFont;
 
-            itemTexts[i].fontSize = 14; 
+            itemTexts[i].fontSize = 20;
 itemTexts[i].alignment = TextAlignmentOptions.Center;
             itemTexts[i].raycastTarget = false;
             RectTransform rtText = textObj.GetComponent<RectTransform>();

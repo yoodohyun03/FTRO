@@ -206,9 +206,14 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
     IEnumerator ShowRoleSequence()
     {
-        GameObject cornerObj = GameObject.Find("CornerRoleText"); GameObject blindObj = GameObject.Find("BlindPanel");
-        if (cornerObj != null) { TextMeshProUGUI cornerText = cornerObj.GetComponent<TextMeshProUGUI>(); cornerObj.SetActive(true); if (myRole == SeekerRole) { cornerText.text = "<color=red>Seeker</color>"; if (blindObj != null) blindObj.SetActive(true); } else { cornerText.text = "<color=#00BFFF>Surviver</color>"; if (blindObj != null) blindObj.SetActive(false); } }
-        yield return new WaitForSeconds(5f); if (blindObj != null) blindObj.SetActive(false);
+        GameObject cornerObj = GameObject.Find("CornerRoleText");
+        if (cornerObj != null) cornerObj.SetActive(false);
+
+        GameObject blindObj = GameObject.Find("BlindPanel");
+        if (blindObj != null) blindObj.SetActive(myRole == SeekerRole);
+
+        yield return new WaitForSeconds(5f);
+        if (blindObj != null) blindObj.SetActive(false);
     }
 
     private float airTime = 0f;

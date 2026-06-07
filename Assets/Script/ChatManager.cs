@@ -12,7 +12,19 @@ public class ChatManager : MonoBehaviourPun
 
     [Header("채팅 설정")]
     public int maxMessages = 8;
+    [SerializeField] private int lobbyChatFontSize = 34;
+    [SerializeField] private int gameChatFontSize = 30;
+    [SerializeField] private int lobbyInputFontSize = 30;
+    [SerializeField] private int gameInputFontSize = 28;
     private List<string> messageList = new List<string>();
+
+    [Header("로비 채팅 레이아웃")]
+    [SerializeField] private float lobbyInputHeight = 48f;
+    [SerializeField] private float lobbyInputBottomMargin = 24f;
+    [SerializeField] private float lobbyInputSideMargin = 28f;
+    [SerializeField] private float lobbyLogGapAboveInput = 12f;
+    [SerializeField] private float lobbyLogSideMargin = 10f;
+    [SerializeField] private float lobbyLogTopMargin = 8f;
 
     [Header("씬 설정")]
     public bool isLobbyScene = false; // 로비 씬일 때만 체크
@@ -23,10 +35,82 @@ public class ChatManager : MonoBehaviourPun
     void Start()
     {
         if (chatLog != null) chatLog.text = "";
+        ApplyChatTypography();
 
         if (chatInput != null)
         {
             chatInput.onSubmit.AddListener(delegate { SendChatMessage(); });
+        }
+    }
+
+    void ApplyChatTypography()
+    {
+        if (isLobbyScene)
+        {
+            ApplyLobbyChatLayout();
+        }
+
+        int logSize = isLobbyScene ? lobbyChatFontSize : gameChatFontSize;
+        int inputSize = isLobbyScene ? lobbyInputFontSize : gameInputFontSize;
+
+        if (chatLog != null)
+        {
+            chatLog.fontSize = logSize;
+            chatLog.enableAutoSizing = false;
+            if (isLobbyScene)
+            {
+                chatLog.overflowMode = TextOverflowModes.Overflow;
+            }
+        }
+
+        if (chatInput == null) return;
+
+        if (chatInput.textComponent != null)
+        {
+            chatInput.textComponent.fontSize = inputSize;
+            chatInput.textComponent.enableAutoSizing = false;
+        }
+
+        if (chatInput.placeholder is TMP_Text placeholderText)
+        {
+            placeholderText.fontSize = inputSize;
+            placeholderText.enableAutoSizing = false;
+        }
+    }
+
+    void ApplyLobbyChatLayout()
+    {
+        if (chatLog == null || chatInput == null) return;
+
+        RectTransform panel = chatLog.transform.parent as RectTransform;
+        if (panel == null) return;
+
+        panel.localScale = Vector3.one;
+
+        float logBottom = lobbyInputBottomMargin + lobbyInputHeight + lobbyLogGapAboveInput;
+
+        RectTransform logRect = chatLog.rectTransform;
+        logRect.anchorMin = Vector2.zero;
+        logRect.anchorMax = Vector2.one;
+        logRect.pivot = new Vector2(0.5f, 0.5f);
+        logRect.offsetMin = new Vector2(lobbyLogSideMargin, logBottom);
+        logRect.offsetMax = new Vector2(-lobbyLogSideMargin, -lobbyLogTopMargin);
+
+        RectTransform inputRect = chatInput.GetComponent<RectTransform>();
+        inputRect.anchorMin = new Vector2(0f, 0f);
+        inputRect.anchorMax = new Vector2(1f, 0f);
+        inputRect.pivot = new Vector2(0.5f, 0f);
+        inputRect.anchoredPosition = new Vector2(0f, lobbyInputBottomMargin);
+        inputRect.sizeDelta = new Vector2(-lobbyInputSideMargin * 2f, lobbyInputHeight);
+
+        if (chatInput.textViewport != null)
+        {
+            RectTransform viewport = chatInput.textViewport;
+            viewport.anchorMin = Vector2.zero;
+            viewport.anchorMax = Vector2.one;
+            viewport.pivot = new Vector2(0.5f, 0.5f);
+            viewport.offsetMin = new Vector2(10f, 6f);
+            viewport.offsetMax = new Vector2(-10f, -6f);
         }
     }
 

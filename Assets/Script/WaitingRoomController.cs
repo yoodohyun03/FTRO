@@ -51,7 +51,7 @@ public sealed class WaitingRoomController
         if (selectedMapText != null && PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(selectedMapKey))
         {
             string mapName = (string)PhotonNetwork.CurrentRoom.CustomProperties[selectedMapKey];
-            selectedMapText.text = "맵 · " + mapName;
+            selectedMapText.text = "맵: " + mapName;
         }
 
         Hashtable props = new Hashtable { { isReadyKey, false } };
@@ -144,6 +144,17 @@ public sealed class WaitingRoomController
                 continue;
             }
 
+            RectTransform slotRect = slot.GetComponent<RectTransform>();
+            if (slotRect != null)
+            {
+                slotRect.localScale = Vector3.one;
+                LayoutElement slotLayout = slot.GetComponent<LayoutElement>();
+                if (slotLayout != null)
+                {
+                    slotLayout.flexibleWidth = 1f;
+                }
+            }
+
             Transform nameTextTransform = slot.transform.Find("PlayerNameText");
             Transform readyTextTransform = slot.transform.Find("ReadyStateText");
 
@@ -171,7 +182,7 @@ public sealed class WaitingRoomController
 
             bool isSelectedSeeker = selectedSeekerActor == player.ActorNumber;
             nameText.text = isSelectedSeeker
-                ? $"<color=#FF6B6B>술래 · {player.NickName}</color>"
+                ? $"<color=#FF6B6B>[술래] {player.NickName}</color>"
                 : player.NickName;
 
             if (player.IsMasterClient)
@@ -362,6 +373,7 @@ public sealed class LobbyController
     private readonly GameObject passwordPopupPanel;
     private readonly TMP_InputField joinPwdInput;
     private readonly string passwordKey;
+    private readonly System.Action<string> joinRoom;
 
     private string targetRoomName = string.Empty;
     private string targetRoomPassword = string.Empty;
@@ -372,7 +384,8 @@ public sealed class LobbyController
         Transform roomListContent,
         GameObject passwordPopupPanel,
         TMP_InputField joinPwdInput,
-        string passwordKey)
+        string passwordKey,
+        System.Action<string> joinRoom)
     {
         this.nameInput = nameInput;
         this.roomEntryPrefab = roomEntryPrefab;
@@ -380,6 +393,7 @@ public sealed class LobbyController
         this.passwordPopupPanel = passwordPopupPanel;
         this.joinPwdInput = joinPwdInput;
         this.passwordKey = passwordKey;
+        this.joinRoom = joinRoom;
     }
 
     public bool TrySetNickname()
@@ -464,7 +478,7 @@ public sealed class LobbyController
                 }
                 else
                 {
-                    PhotonNetwork.JoinRoom(room.Name);
+                    joinRoom?.Invoke(room.Name);
                 }
             });
         }
@@ -492,7 +506,7 @@ public sealed class LobbyController
 
         if (joinPwdInput.text == targetRoomPassword)
         {
-            PhotonNetwork.JoinRoom(targetRoomName);
+            joinRoom?.Invoke(targetRoomName);
             if (passwordPopupPanel != null)
             {
                 passwordPopupPanel.SetActive(false);

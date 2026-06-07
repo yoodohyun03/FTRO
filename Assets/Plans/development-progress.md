@@ -1,182 +1,188 @@
-# FTRO - 개발 진행 기록
+# FTRO — 프로젝트 문서 (통합)
 
-> 마지막 업데이트: 2026-05-28
+> 마지막 업데이트: 2026-06-07
 
 ---
 
-## 프로젝트 개요
+## 1. 프로젝트 개요
 
 | 항목 | 내용 |
 |---|---|
 | 장르 | 숨바꼭질 멀티플레이어 (Hide & Seek) |
 | 네트워크 | Photon PUN2 |
+| Unity | 6000.3.10f1 |
+| 렌더 파이프라인 | URP 17.x |
 | 플랫폼 | PC (Windows) / WebGL |
-| 렌더 파이프라인 | Built-in |
 
-**기본 구조**
-- **술래(Seeker)**: 일반 플레이어와 AI 더미 사이에서 진짜 플레이어를 찾아 잡음
-- **생존자(Survivor)**: AI 더미처럼 행동하며 숨음
-- **AI 더미**: 맵을 배회하며 술래의 탐색을 방해
+**역할 구조**
+- **술래(Seeker)**: AI 더미와 섞인 맵에서 생존자를 찾아 잡음
+- **생존자(Survivor)**: AI처럼 행동하며 숨거나 목표(터미널/탈출) 수행
+- **AI 더미**: 맵을 배회하며 술래의 판별을 어렵게 함
 
 ---
 
-## 씬 구성
+## 2. 씬 구성
 
-| 씬 이름 | 설명 | 상태 |
+| 씬 | 설명 | 상태 |
 |---|---|---|
-| `TitleScene` | 메인 메뉴, 로비, 방 생성 | ✅ 완료 |
-| `CityMapScene` | 기존 도시 맵 (원본) | ✅ 완료 |
-| `CityScene` | 새로 추가된 도시 씬 | ✅ 추가 완료 |
-| `WesternScene` | 새로 추가된 서부 씬 | ✅ 추가 완료 |
+| `TitleScene` | 로그인, 로비, 방 생성/대기 | ✅ |
+| `CityScene` | 메인 도시 맵 (UI 기준 씬) | ✅ |
+| `WesternScene` | 서부 맵 | ✅ |
+| `CityMapScene` | 도시 맵 변형 | ✅ |
 
-**타이틀 씬 맵 선택 UI 순서**
+**타이틀 맵 선택 순서 (캐러셀)**
 ```
-1번 토글 → CityScene
-2번 토글 → WesternScene
-3번 토글 → CityMapScene
-4번 토글 → 랜덤 맵
-```
-
----
-
-## 완료된 작업 목록
-
-### 1. 씬 추가 및 맵 선택 연동
-- `TitleManager.cs`: `selectedMap` 기본값 `"CityScene"`, `mapList` = `{CityScene, WesternScene, CityMapScene}` 로 변경
-- `WaitingRoomController.cs`: 맵 선택 메서드 이름 및 초기값 업데이트
-- `TitleScene.unity`: Toggle GameObject 이름·라벨·기본 선택값 수정
-- 새 씬에 `GameManager`, `NetworkManager`, NavMesh 설정 필요 (수동 작업)
-
----
-
-### 2. Unity 시작 시 프리즈 문제 해결
-**원인**: 새 씬에 `GameManager`, `NetworkManager`, NavMesh가 없어 AI 스포너가 무한 루프  
-**해결**: `CityMapScene`에서 필수 오브젝트 복사, 각 씬에서 NavMesh 베이크
-
----
-
-### 3. NavMesh 관련 오류 수정
-**오류**: `"GetRemainingDistance" can only be called on an active agent that has been placed on a NavMesh`  
-**파일**: `RandomRoam.cs`  
-**해결**: `Update()` 상단에 NavMesh 유효성 체크 추가
-```csharp
-if (agent == null) return;
-if (!agent.isOnNavMesh) return;
+0 → CityScene
+1 → WesternScene
+2 → CityMapScene
+3 → 랜덤
 ```
 
-**NavMesh 장애물 팁**: 차량 등 동적 장애물은 `NavMeshObstacle` 컴포넌트 + `Carve` 옵션 활성화
-
 ---
 
-### 4. 연결 끊김 문제 해결 (AppOutOfFocus / TimeoutDisconnect)
+## 3. 완료된 작업 (최신)
 
-| 원인 | 해결 방법 | 적용 파일 |
+### 3.1 로비 / 대기방
+- 대기방 **술래 지정**: 방장이 플레이어 목록에서 술래 선택 (`SelectedSeeker` 룸 프로퍼티)
+- `MatchStartController`: 선택된 술래 우선, 없으면 랜덤
+- `TitleManager.OnRoomPropertiesUpdate`: 술래 선택 변경 시 UI 갱신
+- **Photon 로비 복구**: 게임 종료 후 타이틀 복귀 시 GameServer 잔류 상태에서 `CreateRoom` 실패하던 문제 수정 (`EnsureLobbyReady`, `RunWhenLobbyReady`)
+
+### 3.2 타이틀 씬 UI
+- 대기방 채팅 패널 레이아웃/폰트 크기 조정 (`ChatManager.ApplyLobbyChatLayout`, `TitleScene` 스케일 수정)
+- 채팅 입력·로그 영역 분리, 클리핑 해소
+
+### 3.3 인게임 UI (CityScene 기준 통일)
+- `WesternScene`, `CityMapScene`에 CityScene UI 동기화 완료
+  - Canvas (타이머, 게임오버, 채팅, ExitButton 등)
+  - ChatManager, EventSystem, MinimapSystem
+  - GameManager UI 참조 자동 연결
+- **동기화 도구**
+  - Unity 메뉴: `FTRO → Sync Game UI From CityScene` (`Assets/Editor/SyncGameUIFromCityScene.cs`) — **권장**
+  - CLI: `node tools/sync_game_ui.mjs` (검증 포함, YAML 헤더·LightingSettings·ExitButton 자동 패치)
+  - 씬 수리: `node tools/repair_scenes.mjs` (`m_LightingSettings: {fileID: 0}`)
+
+### 3.4 씬 손상 이슈 해결 (중요)
+UI YAML 동기화 과정에서 반복되던 오류와 해결:
+
+| 증상 | 원인 | 해결 |
 |---|---|---|
-| 에디터 포커스 잃을 때 연결 끊김 | `Application.runInBackground = true` | `TitleManager.cs`, `NetworkManager.cs` |
-| UDP 방화벽/NAT 문제 | 프로토콜 UDP→TCP 변경 (`Protocol: 1`) | `PhotonServerSettings.asset` |
-| 네트워크 불안정 | `SendRate=30`, `SerializationRate=15` | `TitleManager.cs`, `NetworkManager.cs` |
+| `File may be corrupted` | `%YAML 1.1` 헤더 삭제 | `sync_game_ui.mjs` preamble 보존 + 검증 |
+| 위 오류 (Western/CityMap) | 64비트 `m_LightingSettings` 외부 참조 | `{fileID: 0}` 로 통일 |
+| `Broken text PPtr ... 566308976` | ExitButton이 CityScene GameManager ID 참조 | 각 씬 GameManager ID로 재연결 |
+| 중복 오브젝트 ID | JS `Number`로 64비트 ID 파싱 | 문자열 ID 처리로 변경 |
+
+> **주의**: UI 동기화는 Unity 에디터 메뉴 사용을 권장. CLI 스크립트 실행 후 Unity에서 **Reload** 필수.
+
+### 3.5 게임플레이 UI/연출
+- 미니맵 크기 280 → 310 (`MinimapFollow.cs`)
+- 인게임 **Seeker** 텍스트가 계속 보이던 문제: `CornerRoleText` 기본 비활성, 블라인드 시퀀스만 사용 (`PlayerMove.cs`, `[Core_Systems].prefab`)
+- `NetworkManager`: 방 미입장 5초 후 타이틀 복귀 시 `LeaveRoom`/`Disconnect` 처리
+
+### 3.6 이전에 완료된 핵심 기능 (요약)
+- Photon TCP 전환, `runInBackground`, SendRate/SerializationRate 조정
+- `NetworkManager` 스폰/NavMesh 폴백, `RandomRoam` NavMesh 가드
+- `RandomSkin` ViewID 기반 스킨 동기화
+- `PhotonAnimatorView` Discrete 동기화
+- NavMesh 베이크 및 스폰 포인트 연결 (각 맵)
 
 ---
 
-### 5. 플레이어/AI 스폰 및 동기화 수정
-**파일**: `NetworkManager.cs`
+## 4. 아이템 시스템 기획
 
-- `OnConnectedToMaster` / `OnJoinedRoom`에서 강제로 "TestRoom" 조인하는 로직 제거 (다른 방에 있을 때 튕기는 버그)
-- `WaitAndSpawn()` 코루틴 추가: 방에 없으면 5초 대기 후 타이틀로 복귀
-- `FindSafeSpawnPosition()` 구현: `sharedSpawnPoints` 없을 때 NavMesh에서 랜덤 위치 탐색
-- `OnGUI()` 디버그 오버레이: 방 이름, 플레이어 수, 리전, 스폰 상태 실시간 표시
-- `using System.Collections;` 누락 추가 (컴파일 에러 수정)
+### 4.1 술래 아이템 (Seeker Tactical Device)
 
----
-
-### 6. 애니메이션 동기화 수정
-**원인**: `PhotonAnimatorView`의 모든 파라미터가 `SynchronizeType: 0` (Disabled)  
-**해결**: `SynchronizeType: 1` (Discrete)로 변경  
-**대상 파일**:
-- `Assets/Resources/playerPrefab.prefab`
-- `Assets/Resources/AI_Dummy.prefab`
-
----
-
-### 7. 스킨 랜덤화 및 네트워크 동기화 (`RandomSkin.cs`)
-
-#### 최종 구현 방식: `PhotonNetwork.LocalPlayer.CustomProperties` (ViewID 기반 고유 키)
-
-| 방식 | 문제 | 결과 |
+| 모드 | 효과 | 지속 |
 |---|---|---|
-| `AllBuffered` RPC | 씬 전환 타이밍에 따라 미수신 | ❌ 불안정 |
-| `SetCustomProperties("SkinIdx")` | AI 더미 50개가 마스터의 같은 키 덮어씀 → 전부 동일 스킨 | ❌ 버그 |
-| `SetCustomProperties("S_" + ViewID)` | 오브젝트마다 고유 키 → 충돌 없음 | ✅ 채택 |
+| **Freeze** | 모든 AI 더미 정지 → 움직이는 대상 = 생존자 후보 | 5초 |
+| **Swarm** | AI 더미가 생존자 쪽으로 집단 이동 | 5초 |
 
-**현재 동작 흐름**
-1. `photonView.IsMine == true` → 랜덤 스킨 선택 → `SetCustomProperties({"S_ViewID": index})` 저장
-2. 상대방 기기에서 오브젝트 생성 시 → `Start()`에서 `TryApplySkinFromOwner()` 즉시 읽어 적용
-3. 프로퍼티가 늦게 도착하면 → `OnPlayerPropertiesUpdate()` 콜백에서 자동 적용
-4. `SyncCharacterSkin(int index)`: HideAllModels → BuildBoneMap → 해당 모델 활성화 → 본 리매핑
+**구현 방향**
+- `RandomRoam.cs`: `RPC_SetAIState(state, targetViewID, duration)`
+- `SeekerItemHandler.cs` / `ItemSystem`: 수집·사용·RPC
+- `PlayerMove.cs`: 사용 입력 (Q 등)
+- UI: 하단 슬롯 + 모드 표시
 
-**씬별 스킨 구성**: `MapSkinSet[]` 배열로 씬 이름별 모델 목록 지정, 없으면 `defaultModels` 사용
+### 4.2 생존자 아이템 (터미널 해제 보상)
 
-**RPC 목록** (`PhotonServerSettings.asset`의 `RpcList`에 등록):
-- `SyncCharacterSkin`
-- `RPC_ShowSkeletonSource`
+**습득**: 맵 터미널 해제 시 등급 가중치 랜덤 지급
+
+| 등급 | 아이템 | 효과 | 지속 |
+|---|---|---|---|
+| Common | 스프린트 부스터 | 이동속도 2배 | 5초 |
+| Common | 연막탄 | 반경 5m 시야 차단 | 3초 |
+| Common | 마커 교란기 | 술래 HUD 가짜 위치 2~3개 | 5초 |
+| Rare | EMP | 술래 감속 + 화면 노이즈 | 3초 |
+| Rare | 해킹 툴 | 다음 터미널 해제 50% 단축 | 1회 |
+| Rare | 디코이 | 잔상 생성 + 반대 방향 이동 | 잔상 5초 |
+
+**설계 원칙**
+- 터미널 해제 리스크에 대한 보상
+- 직접 대미지 없음 — 생존·위장 중심
+- `SurvivorItemHandler.cs`, `TerminalController`, `ItemData` ScriptableObject
 
 ---
 
-## 수동으로 해야 할 Unity 에디터 작업
-
-| 항목 | 설명 | 씬 |
-|---|---|---|
-| NavMesh 베이크 | Window → AI → Navigation → Bake | CityScene, WesternScene |
-| 스폰 포인트 연결 | `Point1~5` GameObject를 `NetworkManager`의 `Shared Spawn Points` 배열에 드래그 | CityScene, WesternScene |
-| 스폰 포인트 위치 | Y좌표가 땅 위에 있는지 확인 (카메라가 땅 아래로 내려가는 버그 원인) | 전체 씬 |
-| `RandomSkin` 프리팹 설정 | `mapSkinSets`에 씬 이름과 모델 배열 연결 | playerPrefab, AI_Dummy |
-
----
-
-## 현재 확인된 동작 상태
+## 5. 현재 동작 상태
 
 | 기능 | 상태 |
 |---|---|
-| 씬 전환 (타이틀 → 게임) | ✅ 정상 |
-| Photon 방 생성/참가 | ✅ 정상 |
-| 플레이어 스폰 | ✅ 정상 |
-| AI 더미 스폰 및 배회 | ✅ 정상 |
-| 플레이어 스킨 랜덤화 | ✅ 정상 |
-| 스킨 네트워크 동기화 | ✅ 수정 완료 |
-| 애니메이션 동기화 | ✅ 수정 완료 |
-| AI 스킨 동기화 | ✅ 수정 완료 (ViewID 키) |
-| 연결 안정성 (TCP 전환) | ✅ 개선됨 |
+| 타이틀 로비 / 방 생성·입장 | ✅ |
+| Photon 재접속·로비 복구 | ✅ |
+| City / Western / CityMap 씬 로드 | ✅ |
+| City 기준 인게임 UI (3맵) | ✅ |
+| 술래 선택 대기방 | ✅ |
+| 플레이어·AI 스폰 / 스킨 동기화 | ✅ |
+| 술래·생존자 아이템 | 🔧 부분 구현 (`SeekerItemHandler`, `SurvivorItemHandler`) |
 
 ---
 
-## 기획 문서 목록
+## 6. Unity 에디터 수동 작업 (필요 시)
 
-| 파일 | 내용 |
+| 항목 | 설명 |
 |---|---|
-| `Assets/Plans/seeker-item-system.md` | 술래 전용 아이템 시스템 기획 (Freeze Mode / Swarm Mode) |
-| `Assets/Plans/development-progress.md` | 이 파일 |
+| NavMesh 베이크 | 맵 수정 후 Window → AI → Navigation → Bake |
+| 스폰 포인트 | `NetworkManager.sharedSpawnPoints` 연결·Y좌표 확인 |
+| UI 재동기화 | `FTRO → Sync Game UI From CityScene` |
+| 씬 외부 편집 후 | Unity **Reload** (`.unity` 디스크 변경 반영) |
 
 ---
 
-## 관련 주요 파일
+## 7. 주요 파일
 
 ```
 Assets/
+├── Editor/
+│   └── SyncGameUIFromCityScene.cs   # UI 동기화 (권장)
 ├── Script/
-│   ├── TitleManager.cs         # 타이틀/로비/방 생성
-│   ├── WaitingRoomController.cs# 대기방 맵 선택
-│   ├── NetworkManager.cs       # Photon 연결, 스폰, 디버그
-│   ├── RandomSkin.cs           # 스킨 랜덤화 & 동기화
-│   ├── RandomRoam.cs           # AI NavMesh 배회
-│   └── AISpawner.cs            # AI 더미 스폰
-├── Resources/
-│   ├── playerPrefab.prefab     # 플레이어 프리팹
-│   └── AI_Dummy.prefab         # AI 더미 프리팹
+│   ├── TitleManager.cs              # 로비, Photon 콜백, 로비 복구
+│   ├── WaitingRoomController.cs     # 대기방, 술래 선택, 방 생성
+│   ├── ChatManager.cs               # 로비/인게임 채팅 레이아웃
+│   ├── GameManager.cs               # 게임 흐름, 타이틀 복귀
+│   ├── NetworkManager.cs            # 스폰, Photon
+│   ├── PlayerMove.cs                # 역할 연출, 입력
+│   └── Items/
+│       ├── SeekerItemHandler.cs
+│       └── SurvivorItemHandler.cs
+├── Scripts/
+│   └── MinimapFollow.cs
 ├── Scenes/
 │   ├── TitleScene.unity
-│   ├── CityScene.unity
+│   ├── CityScene.unity              # UI 기준
 │   ├── WesternScene.unity
 │   └── CityMapScene.unity
-└── Photon/PhotonUnityNetworking/Resources/
-    └── PhotonServerSettings.asset  # Photon 설정 (TCP, RPC 목록)
+└── Plans/
+    └── development-progress.md      # 이 문서
+
+tools/
+├── sync_game_ui.mjs                 # CLI UI 동기화
+└── repair_scenes.mjs                # LightingSettings 수리
 ```
+
+---
+
+## 8. 알려진 이슈 / 메모
+
+- `UISettingsManager.sliderValue` (SlimUI): 미사용 경고 — 무시 가능
+- 씬 파일은 Unity 열린 상태에서 CLI 동기화 시 잠금 오류 가능 → Unity 닫거나 Reload
+- git `c7b98b3`~`9cacc05` 커밋에 WesternScene 바이너리 손상 이력 있음 — 현재 YAML 버전 사용 중

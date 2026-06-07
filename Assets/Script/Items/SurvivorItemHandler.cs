@@ -221,13 +221,13 @@ public class SurvivorItemHandler : MonoBehaviourPun
         rt.anchorMin = new Vector2(0.5f, 0);
         rt.anchorMax = new Vector2(0.5f, 0);
         rt.pivot     = new Vector2(0.5f, 0);
-        rt.anchoredPosition = new Vector2(0, 30);
-        rt.sizeDelta = new Vector2(200, 80);
+        rt.anchoredPosition = new Vector2(0, 42);
+        rt.sizeDelta = new Vector2(260, 100);
 
         GameObject slotObj = new GameObject("ItemSlot");
         slotObj.transform.SetParent(uiContainer.transform, false);
         RectTransform rtSlot = slotObj.AddComponent<RectTransform>();
-        rtSlot.sizeDelta = new Vector2(160, 50);
+        rtSlot.sizeDelta = new Vector2(220, 72);
         rtSlot.anchoredPosition = Vector2.zero;
 
         var bg = new GameObject("Background").AddComponent<UnityEngine.UI.Image>();
@@ -239,7 +239,7 @@ public class SurvivorItemHandler : MonoBehaviourPun
         var textObj = new GameObject("ItemText");
         textObj.transform.SetParent(slotObj.transform, false);
         itemText = textObj.AddComponent<TextMeshProUGUI>();
-        itemText.fontSize  = 14;
+        itemText.fontSize  = 20;
         itemText.alignment = TextAlignmentOptions.Center;
         itemText.raycastTarget = false;
         var rtText = textObj.GetComponent<RectTransform>();

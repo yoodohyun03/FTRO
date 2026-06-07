@@ -8,6 +8,7 @@ public class MinimapFollow : MonoBehaviour
     public Transform target;
     public float height = 50f;
     public RenderTexture minimapTexture;
+    [SerializeField] private float minimapSize = 310f;
     
     private GameObject minimapUI;
     private RectTransform playerArrow;
@@ -65,7 +66,7 @@ public class MinimapFollow : MonoBehaviour
         rect.anchorMax = new Vector2(0, 1);
         rect.pivot = new Vector2(0, 1);
         rect.anchoredPosition = new Vector2(20, -20);
-        rect.sizeDelta = new Vector2(150, 150);
+        rect.sizeDelta = new Vector2(minimapSize, minimapSize);
 
         // Add Border
         GameObject border = new GameObject("Border");
@@ -86,7 +87,7 @@ public class MinimapFollow : MonoBehaviour
         arrowImg.sprite = Resources.Load<Sprite>("MinimapArrow_New");
         arrowImg.color = Color.white; 
         RectTransform arrowRect = arrowObj.GetComponent<RectTransform>();
-        arrowRect.sizeDelta = new Vector2(18, 22); // Reduced size
+        arrowRect.sizeDelta = new Vector2(22, 26);
         arrowRect.anchoredPosition = Vector2.zero; // Center of minimap
 arrowRect.pivot = new Vector2(0.5f, 0.5f);
         playerArrow = arrowRect;
@@ -173,10 +174,9 @@ arrowRect.pivot = new Vector2(0.5f, 0.5f);
             img.color = color;
             
             RectTransform rect = indicator.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(28, 28); // Increased size
-            
-            // Position at the edge of the minimap UI
-float radius = 70f; // Half of 150 (minimap size) minus margin
+            rect.sizeDelta = new Vector2(32, 32);
+
+            float radius = (minimapSize * 0.5f) - 12f;
             rect.anchoredPosition = uiDir * radius;
             
             // Rotate arrow to point towards target

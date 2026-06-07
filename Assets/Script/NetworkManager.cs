@@ -47,6 +47,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         else
         {
             Debug.LogWarning("[NetworkManager] 5초 대기 후에도 방에 없음 - 타이틀로 복귀합니다.");
+            if (PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
+            else if (PhotonNetwork.IsConnected)
+            {
+                PhotonNetwork.Disconnect();
+            }
+
             UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
         }
     }

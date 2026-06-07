@@ -39407,6 +39407,7 @@ MonoBehaviour:
   centerText: {fileID: 329528488}
   timerText: {fileID: 956871586}
   objectiveStatusText: {fileID: 1107966725}
+  roleIndicatorText: {fileID: 0}
   playTime: 600
   survivorCount: 0
 --- !u!4 &566308977
@@ -66815,7 +66816,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 74, y: -362}
+  m_AnchoredPosition: {x: 62, y: -226}
   m_SizeDelta: {x: 323, y: 130}
   m_Pivot: {x: 0, y: 1}
 --- !u!1001 &958419616
@@ -70426,6 +70427,16 @@ MonoBehaviour:
   chatInput: {fileID: 896996040}
   chatLog: {fileID: 1928120279}
   maxMessages: 7
+  lobbyChatFontSize: 36
+  gameChatFontSize: 30
+  lobbyInputFontSize: 32
+  gameInputFontSize: 28
+  lobbyInputHeight: 48
+  lobbyInputBottomMargin: 24
+  lobbyInputSideMargin: 28
+  lobbyLogGapAboveInput: 12
+  lobbyLogSideMargin: 10
+  lobbyLogTopMargin: 8
   isLobbyScene: 0
 --- !u!4 &1023600695
 Transform:
@@ -76086,7 +76097,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 921, y: 520}
+  m_AnchoredPosition: {x: 918, y: 424}
   m_SizeDelta: {x: 277.5352, y: 65.6917}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1107966725
