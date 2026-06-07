@@ -27,6 +27,7 @@ public class RandomSkin : MonoBehaviourPunCallbacks
     public GameObject skeletonSource;
 
     private Dictionary<string, Transform> boneMap = new Dictionary<string, Transform>();
+    private readonly Dictionary<GameObject, GameObject> runtimeModelCache = new Dictionary<GameObject, GameObject>();
     private int chosenSkinIndex = -1;
 
     void Start()
@@ -85,16 +86,11 @@ public class RandomSkin : MonoBehaviourPunCallbacks
 
     void ShowSkeletonSourceLocal()
     {
-        foreach (var set in mapSkinSets)
-            foreach (var m in set.characterModels)
-                if (m != null && m != skeletonSource) m.SetActive(false);
-        foreach (var m in defaultModels)
-            if (m != null && m != skeletonSource) m.SetActive(false);
+        HideAllModels();
 
         if (skeletonSource == null) return;
         skeletonSource.SetActive(true);
-        foreach (var smr in skeletonSource.GetComponentsInChildren<SkinnedMeshRenderer>())
-            smr.enabled = true;
+        SetRenderersEnabled(skeletonSource, true);
     }
 
     [PunRPC]
@@ -115,18 +111,17 @@ public class RandomSkin : MonoBehaviourPunCallbacks
         BuildBoneMap();
 
         GameObject selected = GetModelByGlobalIndex(globalIndex);
+        selected = ResolveModelInstance(selected);
         if (selected == null)
         {
             if (skeletonSource != null)
-                foreach (var smr in skeletonSource.GetComponentsInChildren<SkinnedMeshRenderer>())
-                    smr.enabled = true;
+                SetRenderersEnabled(skeletonSource, true);
             return;
         }
 
         if (selected == skeletonSource)
         {
-            foreach (var smr in skeletonSource.GetComponentsInChildren<SkinnedMeshRenderer>())
-                smr.enabled = true;
+            SetRenderersEnabled(skeletonSource, true);
         }
         else
         {
@@ -134,8 +129,9 @@ public class RandomSkin : MonoBehaviourPunCallbacks
             selected.transform.localPosition = Vector3.zero;
             selected.transform.localRotation = Quaternion.identity;
             selected.transform.localScale = Vector3.one;
+            SetRenderersEnabled(selected, true);
             RemapBones(selected);
-            var childAnim = selected.GetComponent<Animator>();
+            Animator childAnim = selected.GetComponent<Animator>();
             if (childAnim != null) childAnim.enabled = false;
         }
 
@@ -172,9 +168,50 @@ public class RandomSkin : MonoBehaviourPunCallbacks
     {
         foreach (var set in mapSkinSets)
             foreach (var m in set.characterModels)
-                if (m != null) m.SetActive(false);
+                HideModelReference(m);
         foreach (var m in defaultModels)
-            if (m != null) m.SetActive(false);
+            HideModelReference(m);
+    }
+
+    void HideModelReference(GameObject source)
+    {
+        if (source == null) return;
+
+        if (IsHierarchyModel(source))
+        {
+            source.SetActive(false);
+            return;
+        }
+
+        if (runtimeModelCache.TryGetValue(source, out GameObject cached) && cached != null)
+            cached.SetActive(false);
+    }
+
+    bool IsHierarchyModel(GameObject model)
+    {
+        return model != null && model.transform.IsChildOf(transform);
+    }
+
+    GameObject ResolveModelInstance(GameObject source)
+    {
+        if (source == null) return null;
+        if (IsHierarchyModel(source)) return source;
+
+        if (runtimeModelCache.TryGetValue(source, out GameObject cached) && cached != null)
+            return cached;
+
+        GameObject instance = Instantiate(source, transform);
+        instance.name = source.name;
+        instance.SetActive(false);
+        runtimeModelCache[source] = instance;
+        return instance;
+    }
+
+    static void SetRenderersEnabled(GameObject target, bool enabled)
+    {
+        if (target == null) return;
+        foreach (SkinnedMeshRenderer smr in target.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+            smr.enabled = enabled;
     }
 
     void BuildBoneMap()

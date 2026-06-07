@@ -1,6 +1,6 @@
 # FTRO — 프로젝트 문서 (통합)
 
-> 마지막 업데이트: 2026-06-07
+> 마지막 업데이트: 2026-06-08
 
 ---
 
@@ -74,12 +74,27 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 
 > **주의**: UI 동기화는 Unity 에디터 메뉴 사용을 권장. CLI 스크립트 실행 후 Unity에서 **Reload** 필수.
 
-### 3.5 게임플레이 UI/연출
+### 3.5 오브젝트 스폰 포인트 (Western / CityMap)
+- `ObjectiveSpawnPoints` 루트 추가: 터미널 10 (`TerminalSpawn_0~9`) + 탈출구 3 (`EscapeSpawn_0~2`)
+- `GameManager`에 스폰 포인트·프리팹 참조 연결 (CityScene과 동일)
+- 도구: `node tools/add_objective_spawn_points.mjs` 또는 `FTRO → Add Objective Spawn Points`
+- 스폰 위치는 에디터에서 맵에 맞게 수동 조정 필요
+
+### 3.6 Western 맵 캐릭터 스킨
+- `playerPrefab` / `AI_Dummy`의 `RandomSkin.mapSkinSets`에 `WesternScene` + Synty Western 프리팹 8종 연결
+  - 경로: `Assets/Synty/PolygonWestern/Prefabs/Characters/SM_Chr_*`
+- City 캐릭터는 프리팹 **자식**으로 들어 있고, Western은 **프로젝트 프리팹 참조**만 연결 (Hierarchy에 City만 보이는 것은 정상)
+- `skeletonSource`는 애니메이션용 City 뼈대 유지 → Western 메시는 `RemapBones`로 City 뼈에 붙임
+- `RandomSkin.cs`: 외부 프리팹 참조 시 런타임 `Instantiate` + `runtimeModelCache` (`ResolveModelInstance`)
+- **투명 캐릭터 이슈**: Unity가 Western 프리팹을 재저장하면서 `SkinnedMeshRenderer.m_Bones`가 `{fileID: 0}`으로 깨짐 → git 원본 복구 필요
+  - 복구: `git checkout HEAD -- Assets/Synty/PolygonWestern/Prefabs/Characters/`
+
+### 3.7 게임플레이 UI/연출
 - 미니맵 크기 280 → 310 (`MinimapFollow.cs`)
 - 인게임 **Seeker** 텍스트가 계속 보이던 문제: `CornerRoleText` 기본 비활성, 블라인드 시퀀스만 사용 (`PlayerMove.cs`, `[Core_Systems].prefab`)
 - `NetworkManager`: 방 미입장 5초 후 타이틀 복귀 시 `LeaveRoom`/`Disconnect` 처리
 
-### 3.6 이전에 완료된 핵심 기능 (요약)
+### 3.8 이전에 완료된 핵심 기능 (요약)
 - Photon TCP 전환, `runInBackground`, SendRate/SerializationRate 조정
 - `NetworkManager` 스폰/NavMesh 폴백, `RandomRoam` NavMesh 가드
 - `RandomSkin` ViewID 기반 스킨 동기화
@@ -133,6 +148,8 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 | City 기준 인게임 UI (3맵) | ✅ |
 | 술래 선택 대기방 | ✅ |
 | 플레이어·AI 스폰 / 스킨 동기화 | ✅ |
+| Western 맵 캐릭터 스킨 (RandomSkin) | ✅ |
+| Western/CityMap 터미널·탈출 스폰 포인트 | ✅ (위치 수동 조정) |
 | 술래·생존자 아이템 | 🔧 부분 구현 (`SeekerItemHandler`, `SurvivorItemHandler`) |
 
 ---
@@ -143,6 +160,8 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 |---|---|
 | NavMesh 베이크 | 맵 수정 후 Window → AI → Navigation → Bake |
 | 스폰 포인트 | `NetworkManager.sharedSpawnPoints` 연결·Y좌표 확인 |
+| 터미널/탈출 스폰 | `ObjectiveSpawnPoints` 하위 Transform 위치를 맵에 맞게 이동 |
+| Western 스킨 | `RandomSkin` WesternScene 목록 + Synty `SM_Chr_*` 프리팹 (파란 큐브) |
 | UI 재동기화 | `FTRO → Sync Game UI From CityScene` |
 | 씬 외부 편집 후 | Unity **Reload** (`.unity` 디스크 변경 반영) |
 
@@ -153,10 +172,15 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 ```
 Assets/
 ├── Editor/
-│   └── SyncGameUIFromCityScene.cs   # UI 동기화 (권장)
+│   ├── SyncGameUIFromCityScene.cs   # UI 동기화 (권장)
+│   └── AddObjectiveSpawnPoints.cs   # 터미널/탈출 스폰 포인트 추가
+├── Resources/
+│   ├── playerPrefab.prefab          # RandomSkin (City + Western mapSkinSets)
+│   └── AI_Dummy.prefab
 ├── Script/
 │   ├── TitleManager.cs              # 로비, Photon 콜백, 로비 복구
 │   ├── WaitingRoomController.cs     # 대기방, 술래 선택, 방 생성
+│   ├── RandomSkin.cs                # 맵별 캐릭터 스킨, 외부 프리팹 Instantiate
 │   ├── ChatManager.cs               # 로비/인게임 채팅 레이아웃
 │   ├── GameManager.cs               # 게임 흐름, 타이틀 복귀
 │   ├── NetworkManager.cs            # 스폰, Photon
@@ -176,7 +200,8 @@ Assets/
 
 tools/
 ├── sync_game_ui.mjs                 # CLI UI 동기화
-└── repair_scenes.mjs                # LightingSettings 수리
+├── repair_scenes.mjs                # LightingSettings 수리
+└── add_objective_spawn_points.mjs   # 터미널/탈출 스폰 포인트 CLI
 ```
 
 ---
@@ -186,3 +211,4 @@ tools/
 - `UISettingsManager.sliderValue` (SlimUI): 미사용 경고 — 무시 가능
 - 씬 파일은 Unity 열린 상태에서 CLI 동기화 시 잠금 오류 가능 → Unity 닫거나 Reload
 - git `c7b98b3`~`9cacc05` 커밋에 WesternScene 바이너리 손상 이력 있음 — 현재 YAML 버전 사용 중
+- Synty Western 캐릭터 프리팹을 Unity에서 저장/업그레이드하면 bone 참조가 null로 깨져 투명해질 수 있음 → `git checkout`으로 `Prefabs/Characters/` 복구

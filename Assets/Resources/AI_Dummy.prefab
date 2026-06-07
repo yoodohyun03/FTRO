@@ -279,6 +279,16 @@ MonoBehaviour:
     - {fileID: 8074584269344727273}
     - {fileID: 2045960462576089102}
     - {fileID: 1765046969708970448}
+  - sceneName: WesternScene
+    characterModels:
+    - {fileID: 1942289980213182, guid: 085e53ee40ad24b40a83bd90705ad460, type: 3}
+    - {fileID: 1214723647702548, guid: e85f10072d335224984d9b8ae2e93843, type: 3}
+    - {fileID: 1800371080893130, guid: e169e4d9dbd157b498e582065a5f9302, type: 3}
+    - {fileID: 1506550050545096, guid: 24362449162558a49bc6904c0fda923a, type: 3}
+    - {fileID: 1964704263138806, guid: e3d9a5b7a19f9684d9b63308cdfa95bd, type: 3}
+    - {fileID: 1819260798650952, guid: 96256c2234452c641863ebbc421be660, type: 3}
+    - {fileID: 1040643676778012, guid: 15a550206f811c346b37f3a3f4495178, type: 3}
+    - {fileID: 1876497922086962, guid: 7aad5b0274fd2894eafec31a58e26a32, type: 3}
   defaultModels: []
   skeletonSource: {fileID: 2572130574596100393}
 --- !u!1001 &713170987331564796
