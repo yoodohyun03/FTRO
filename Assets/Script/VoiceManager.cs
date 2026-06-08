@@ -173,7 +173,7 @@ public class VoiceManager : MonoBehaviour
         if (_recorder == null && IsVoiceGameplayScene(SceneManager.GetActiveScene().name))
             Debug.LogWarning(
                 "[VoiceManager] Recorder를 찾지 못했습니다. " +
-                "PhotonNetwork.Instantiate로 쓰는 프리팹(예: male01_1) 루트에 PhotonView + PhotonVoiceView + Recorder가 있는지, " +
+                "PhotonNetwork.Instantiate로 쓰는 프리팹(예: playerPrefab) 루트에 PhotonView + PhotonVoiceView + Recorder가 있는지, " +
                 "Resources 폴더에 올바른 프리팹 이름이 있는지 확인하세요.");
         _bindRoutine = null;
     }
