@@ -11,15 +11,15 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
   m_Name: PhotonServerSettings
-  m_EditorClassIdentifier: PhotonUnityNetworking::Photon.Pun.ServerSettings
+  m_EditorClassIdentifier: 
   AppSettings:
     AppIdRealtime: 0ee4c115-c2dd-442d-8d81-06387d0290b1
     AppIdFusion: 
     AppIdChat: 
-    AppIdVoice: 
+    AppIdVoice: b63d3af6-50c4-4d38-8d45-101dc271a7c0
     AppVersion: 1
     UseNameServer: 1
-    FixedRegion: kr
+    FixedRegion: 
     Server: 
     Port: 0
     ProxyServer: 
@@ -34,25 +34,23 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - CantHearYou
+  - ChangeColour
   - ClickRpc
   - DestroyRpc
+  - HeresWhy
   - DestroySpaceship
   - Fire
-  - RespawnSpaceship
-  - SyncMessage
-  - SyncState
-  - SyncTimer
-  - SyncRoleMessage
   - GetCaught
-  - RPC_PlayJumpAnimation
-  - RPC_PlayPunchAnimation
   - OnSurvivorCaught
+  - RespawnSpaceship
+  - RPC_Jump
+  - RPC_PlayJumpAnimation
+  - RPC_PlayLandAnimation
+  - RPC_PlayPunchAnimation
   - RPC_ReceiveChat
-  - SyncCharacterSkin
   - RPC_SetDestination
   - RPC_SetSpeed
-  - RPC_Jump
-  - RPC_PlayLandAnimation
   - RPC_ShowSkeletonSource
   - RPC_CreateNoisePing
   - RPC_ActivateEscape
@@ -72,7 +70,12 @@ MonoBehaviour:
   - RPC_SpawnDecoy
   - RPC_SpawnSmoke
   - RPC_PlayHitAnimation
+  - SyncCharacterSkin
+  - SyncMessage
   - SyncRoleIndicator
+  - SyncRoleMessage
+  - SyncState
+  - SyncTimer
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
+  ShowSettings: 0
   DevRegionSetOnce: 1

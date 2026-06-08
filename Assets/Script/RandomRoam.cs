@@ -144,6 +144,16 @@ public class RandomRoam : MonoBehaviourPun
         if (isHitStunned) return;
         if (agent.isOnNavMesh && agent.isStopped) agent.isStopped = false;
 
+        if (!agent.isOnNavMesh)
+        {
+            if (NavMesh.SamplePosition(transform.position, out NavMeshHit recoverHit, 3f, NavMesh.AllAreas))
+            {
+                agent.Warp(recoverHit.position);
+            }
+
+            return;
+        }
+
         // 땅에 닿았는지 확인
 CheckGrounded();
 
@@ -157,7 +167,8 @@ CheckGrounded();
                 currentWalkTime += Time.deltaTime;
             }
 
-            if ((agent.remainingDistance <= agent.stoppingDistance && timer >= waitTime) || currentWalkTime >= maxWalkTime)
+            if (!agent.pathPending &&
+                ((agent.remainingDistance <= agent.stoppingDistance && timer >= waitTime) || currentWalkTime >= maxWalkTime))
             {
                 Vector3 targetPos;
 
@@ -200,7 +211,9 @@ CheckGrounded();
 
         // 모든 클라이언트에서 애니메이션 업데이트
         float currentSpeed = Mathf.Max(agent.velocity.magnitude, agent.desiredVelocity.magnitude);
-        bool hasMoveIntent = agent.hasPath && agent.remainingDistance > Mathf.Max(agent.stoppingDistance, 0.1f);
+        bool hasMoveIntent = !agent.pathPending &&
+            agent.hasPath &&
+            agent.remainingDistance > Mathf.Max(agent.stoppingDistance, 0.1f);
         float positionDelta = Vector3.Distance(transform.position, lastPosition);
         bool movedByTransform = positionDelta > 0.0015f;
         bool isMoving = currentSpeed >= moveThreshold || hasMoveIntent || movedByTransform;
@@ -211,7 +224,7 @@ CheckGrounded();
         UpdateAnimation(magnitude, isRunning);
 
         lastPosition = transform.position;
-        }
+    }
 
     void CheckGrounded()
     {
