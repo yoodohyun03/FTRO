@@ -1,6 +1,7 @@
 # FTRO — 프로젝트 문서 (통합)
 
-> 마지막 업데이트: 2026-06-09
+> 마지막 업데이트: 2026-06-09  
+> 최신 커밋: `b6a182a` (`main` = `origin/main`)
 
 ---
 
@@ -121,10 +122,42 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 ### 3.8 게임플레이 UI/연출
 
 - 미니맵 크기 280 → 310 (`MinimapFollow.cs`)
-- 인게임 **Seeker** 텍스트가 계속 보이던 문제: `CornerRoleText` 기본 비활성, 블라인드 시퀀스만 사용 (`PlayerMove.cs`, `[Core_Systems].prefab`)
+- **게임 시작 역할 안내 배너** (`PlayerMove.cs`, `playerPrefab.prefab`)
+  - `whBtn._0` 스프라이트(`Assets/Sprites/whBtn..png`) 배경 + 중앙 상단 문구
+  - 술래: "당신은 술래입니다" / 생존자: "당신은 생존자입니다"
+  - `ScreenSpaceOverlay` Canvas에만 붙임 (`FindOverlayCanvas`) — 플레이어 월드스페이스 이름표 Canvas와 분리
+  - 위치 `anchoredPosition (0, 140)`, 크기 `680×180`, 글자 `48pt`, **3초** 후 자동 제거
+  - 기존 술래 **BlindPanel 5초** 전체 가림 제거
+  - 터미널 상호작용 UI(`Press [E] to Hack`)도 동일 Overlay Canvas 사용으로 수정
+- `CornerRoleText`는 계속 기본 비활성 (`[Core_Systems].prefab`)
 - `NetworkManager`: 방 미입장 5초 후 타이틀 복귀 시 `LeaveRoom`/`Disconnect` 처리
 
-### 3.9 이전에 완료된 핵심 기능 (요약)
+### 3.9 Photon Voice (PR #16, #17)
+
+- **PR #16** (`voice-test`, `cb42b01`): Photon Voice 2 패키지·에셋 통합, `VoiceManager.cs`, `USE_PHOTON_VOICE` 심볼
+- **PR #17** (`voice-last-test`, `d169753`): 보이스 수정
+  - `playerPrefab`에 `PhotonVoiceView` + `Recorder` + `PhotonVoiceSpeaker` 연결
+  - `TitleScene`에 Voice UI/설정 보강
+  - `VoiceManager.cs` Recorder 바인딩·재시도 로직 조정
+- `VoiceManager`: `TitleScene` 전용 오브젝트 + `PunVoiceClient`, 씬 전환 시 DDOL
+  - Push-to-Talk 기본 `V` 키 (`pushToTalk` 옵션)
+  - 인게임 씬 로드 후 Recorder 자동 바인딩 (최대 10초 재시도)
+- `PhotonServerSettings`: `AppIdVoice` 설정 필요 (Photon 대시보드)
+- 에디터: `PhotonVoiceDefineSync.cs`가 Voice 패키지 유무에 따라 심볼 자동 동기화
+
+### 3.10 맵 스폰·위치 조정 (PR #15)
+
+- **PR #15** (`bsm`, `068705a` / `08e3323`): 탈출구·터미널·플레이어 스폰 포인트 위치 조정
+  - `WesternScene.unity`, `CityMapScene.unity` 스폰 Transform 이동
+  - `CityMapScene` NavMesh 에셋 갱신
+
+### 3.11 타이틀·오디오 에셋
+
+- 타이틀 배경 이미지 경량화 (`Background_Title.png`, `9b62c56`)
+- BGM 에셋 추가: `Assets/Audio/Casual & Relaxing Game Music/Happy.wav` (`b6a182a`)
+  - 아직 씬/스크립트에 자동 재생 연결은 없음 — 에디터에서 AudioSource 연결 필요
+
+### 3.12 이전에 완료된 핵심 기능 (요약)
 
 - Photon TCP 전환, `runInBackground`, SendRate/SerializationRate 조정
 - `NetworkManager` 스폰/NavMesh 폴백, `RandomRoam` NavMesh 가드
@@ -190,7 +223,11 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 | Western/CityMap 터미널·탈출 스폰 포인트 | ✅ (위치 수동 조정)                                          |
 | 인게임 10분 타이머 즉시 시작             | ✅                                                     |
 | 생존자 터미널 해킹(E) 상호작용            | ✅                                                     |
+| 게임 시작 역할 안내 배너 (whBtn)         | ✅                                                     |
+| Photon Voice (마이크/스피커)           | ✅ (AppIdVoice·마이크 권한 확인 필요)                          |
+| Western/CityMap 스폰·터미널 위치 (PR#15) | ✅ (추가 미세 조정 가능)                                      |
 | 술래·생존자 아이템                    | 🔧 부분 구현 (`SeekerItemHandler`, `SurvivorItemHandler`) |
+| BGM (`Happy.wav`) 자동 재생          | ⏳ 에셋만 추가, 씬 연결 미완                                    |
 
 
 ---
@@ -205,6 +242,9 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 | 터미널/탈출 스폰   | `ObjectiveSpawnPoints` 하위 Transform 위치를 맵에 맞게 이동            |
 | Western 스킨  | `RandomSkin` WesternScene 목록 + Synty `SM_Chr_`* 프리팹 (파란 큐브) |
 | 터미널 해킹 테스트  | 생존자로 터미널 6m 이내 접근 → `Press [E] to Hack` → 프로그레스 바 확인        |
+| 역할 배너 테스트    | 게임 시작 시 화면 중앙 상단 배너 3초 표시 확인 (월드스페이스 말풍선 X)              |
+| Voice 테스트     | TitleScene→방 입장→인게임: 마이크 권한, `V` PTT, 상대 음성 수신 확인            |
+| BGM 연결        | `Happy.wav`를 TitleScene 또는 인게임 AudioSource에 드래그·Loop 설정         |
 | UI 재동기화     | `FTRO → Sync Game UI From CityScene`                        |
 | 씬 외부 편집 후   | Unity **Reload** (`.unity` 디스크 변경 반영)                       |
 
@@ -218,22 +258,27 @@ Assets/
 ├── Editor/
 │   ├── SyncGameUIFromCityScene.cs   # UI 동기화 (권장)
 │   └── AddObjectiveSpawnPoints.cs   # 터미널/탈출 스폰 포인트 추가
+├── Audio/
+│   └── Casual & Relaxing Game Music/Happy.wav   # BGM (씬 연결 미완)
 ├── Resources/
-│   ├── playerPrefab.prefab          # RandomSkin (City + Western mapSkinSets)
+│   ├── playerPrefab.prefab          # RandomSkin + PhotonVoiceView/Recorder/Speaker + 역할 배너
 │   ├── AI_Dummy.prefab
 │   └── HackingTerminal.prefab       # ObjectivePoint + 넓은 트리거 콜라이더
 ├── Script/
 │   ├── TitleManager.cs              # 로비, Photon 콜백, 로비 복구
 │   ├── WaitingRoomController.cs     # 대기방, 술래 선택, 방 생성
+│   ├── VoiceManager.cs              # Photon Voice 2, PTT, Recorder 바인딩
 │   ├── RandomSkin.cs                # 맵별 캐릭터 스킨, 외부 프리팹 Instantiate
 │   ├── ObjectivePoint.cs            # 터미널 해킹 진행·완료·아이템 지급
 │   ├── ChatManager.cs               # 로비/인게임 채팅 레이아웃
 │   ├── GameManager.cs               # 게임 흐름, 10분 타이머, 오브젝트 스폰
 │   ├── NetworkManager.cs            # 스폰, Photon
-│   ├── PlayerMove.cs                # 이동, 터미널 E 상호작용, 역할 연출
+│   ├── PlayerMove.cs                # 이동, 터미널 E, 역할 안내 배너(whBtn)
 │   └── Items/
 │       ├── SeekerItemHandler.cs
 │       └── SurvivorItemHandler.cs
+├── Sprites/
+│   └── whBtn..png                   # 역할 안내 배너 스프라이트 (whBtn._0)
 ├── Scripts/
 │   └── MinimapFollow.cs
 ├── Scenes/
@@ -258,6 +303,52 @@ tools/
 - 씬 파일은 Unity 열린 상태에서 CLI 동기화 시 잠금 오류 가능 → Unity 닫거나 Reload
 - git `c7b98b3`~`9cacc05` 커밋에 WesternScene 바이너리 손상 이력 있음 — 현재 YAML 버전 사용 중
 - Synty Western 캐릭터 프리팹을 Unity에서 저장/업그레이드하면 bone 참조가 null로 깨져 투명해질 수 있음 → `git checkout`으로 `Prefabs/Characters/` 복구
-- `ObjectiveSpawnPoints` 기본 좌표는 임시 그리드 — 맵마다 에디터에서 위치 조정 필요 (터미널이 땅 밑/맵 밖이면 상호작용 불가)
-- **병렬 작업 중**: 로컬 변경(`GameManager`, `PlayerMove`, `HackingTerminal` 등)은 친구 브랜치와 합칠 때 충돌 가능 → PR 전 `git pull`/머지 권장
+- `ObjectiveSpawnPoints` 기본 좌표는 임시 그리드 — PR #15로 Western/CityMap 위치 조정됨, 추가 미세 조정은 에디터에서
+- 역할 배너가 캐릭터 위 말풍선처럼 보이면 → Overlay Canvas 미탐지. `FindOverlayCanvas()` 확인
+- Photon Voice: `AppIdVoice` 미설정·마이크 권한 거부 시 음성 불가 — Photon 대시보드·Windows 마이크 설정 확인
+- GitHub PR #16/#17은 로컬 fast-forward 머지 후 푸시됨 — 웹에서 open으로 남아 있으면 Close 처리
+
+---
+
+## 9. 데스크탑 이어서 작업 (핸드오프)
+
+### 9.1 저장소 상태
+
+```text
+브랜치: main (= origin/main)
+HEAD:   b6a182a  Add role reveal banner at game start and casual BGM assets.
+        d169753  보이스 수정          ← PR #17
+        9b62c56  배경 수정
+        cb42b01  Merge PR #16 Voice test
+        4d8979e  Fix timer + terminal hacking
+```
+
+데스크탑에서 시작:
+
+```bash
+git pull origin main
+```
+
+### 9.2 최근 머지 요약
+
+| PR | 브랜치 | 내용 |
+| --- | --- | --- |
+| #15 | `bsm` | Western/CityMap 스폰·터미널·탈출구 위치 |
+| #16 | `voice-test` | Photon Voice 2 통합 |
+| #17 | `voice-last-test` | playerPrefab Voice 컴포넌트·TitleScene 보이스 UI |
+
+### 9.3 우선 확인할 것 (Unity 플레이 테스트)
+
+1. **역할 배너** — 게임 시작 3초, 화면 중앙 상단, 술래/생존자 문구
+2. **10분 타이머** — 즉시 `10:00` 시작
+3. **터미널 E** — 생존자 6m 이내 해킹
+4. **Voice** — 2인 이상, 마이크·`V` PTT
+5. **Western 스킨** — 캐릭터 투명 여부
+
+### 9.4 다음 작업 후보
+
+- `Happy.wav` BGM을 TitleScene/인게임에 AudioSource 연결
+- 술래·생존자 아이템 시스템 완성 (§4 기획)
+- 대기방/맵 선택 후 인게임 진입 전체 플로우 재검증
+- 역할 배너 크기·위치 미세 조정 (`PlayerMove` `680×180`, `y=140`, `fontSize=48`)
 
