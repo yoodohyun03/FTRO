@@ -229,11 +229,17 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
         if (isDead) { SpectateUpdate(); return; }
 
+        EnsureRoleAssigned();
+
         var es = UnityEngine.EventSystems.EventSystem.current;
-        if (es != null && es.currentSelectedGameObject != null) return;
-        
+        bool uiBlocksMovement = es != null && es.currentSelectedGameObject != null
+            && es.currentSelectedGameObject.GetComponent<TMPro.TMP_InputField>() != null;
+
         HandleCursorUpdate();
         CheckGrounded();
+        HandleInteraction();
+
+        if (uiBlocksMovement) return;
 
         if (isGrounded)
         {
@@ -291,60 +297,106 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         if (Input.GetMouseButtonDown(0)) { var _es = UnityEngine.EventSystems.EventSystem.current; if ((_es == null || !_es.IsPointerOverGameObject()) && myRole == SeekerRole && !isAttacking) StartCoroutine(PerformAttack()); }
         
         HandleNoiseDetection();
-        HandleInteraction();
         MoveUpdate();
         UpdateAnimation();
 
         wasGrounded = isGrounded; // 마지막에 업데이트해야 착지 판정이 정확함
     }
 
-        void HandleInteraction()
+    void EnsureRoleAssigned()
+    {
+        if (!string.IsNullOrEmpty(myRole) || photonView.Owner == null) return;
+        if (!photonView.Owner.CustomProperties.ContainsKey(RoleKey)) return;
+
+        myRole = (string)photonView.Owner.CustomProperties[RoleKey];
+        if (myRole == SeekerRole)
+            gameObject.AddComponent<SeekerItemHandler>();
+        else
+            gameObject.AddComponent<SurvivorItemHandler>();
+        photonView.RefreshRpcMonoBehaviourCache();
+    }
+
+    bool CanInteractWithObjectives()
+    {
+        if (myRole == SeekerRole || isDead || !photonView.IsMine) return false;
+        if (GameManager.instance != null && GameManager.instance.currentState != GameManager.GameState.Playing)
+            return false;
+        return true;
+    }
+
+    ObjectivePoint FindNearestTerminal(float interactRange)
+    {
+        ObjectivePoint nearest = null;
+        float nearestDist = float.MaxValue;
+
+        foreach (ObjectivePoint op in Object.FindObjectsByType<ObjectivePoint>(FindObjectsSortMode.None))
         {
-            if (myRole == SeekerRole || isDead || !photonView.IsMine) return;
+            if (op == null || op.isCompleted || op.photonView == null) continue;
 
-            ObjectivePoint nearest = null;
-            float interactRange = 6.0f;
-            float nearestDist = float.MaxValue;
-            // QueryTriggerInteraction.Collide 명시 - 터미널이 Trigger 콜라이더여도 감지
-            Collider[] hits = Physics.OverlapSphere(transform.position, interactRange, ~0, QueryTriggerInteraction.Collide);
-            foreach (var hit in hits)
+            float dist = Vector3.Distance(transform.position, op.transform.position);
+            if (dist > interactRange || dist >= nearestDist) continue;
+
+            nearestDist = dist;
+            nearest = op;
+        }
+
+        if (nearest != null) return nearest;
+
+        Collider[] hits = Physics.OverlapSphere(transform.position, interactRange, ~0, QueryTriggerInteraction.Collide);
+        foreach (Collider hit in hits)
+        {
+            ObjectivePoint op = hit.GetComponent<ObjectivePoint>() ?? hit.GetComponentInParent<ObjectivePoint>();
+            if (op == null || op.isCompleted || op.photonView == null) continue;
+
+            float dist = Vector3.Distance(transform.position, op.transform.position);
+            if (dist < nearestDist)
             {
-                ObjectivePoint op = hit.GetComponent<ObjectivePoint>() ?? hit.GetComponentInParent<ObjectivePoint>();
-                if (op == null || op.isCompleted) continue;
-
-                // 가장 가까운 터미널 선택
-                float dist = Vector3.Distance(transform.position, op.transform.position);
-                if (dist < nearestDist)
-                {
-                    nearestDist = dist;
-                    nearest = op;
-                }
-            }
-
-            if (interactionText != null) interactionText.gameObject.SetActive(nearest != null && currentInteractionTarget == null);
-
-            if (Input.GetKey(KeyCode.E) && nearest != null)
-            {
-                currentInteractionTarget = nearest;
-                float progressAmount = hackSpeedBoost ? Time.deltaTime * 2f : Time.deltaTime;
-                currentInteractionTarget.photonView.RPC("RPC_AddProgress", RpcTarget.MasterClient, progressAmount);
-                if (currentInteractionTarget.isCompleted) hackSpeedBoost = false;
-            
-                if (progressBar != null)
-                {
-                    progressBar.gameObject.SetActive(true);
-                    progressBar.value = currentInteractionTarget.currentProgress / currentInteractionTarget.interactionTime;
-                }
-
-                currentH *= 0.1f;
-                currentV *= 0.1f;
-            }
-            else
-            {
-                currentInteractionTarget = null;
-                if (progressBar != null) progressBar.gameObject.SetActive(false);
+                nearestDist = dist;
+                nearest = op;
             }
         }
+
+        return nearest;
+    }
+
+    void HandleInteraction()
+    {
+        if (!CanInteractWithObjectives())
+        {
+            currentInteractionTarget = null;
+            if (interactionText != null) interactionText.gameObject.SetActive(false);
+            if (progressBar != null) progressBar.gameObject.SetActive(false);
+            return;
+        }
+
+        const float interactRange = 6f;
+        ObjectivePoint nearest = FindNearestTerminal(interactRange);
+
+        if (interactionText != null)
+            interactionText.gameObject.SetActive(nearest != null && currentInteractionTarget == null);
+
+        if (Input.GetKey(KeyCode.E) && nearest != null)
+        {
+            currentInteractionTarget = nearest;
+            float progressAmount = hackSpeedBoost ? Time.deltaTime * 2f : Time.deltaTime;
+            currentInteractionTarget.photonView.RPC("RPC_AddProgress", RpcTarget.MasterClient, progressAmount);
+            if (currentInteractionTarget.isCompleted) hackSpeedBoost = false;
+
+            if (progressBar != null)
+            {
+                progressBar.gameObject.SetActive(true);
+                progressBar.value = currentInteractionTarget.currentProgress / currentInteractionTarget.interactionTime;
+            }
+
+            currentH *= 0.1f;
+            currentV *= 0.1f;
+        }
+        else
+        {
+            currentInteractionTarget = null;
+            if (progressBar != null) progressBar.gameObject.SetActive(false);
+        }
+    }
 
     void HandleNoiseDetection()
     {

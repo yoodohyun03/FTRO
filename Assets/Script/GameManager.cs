@@ -60,6 +60,7 @@ private const string RoleKey = "Role";
         UpdateObjectiveStatusUI();
         EnsureRoleIndicator();
         if (centerText != null) centerText.text = "";
+        if (timerText != null) timerText.text = FormatTime(playTime);
 
         if (PhotonNetwork.IsMasterClient)
 {
@@ -94,12 +95,12 @@ private const string RoleKey = "Role";
         if (terminalSpawnPoints == null || terminalSpawnPoints.Count == 0)
         {
             Debug.LogWarning("terminalSpawnPoints 리스트가 비어있습니다. 'SpawnPoints' 오브젝트에서 자동 검색을 시도합니다.");
-            GameObject spawnRoot = GameObject.Find("SpawnPoints") ?? GameObject.Find("SpawnPoints (1)");
+            GameObject spawnRoot = GameObject.Find("ObjectiveSpawnPoints")
+                ?? GameObject.Find("SpawnPoints")
+                ?? GameObject.Find("SpawnPoints (1)");
             if (spawnRoot != null)
             {
-                terminalSpawnPoints = new List<Transform>();
-                foreach (Transform child in spawnRoot.transform)
-                    terminalSpawnPoints.Add(child);
+                terminalSpawnPoints = CollectTerminalSpawnPoints(spawnRoot.transform);
                 Debug.Log($"[GameManager] {terminalSpawnPoints.Count}개의 터미널 스폰 포인트를 자동으로 찾았습니다.");
             }
         }
@@ -107,12 +108,12 @@ private const string RoleKey = "Role";
         if (escapeSpawnPoints == null || escapeSpawnPoints.Count == 0)
         {
             Debug.LogWarning("escapeSpawnPoints 리스트가 비어있습니다. 'EscapePoints' 오브젝트에서 자동 검색을 시도합니다.");
-            GameObject escapeRoot = GameObject.Find("EscapePoints") ?? GameObject.Find("EscapeSpawnPoints");
+            GameObject escapeRoot = GameObject.Find("ObjectiveSpawnPoints")
+                ?? GameObject.Find("EscapePoints")
+                ?? GameObject.Find("EscapeSpawnPoints");
             if (escapeRoot != null)
             {
-                escapeSpawnPoints = new List<Transform>();
-                foreach (Transform child in escapeRoot.transform)
-                    escapeSpawnPoints.Add(child);
+                escapeSpawnPoints = CollectEscapeSpawnPoints(escapeRoot.transform);
                 Debug.Log($"[GameManager] {escapeSpawnPoints.Count}개의 탈출구 스폰 포인트를 자동으로 찾았습니다.");
             }
         }
@@ -124,7 +125,7 @@ private const string RoleKey = "Role";
             foreach (var p in terminalSpawnPoints) if (p != null) availablePoints.Add(p);
 
             List<Vector3> spawnedPositions = new List<Vector3>();
-            float minDistanceBetweenTerminals = 20f;
+            float minDistanceBetweenTerminals = 15f;
             int countToSpawn = Mathf.Min(totalObjectives, availablePoints.Count);
             int spawnedCount = 0;
             int maxAttempts = 50;
@@ -199,37 +200,24 @@ private const string RoleKey = "Role";
 
     IEnumerator GameFlowRoutine()
     {
-        // 1. [Setup] 5초 대기 (가운데 안내 멘트 없음, 직업은 우측 상단 표시)
-        SetState(GameState.Setup);
-        photonView.RPC("SyncRoleIndicator", RpcTarget.All);
-
-        yield return new WaitForSeconds(5f);
-
-        // 2. [Playing] 본 게임 시작
+        // 본 게임 즉시 시작 — 10분 타이머 바로 표시
         SetState(GameState.Playing);
         photonView.RPC("SyncRoleIndicator", RpcTarget.All);
 
-        // 마스터 교체 시 타이머 인계를 위해 시작 시간 저장
         gameStartNetworkTime = PhotonNetwork.Time;
         PhotonNetwork.CurrentRoom.SetCustomProperties(
             new ExitGames.Client.Photon.Hashtable { { "GST", gameStartNetworkTime } });
 
-        yield return new WaitForSeconds(2f);
         photonView.RPC("SyncMessage", RpcTarget.All, "");
+        photonView.RPC("SyncTimer", RpcTarget.All, FormatTime(playTime));
 
-        // 3. 타이머 시작
         float currentTime = playTime;
 
         while (currentState == GameState.Playing && currentTime > 0)
         {
             yield return new WaitForSeconds(1f);
             currentTime -= 1f;
-
-            int min = Mathf.FloorToInt(currentTime / 60f);
-            int sec = Mathf.FloorToInt(currentTime % 60f);
-            string timeString = string.Format("{0:00}:{1:00}", min, sec);
-
-            photonView.RPC("SyncTimer", RpcTarget.All, timeString);
+            photonView.RPC("SyncTimer", RpcTarget.All, FormatTime(currentTime));
         }
 
         // 4. 게임 끝!
@@ -364,13 +352,13 @@ private const string RoleKey = "Role";
             remaining = Mathf.Max(0, playTime - (float)elapsed);
         }
 
+        photonView.RPC("SyncTimer", RpcTarget.All, FormatTime(remaining));
+
         while (currentState == GameState.Playing && remaining > 0)
         {
             yield return new WaitForSeconds(1f);
             remaining -= 1f;
-            int min = Mathf.FloorToInt(remaining / 60f);
-            int sec = Mathf.FloorToInt(remaining % 60f);
-            photonView.RPC("SyncTimer", RpcTarget.All, string.Format("{0:00}:{1:00}", min, sec));
+            photonView.RPC("SyncTimer", RpcTarget.All, FormatTime(remaining));
         }
 
         if (currentState == GameState.Playing && remaining <= 0)
@@ -406,6 +394,46 @@ private const string RoleKey = "Role";
     public void SyncTimer(string timeMsg)
     {
         if (timerText != null) timerText.text = timeMsg;
+    }
+
+    static string FormatTime(float seconds)
+    {
+        int total = Mathf.Max(0, Mathf.CeilToInt(seconds));
+        int min = total / 60;
+        int sec = total % 60;
+        return string.Format("{0:00}:{1:00}", min, sec);
+    }
+
+    static List<Transform> CollectTerminalSpawnPoints(Transform root)
+    {
+        List<Transform> points = new List<Transform>();
+        foreach (Transform child in root)
+        {
+            if (child != null && child.name.StartsWith("TerminalSpawn"))
+                points.Add(child);
+        }
+        if (points.Count == 0)
+        {
+            foreach (Transform child in root)
+                if (child != null) points.Add(child);
+        }
+        return points;
+    }
+
+    static List<Transform> CollectEscapeSpawnPoints(Transform root)
+    {
+        List<Transform> points = new List<Transform>();
+        foreach (Transform child in root)
+        {
+            if (child != null && child.name.StartsWith("EscapeSpawn"))
+                points.Add(child);
+        }
+        if (points.Count == 0)
+        {
+            foreach (Transform child in root)
+                if (child != null) points.Add(child);
+        }
+        return points;
     }
 
     [PunRPC]
