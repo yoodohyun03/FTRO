@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 using TMPro;
@@ -10,6 +11,12 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 {
     private const string RoleKey = "Role";
     private const string SeekerRole = "Seeker";
+
+    [Header("역할 안내 UI")]
+    public Sprite roleBannerSprite;
+    public float roleRevealDuration = 3f;
+
+    static Sprite cachedRoleBannerSprite;
 
     [Header("이동 속도 및 물리 설정")]
     public float walkSpeed = 3.8f;
@@ -139,7 +146,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
     void CreateInteractionUI()
     {
-        Canvas canvas = FindFirstObjectByType<Canvas>();
+        Canvas canvas = FindOverlayCanvas();
         if (canvas == null) return;
 
         GameObject textObj = new GameObject("InteractionText");
@@ -209,11 +216,114 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         GameObject cornerObj = GameObject.Find("CornerRoleText");
         if (cornerObj != null) cornerObj.SetActive(false);
 
-        GameObject blindObj = GameObject.Find("BlindPanel");
-        if (blindObj != null) blindObj.SetActive(myRole == SeekerRole);
+        float timeout = 3f;
+        float elapsed = 0f;
+        while (string.IsNullOrEmpty(myRole) && elapsed < timeout)
+        {
+            EnsureRoleAssigned();
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
 
-        yield return new WaitForSeconds(5f);
-        if (blindObj != null) blindObj.SetActive(false);
+        if (string.IsNullOrEmpty(myRole)) yield break;
+
+        float canvasTimeout = 5f;
+        float canvasElapsed = 0f;
+        while (FindOverlayCanvas() == null && canvasElapsed < canvasTimeout)
+        {
+            canvasElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        GameObject panel = CreateRoleRevealPanel();
+        if (panel == null) yield break;
+
+        panel.SetActive(true);
+        yield return new WaitForSeconds(roleRevealDuration);
+        Destroy(panel);
+    }
+
+    GameObject CreateRoleRevealPanel()
+    {
+        Canvas canvas = FindOverlayCanvas();
+        if (canvas == null) return null;
+
+        Sprite banner = GetRoleBannerSprite();
+        if (banner == null) return null;
+
+        bool isSeeker = myRole == SeekerRole;
+
+        GameObject root = new GameObject("RoleRevealPanel");
+        root.transform.SetParent(canvas.transform, false);
+
+        RectTransform rootRect = root.AddComponent<RectTransform>();
+        rootRect.anchorMin = new Vector2(0.5f, 0.5f);
+        rootRect.anchorMax = new Vector2(0.5f, 0.5f);
+        rootRect.pivot = new Vector2(0.5f, 0.5f);
+        rootRect.anchoredPosition = new Vector2(0f, 140f);
+        rootRect.sizeDelta = new Vector2(680f, 180f);
+        rootRect.SetAsLastSibling();
+
+        Image bg = root.AddComponent<Image>();
+        bg.sprite = banner;
+        bg.type = Image.Type.Simple;
+        bg.preserveAspect = true;
+        bg.color = isSeeker ? new Color(1f, 0.85f, 0.85f, 0.95f) : new Color(0.9f, 0.95f, 1f, 0.95f);
+        bg.raycastTarget = false;
+
+        GameObject textObj = new GameObject("RoleText");
+        textObj.transform.SetParent(root.transform, false);
+
+        RectTransform textRect = textObj.AddComponent<RectTransform>();
+        textRect.anchorMin = Vector2.zero;
+        textRect.anchorMax = Vector2.one;
+        textRect.offsetMin = Vector2.zero;
+        textRect.offsetMax = Vector2.zero;
+
+        TextMeshProUGUI text = textObj.AddComponent<TextMeshProUGUI>();
+        text.text = isSeeker ? "당신은 술래입니다" : "당신은 생존자입니다";
+        text.fontSize = 48f;
+        text.fontStyle = FontStyles.Bold;
+        text.alignment = TextAlignmentOptions.Center;
+        text.color = isSeeker ? new Color(0.85f, 0.2f, 0.2f) : new Color(0.15f, 0.45f, 0.85f);
+        text.raycastTarget = false;
+
+        TMP_FontAsset font = Resources.Load<TMP_FontAsset>("Font_1-4Regular SDF");
+        if (font != null) text.font = font;
+
+        root.SetActive(false);
+        return root;
+    }
+
+    Canvas FindOverlayCanvas()
+    {
+        Canvas[] canvases = Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None);
+        foreach (Canvas canvas in canvases)
+        {
+            if (canvas.renderMode != RenderMode.ScreenSpaceOverlay) continue;
+            if (canvas.transform.IsChildOf(transform)) continue;
+            return canvas;
+        }
+
+        return null;
+    }
+
+    Sprite GetRoleBannerSprite()
+    {
+        if (roleBannerSprite != null) return roleBannerSprite;
+        if (cachedRoleBannerSprite != null) return cachedRoleBannerSprite;
+
+        Sprite[] sprites = Resources.LoadAll<Sprite>("whBtn");
+        foreach (Sprite sprite in sprites)
+        {
+            if (sprite.name == "whBtn._0")
+            {
+                cachedRoleBannerSprite = sprite;
+                return cachedRoleBannerSprite;
+            }
+        }
+
+        return null;
     }
 
     private float airTime = 0f;

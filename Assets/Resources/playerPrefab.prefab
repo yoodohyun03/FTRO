@@ -312,6 +312,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81850c6db0b1b9244918255303537846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMove
+  roleBannerSprite: {fileID: -1872633861, guid: 65d6849ba29c8fb419f036067fc39d47, type: 3}
+  roleRevealDuration: 3
   walkSpeed: 3
   seekerRunSpeed: 8.8
   survivorRunSpeed: 7.5
