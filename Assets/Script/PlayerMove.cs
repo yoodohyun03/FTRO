@@ -225,7 +225,19 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         if (isDead) { SpectateUpdate(); return; }
 
         var es = UnityEngine.EventSystems.EventSystem.current;
-        if (es != null && es.currentSelectedGameObject != null) return;
+        // 키보드 입력(WASD, Shift, Space)이 있으면 UI 포커스를 강제로 해제하여 즉시 움직일 수 있게 함
+        if (es != null && es.currentSelectedGameObject != null)
+        {
+            if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0 || 
+                Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.Space))
+            {
+                es.SetSelectedGameObject(null);
+            }
+            else
+            {
+                return;
+            }
+        }
         
         HandleCursorUpdate();
         CheckGrounded();
@@ -738,5 +750,22 @@ void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject
         }
     }
 
-    void HandleCursorUpdate() { if (Input.GetKeyDown(KeyCode.Escape)) { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; } var _ces = UnityEngine.EventSystems.EventSystem.current; if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked && (_ces == null || !_ces.IsPointerOverGameObject())) { Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false; } }
+    void HandleCursorUpdate() 
+    { 
+        var _ces = UnityEngine.EventSystems.EventSystem.current; 
+        
+        // 마우스 왼쪽 클릭 혹은 이동 키(WASD, Shift, Space) 입력 시 커서 잠금
+        bool movementKeyPressed = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0 || 
+                                 Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.Space);
+
+        if ((Input.GetMouseButtonDown(0) || movementKeyPressed) && Cursor.lockState != CursorLockMode.Locked) 
+        {
+            // UI 위를 클릭하는 중이 아닐 때만 잠금
+            if (_ces == null || !_ces.IsPointerOverGameObject())
+            {
+                Cursor.lockState = CursorLockMode.Locked; 
+                Cursor.visible = false; 
+            }
+        } 
+    }
 }
