@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 #if USE_PHOTON_VOICE
 using System.Collections;
 using Photon.Pun;
+using Photon.Realtime;
 using Photon.Voice.PUN;
 using Photon.Voice.Unity;
 #endif
@@ -102,6 +103,7 @@ public class VoiceManager : MonoBehaviour
             _recorder = null;
             _micUsageLogged = false;
             RequestBindRecorder();
+            StartCoroutine(RefreshRemoteSpeakersDelayed());
         }
     }
 
@@ -127,6 +129,25 @@ public class VoiceManager : MonoBehaviour
         base.OnJoinedRoom();
         ApplyPunVoiceClientSettings();
         RequestBindRecorderIfNeeded();
+        StartCoroutine(RefreshRemoteSpeakersDelayed());
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+        StartCoroutine(RefreshRemoteSpeakersDelayed());
+    }
+
+    IEnumerator RefreshRemoteSpeakersDelayed()
+    {
+        if (!PhotonNetwork.InRoom || !IsVoiceGameplayScene(SceneManager.GetActiveScene().name))
+            yield break;
+
+        for (int i = 0; i < 15; i++)
+        {
+            VoiceProximityAudio.RefreshAllRemoteSpeakers();
+            yield return null;
+        }
     }
 
     void RequestBindRecorderIfNeeded()

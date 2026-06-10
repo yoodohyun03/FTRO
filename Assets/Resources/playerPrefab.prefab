@@ -304,6 +304,7 @@ GameObject:
   - component: {fileID: -8212622554268921394}
   - component: {fileID: 910033001001001001}
   - component: {fileID: 910033001001001002}
+  - component: {fileID: 910033001001001020}
   m_Layer: 0
   m_Name: playerPrefab
   m_TagString: Player
@@ -633,6 +634,22 @@ MonoBehaviour:
   useOnAudioFilterRead: 0
   useMicrophoneTypeFallback: 1
   recordWhenJoined: 1
+--- !u!114 &910033001001001020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4227893057856370313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7f3c2e1b9d0486f8e2a1c5b4d3e7f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minDistance: 2
+  maxDistance: 32
+  spatialBlend: 1
+  linkRetryInterval: 1
 --- !u!1 &5662720093640914312
 GameObject:
   m_ObjectHideFlags: 0
