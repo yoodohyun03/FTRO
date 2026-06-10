@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05dcc940733532945861e2e762dcff0b, type: 3}
   m_Name: FreezeItem
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemName: AI Freeze Device
+  itemName: "AI 프리즈"
+  description: "모든 AI 정지, 움직이는 대상 추적"
   icon: {fileID: 0}
   cooldown: 15
   duration: 10

@@ -7,12 +7,21 @@ using TMPro;
 public class SurvivorItemHandler : MonoBehaviourPun
 {
     static readonly string[] ItemNames = { "스프린트 부스트", "연막탄", "마커 교란", "EMP", "해킹 툴", "디코이" };
-    static readonly bool[]   IsRare    = { false, false, false, true, true, true };
+    static readonly string[] ItemDescriptions =
+    {
+        "이동속도 2배 (5초)",
+        "주변 시야 차단 (3초)",
+        "술래 미니맵 가짜 신호",
+        "술래 감속 + 화면 노이즈",
+        "다음 터미널 해킹 단축",
+        "잔상 생성으로 위장"
+    };
+    static readonly bool[] IsRare = { false, false, false, true, true, true };
 
     private SurvivorItemType? heldItem = null;
     private PlayerMove playerMove;
     private GameObject uiContainer;
-    private TextMeshProUGUI itemText;
+    private RoleSkillPanelUI.SkillSlot skillSlot;
 
     void Awake()
     {
@@ -95,12 +104,12 @@ public class SurvivorItemHandler : MonoBehaviourPun
         if (c != null) Destroy(c);
         
         Renderer r = smoke.GetComponent<Renderer>();
-        if (r != null) r.material.color = new Color(0.6f, 0.6f, 0.6f, 0.8f);
+        if (r != null) r.material.color = new Color(0.45f, 0.45f, 0.45f, 0.92f);
         
         Destroy(smoke, 3f);
 
         if (IsLocalSeeker() && Vector3.Distance(GetLocalCameraPos(), pos) < 15f)
-            StartCoroutine(ScreenOverlay(new Color(0.6f, 0.6f, 0.6f, 0.9f), 2.5f));
+            StartCoroutine(ScreenOverlay(new Color(0.32f, 0.32f, 0.32f, 0.97f), 2.5f));
     }
 
     void UseMarkerJam()
@@ -178,7 +187,7 @@ public class SurvivorItemHandler : MonoBehaviourPun
 
     IEnumerator ScreenOverlay(Color color, float duration)
     {
-        Canvas canvas = FindOverlayCanvas();
+        Canvas canvas = RoleSkillPanelUI.FindOverlayCanvas(transform);
         if (canvas == null) yield break;
 
         GameObject overlay = new GameObject("ItemOverlay");
@@ -196,67 +205,39 @@ public class SurvivorItemHandler : MonoBehaviourPun
         if (overlay != null) Destroy(overlay);
     }
 
-    Canvas FindOverlayCanvas()
-    {
-        Canvas[] canvases = Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None);
-        foreach (var c in canvases)
-        {
-            if (c.renderMode == RenderMode.ScreenSpaceOverlay) return c;
-        }
-        return Object.FindFirstObjectByType<Canvas>();
-    }
-
     void CreateUI()
     {
         if (uiContainer != null) Destroy(uiContainer);
 
-        Canvas canvas = FindOverlayCanvas();
+        Canvas canvas = RoleSkillPanelUI.FindOverlayCanvas(transform);
         if (canvas == null) return;
 
-        uiContainer = new GameObject("SurvivorItemUI_Bottom");
-        uiContainer.transform.SetParent(canvas.transform, false);
-        uiContainer.transform.SetAsLastSibling();
+        RectTransform panel = RoleSkillPanelUI.CreateBottomPanel(
+            canvas.transform, "SurvivorSkillPanel", new Vector2(RoleSkillPanelUI.SlotWidth + 8f, RoleSkillPanelUI.SlotHeight + 8f));
 
-        var rt = uiContainer.AddComponent<RectTransform>();
-        rt.anchorMin = new Vector2(0.5f, 0);
-        rt.anchorMax = new Vector2(0.5f, 0);
-        rt.pivot     = new Vector2(0.5f, 0);
-        rt.anchoredPosition = new Vector2(0, 42);
-        rt.sizeDelta = new Vector2(260, 100);
-
-        GameObject slotObj = new GameObject("ItemSlot");
-        slotObj.transform.SetParent(uiContainer.transform, false);
-        RectTransform rtSlot = slotObj.AddComponent<RectTransform>();
-        rtSlot.sizeDelta = new Vector2(220, 72);
-        rtSlot.anchoredPosition = Vector2.zero;
-
-        var bg = new GameObject("Background").AddComponent<UnityEngine.UI.Image>();
-        bg.transform.SetParent(slotObj.transform, false);
-        bg.color = new Color(0, 0, 0, 0.7f);
-        var rtBg = bg.GetComponent<RectTransform>();
-        rtBg.anchorMin = Vector2.zero; rtBg.anchorMax = Vector2.one; rtBg.sizeDelta = Vector2.zero;
-
-        var textObj = new GameObject("ItemText");
-        textObj.transform.SetParent(slotObj.transform, false);
-        itemText = textObj.AddComponent<TextMeshProUGUI>();
-        itemText.fontSize  = 20;
-        itemText.alignment = TextAlignmentOptions.Center;
-        itemText.raycastTarget = false;
-        var rtText = textObj.GetComponent<RectTransform>();
-        rtText.anchorMin = Vector2.zero; rtText.anchorMax = Vector2.one; rtText.sizeDelta = Vector2.zero;
+        uiContainer = panel.gameObject;
+        skillSlot = RoleSkillPanelUI.CreateSkillSlot(panel, Vector2.zero);
     }
 
     void UpdateUI()
     {
-        if (itemText == null) return;
+        if (skillSlot?.text == null) return;
+
         if (heldItem == null)
         {
-            itemText.text = "No Item";
+            skillSlot.text.text = RoleSkillPanelUI.FormatEmptySlot(
+                "아이템 없음", "터미널 해킹 시 획득");
+            if (skillSlot.cooldownOverlay != null) skillSlot.cooldownOverlay.fillAmount = 0f;
             return;
         }
+
         int idx = (int)heldItem.Value;
-        string rarityTag = IsRare[idx] ? "<color=yellow>[Rare]</color>" : "<color=white>[Common]</color>";
-        itemText.text = $"{rarityTag} <b>{ItemNames[idx]}</b>\n[F] 사용";
+        string rarity = IsRare[idx] ? "희귀" : "일반";
+        string name = $"{ItemNames[idx]} ({rarity})";
+
+        skillSlot.text.text = RoleSkillPanelUI.FormatSkillText(
+            "F", name, ItemDescriptions[idx], true);
+        if (skillSlot.cooldownOverlay != null) skillSlot.cooldownOverlay.fillAmount = 0f;
     }
 
     bool IsLocalSeeker()

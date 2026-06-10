@@ -4,6 +4,7 @@ using UnityEngine;
 public class ItemData : ScriptableObject
 {
     public string itemName;
+    [TextArea(1, 3)] public string description;
     public Sprite icon;
     public float cooldown = 10f;
     public float duration = 5f;

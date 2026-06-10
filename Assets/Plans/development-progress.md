@@ -1,7 +1,6 @@
 # FTRO — 프로젝트 문서 (통합)
 
-> 마지막 업데이트: 2026-06-09  
-> 최신 커밋: `b6a182a` (`main` = `origin/main`)
+> 마지막 업데이트: 2026-06-10
 
 ---
 
@@ -157,6 +156,18 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 - BGM 에셋 추가: `Assets/Audio/Casual & Relaxing Game Music/Happy.wav` (`b6a182a`)
   - 아직 씬/스크립트에 자동 재생 연결은 없음 — 에디터에서 AudioSource 연결 필요
 
+### 3.13 스킬창 UI 통일 (술래·생존자)
+
+- **`RoleSkillPanelUI.cs`**: 화면 하단 Overlay 스킬 슬롯 공통 UI (이름·설명·키·상태)
+- **술래** (`SeekerItemHandler.cs`): Q/R 슬롯 항상 표시
+  - AI 프리즈: "모든 AI 정지, 움직이는 대상 추적"
+  - AI 스웜: "AI가 생존자 방향으로 집단 이동"
+  - `ItemData.description` + `FreezeItem`/`SwarmItem` 에셋 한글화
+- **생존자** (`SurvivorItemHandler.cs`): F 슬롯 1개
+  - 보유 없음: "아이템 없음 / 터미널 해킹 시 획득"
+  - 보유 시: 아이템명(일반·희귀) + 효과 설명 + `[F] 사용 가능`
+- **연막탄 시야 차단** 강화: 술래 전체 화면 오버레이 알파 `0.97`, 연막 구체 불투명도 상향
+
 ### 3.12 이전에 완료된 핵심 기능 (요약)
 
 - Photon TCP 전환, `runInBackground`, SendRate/SerializationRate 조정
@@ -178,12 +189,11 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 | **Swarm**  | AI 더미가 생존자 쪽으로 집단 이동           | 5초  |
 
 
-**구현 방향**
+**구현 상태** (✅ 기본 동작 + 스킬창 설명 UI)
 
-- `RandomRoam.cs`: `RPC_SetAIState(state, targetViewID, duration)`
-- `SeekerItemHandler.cs` / `ItemSystem`: 수집·사용·RPC
-- `PlayerMove.cs`: 사용 입력 (Q 등)
-- UI: 하단 슬롯 + 모드 표시
+- `SeekerItemHandler.cs`: Q/R 사용, 90초 쿨다운, `RandomRoam.RPC_SetAIState`
+- `RoleSkillPanelUI.cs`: 하단 슬롯에 스킬명·설명·키·쿨타임 표시
+- `Items/FreezeItem.asset`, `Items/SwarmItem.asset`: 한글 이름·설명
 
 ### 4.2 생존자 아이템 (터미널 해제 보상)
 
@@ -200,11 +210,12 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 | Rare   | 디코이      | 잔상 생성 + 반대 방향 이동  | 잔상 5초 |
 
 
-**설계 원칙**
+**구현 상태** (✅ 터미널 보상 지급 + F 사용 + 스킬창 설명)
 
-- 터미널 해제 리스크에 대한 보상
-- 직접 대미지 없음 — 생존·위장 중심
-- `SurvivorItemHandler.cs`, `TerminalController`, `ItemData` ScriptableObject
+- `ObjectivePoint.cs` → `SurvivorItemHandler.ReceiveItem` (6종)
+- 스킬창: 보유 아이템명·등급·효과 설명 표시 (`RoleSkillPanelUI`)
+- 연막탄: 술래 15m 이내 전체 화면 시야 차단 (불투명도 조정 완료)
+- EMP·연막·디코이 등 RPC 효과 구현, 밸런스·연출 추가 조정 가능
 
 ---
 
@@ -226,7 +237,8 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 | 게임 시작 역할 안내 배너 (whBtn)         | ✅                                                     |
 | Photon Voice (마이크/스피커)           | ✅ (AppIdVoice·마이크 권한 확인 필요)                          |
 | Western/CityMap 스폰·터미널 위치 (PR#15) | ✅ (추가 미세 조정 가능)                                      |
-| 술래·생존자 아이템                    | 🔧 부분 구현 (`SeekerItemHandler`, `SurvivorItemHandler`) |
+| 술래·생존자 스킬창 (설명 UI)           | ✅                                                     |
+| 술래·생존자 아이템 효과                 | ✅ (밸런스·연출 미세 조정 가능)                                  |
 | BGM (`Happy.wav`) 자동 재생          | ⏳ 에셋만 추가, 씬 연결 미완                                    |
 
 
@@ -243,6 +255,7 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 | Western 스킨  | `RandomSkin` WesternScene 목록 + Synty `SM_Chr_`* 프리팹 (파란 큐브) |
 | 터미널 해킹 테스트  | 생존자로 터미널 6m 이내 접근 → `Press [E] to Hack` → 프로그레스 바 확인        |
 | 역할 배너 테스트    | 게임 시작 시 화면 중앙 상단 배너 3초 표시 확인 (월드스페이스 말풍선 X)              |
+| 스킬창 테스트      | 술래 Q/R 설명·쿨타임, 생존자 F 슬롯·연막탄 술래 시야 차단 확인                    |
 | Voice 테스트     | TitleScene→방 입장→인게임: 마이크 권한, `V` PTT, 상대 음성 수신 확인            |
 | BGM 연결        | `Happy.wav`를 TitleScene 또는 인게임 AudioSource에 드래그·Loop 설정         |
 | UI 재동기화     | `FTRO → Sync Game UI From CityScene`                        |
@@ -263,7 +276,8 @@ Assets/
 ├── Resources/
 │   ├── playerPrefab.prefab          # RandomSkin + PhotonVoiceView/Recorder/Speaker + 역할 배너
 │   ├── AI_Dummy.prefab
-│   └── HackingTerminal.prefab       # ObjectivePoint + 넓은 트리거 콜라이더
+│   ├── HackingTerminal.prefab       # ObjectivePoint + 넓은 트리거 콜라이더
+│   └── Items/FreezeItem.asset, SwarmItem.asset
 ├── Script/
 │   ├── TitleManager.cs              # 로비, Photon 콜백, 로비 복구
 │   ├── WaitingRoomController.cs     # 대기방, 술래 선택, 방 생성
@@ -275,6 +289,8 @@ Assets/
 │   ├── NetworkManager.cs            # 스폰, Photon
 │   ├── PlayerMove.cs                # 이동, 터미널 E, 역할 안내 배너(whBtn)
 │   └── Items/
+│       ├── ItemData.cs              # itemName, description
+│       ├── RoleSkillPanelUI.cs      # 술래·생존자 공통 스킬창 UI
 │       ├── SeekerItemHandler.cs
 │       └── SurvivorItemHandler.cs
 ├── Sprites/
@@ -316,11 +332,10 @@ tools/
 
 ```text
 브랜치: main (= origin/main)
-HEAD:   b6a182a  Add role reveal banner at game start and casual BGM assets.
-        d169753  보이스 수정          ← PR #17
-        9b62c56  배경 수정
-        cb42b01  Merge PR #16 Voice test
-        4d8979e  Fix timer + terminal hacking
+최근:   스킬창 UI 통일 + 연막탄 시야차단 강화
+        1ec2b7d  development-progress (PR handoff)
+        b6a182a  role reveal banner + BGM
+        d169753  보이스 수정 (PR #17)
 ```
 
 데스크탑에서 시작:
@@ -344,11 +359,11 @@ git pull origin main
 3. **터미널 E** — 생존자 6m 이내 해킹
 4. **Voice** — 2인 이상, 마이크·`V` PTT
 5. **Western 스킨** — 캐릭터 투명 여부
+6. **스킬창** — 술래 Q/R·생존자 F 설명, 연막탄 술래 시야 차단
 
 ### 9.4 다음 작업 후보
 
 - `Happy.wav` BGM을 TitleScene/인게임에 AudioSource 연결
-- 술래·생존자 아이템 시스템 완성 (§4 기획)
+- 아이템 밸런스·연출 미세 조정 (쿨타임, 연막 범위 등)
 - 대기방/맵 선택 후 인게임 진입 전체 플로우 재검증
-- 역할 배너 크기·위치 미세 조정 (`PlayerMove` `680×180`, `y=140`, `fontSize=48`)
 

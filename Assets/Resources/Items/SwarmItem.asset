@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05dcc940733532945861e2e762dcff0b, type: 3}
   m_Name: SwarmItem
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemName: AI Swarm Signal
+  itemName: "AI 스웜"
+  description: "AI가 생존자 방향으로 집단 이동"
   icon: {fileID: 0}
   cooldown: 20
   duration: 10
