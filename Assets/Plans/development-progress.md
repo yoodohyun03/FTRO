@@ -1,6 +1,6 @@
 # FTRO — 프로젝트 문서 (통합)
 
-> 마지막 업데이트: 2026-06-10
+> 마지막 업데이트: 2026-06-06
 
 ---
 
@@ -139,10 +139,23 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
   - `TitleScene`에 Voice UI/설정 보강
   - `VoiceManager.cs` Recorder 바인딩·재시도 로직 조정
 - `VoiceManager`: `TitleScene` 전용 오브젝트 + `PunVoiceClient`, 씬 전환 시 DDOL
-  - Push-to-Talk 기본 `V` 키 (`pushToTalk` 옵션)
+  - Push-to-Talk 기본 `V` 키 (`pushToTalk` 옵션, **현재 TitleScene 설정은 꺼짐** → 오픈 마이크)
   - 인게임 씬 로드 후 Recorder 자동 바인딩 (최대 10초 재시도)
 - `PhotonServerSettings`: `AppIdVoice` 설정 필요 (Photon 대시보드)
 - 에디터: `PhotonVoiceDefineSync.cs`가 Voice 패키지 유무에 따라 심볼 자동 동기화
+
+### 3.14 인게임 보이스 상태 UI
+
+- **`VoiceStatusUI.cs`**: 마이크 연결·송신 상태를 인게임에서 확인하는 간단한 HUD
+  - **좌하단** 고정 (미니맵 좌상단과 겹치지 않음)
+  - 기존 **Overlay Canvas**에만 패널을 붙임 — 별도 Canvas를 만들지 않아 다른 UI 레이아웃에 영향 없음
+  - `raycastTarget = false` — 클릭·터치 방해 없음
+  - 씬 전환 시 패널은 게임 씬 Canvas와 함께 제거, TitleScene에서는 표시 안 함
+- 표시 내용
+  - 상태 점 + 문구: `연결 대기...` / `켜짐` / `송신 중` / `대기 (V키)` 등
+  - 하단 **마이크 레벨 게이지**: `Recorder.LevelMeter.CurrentPeakAmp` 기반 (말할 때 채워짐)
+  - `송신 중` 문구는 Photon이 실제 음성 패킷 송신 중일 때 표시
+- `VoiceManager.cs`: 상태 조회 API (`Instance`, `HasRecorder`, `IsTransmitting`, `MicPeakLevel` 등) + `VoiceStatusUI` 자동 부착
 
 ### 3.10 맵 스폰·위치 조정 (PR #15)
 
@@ -222,24 +235,25 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 ## 5. 현재 동작 상태
 
 
-| 기능                            | 상태                                                    |
-| ----------------------------- | ----------------------------------------------------- |
-| 타이틀 로비 / 방 생성·입장              | ✅                                                     |
-| Photon 재접속·로비 복구              | ✅                                                     |
-| City / Western / CityMap 씬 로드 | ✅                                                     |
-| City 기준 인게임 UI (3맵)           | ✅                                                     |
-| 술래 선택 대기방                     | ✅                                                     |
-| 플레이어·AI 스폰 / 스킨 동기화           | ✅                                                     |
-| Western 맵 캐릭터 스킨 (RandomSkin) | ✅                                                     |
-| Western/CityMap 터미널·탈출 스폰 포인트 | ✅ (위치 수동 조정)                                          |
-| 인게임 10분 타이머 즉시 시작             | ✅                                                     |
-| 생존자 터미널 해킹(E) 상호작용            | ✅                                                     |
-| 게임 시작 역할 안내 배너 (whBtn)         | ✅                                                     |
-| Photon Voice (마이크/스피커)           | ✅ (AppIdVoice·마이크 권한 확인 필요)                          |
-| Western/CityMap 스폰·터미널 위치 (PR#15) | ✅ (추가 미세 조정 가능)                                      |
-| 술래·생존자 스킬창 (설명 UI)           | ✅                                                     |
-| 술래·생존자 아이템 효과                 | ✅ (밸런스·연출 미세 조정 가능)                                  |
-| BGM (`Happy.wav`) 자동 재생          | ⏳ 에셋만 추가, 씬 연결 미완                                    |
+| 기능                                | 상태                          |
+| --------------------------------- | --------------------------- |
+| 타이틀 로비 / 방 생성·입장                  | ✅                           |
+| Photon 재접속·로비 복구                  | ✅                           |
+| City / Western / CityMap 씬 로드     | ✅                           |
+| City 기준 인게임 UI (3맵)               | ✅                           |
+| 술래 선택 대기방                         | ✅                           |
+| 플레이어·AI 스폰 / 스킨 동기화               | ✅                           |
+| Western 맵 캐릭터 스킨 (RandomSkin)     | ✅                           |
+| Western/CityMap 터미널·탈출 스폰 포인트     | ✅ (위치 수동 조정)                |
+| 인게임 10분 타이머 즉시 시작                 | ✅                           |
+| 생존자 터미널 해킹(E) 상호작용                | ✅                           |
+| 게임 시작 역할 안내 배너 (whBtn)            | ✅                           |
+| Photon Voice (마이크/스피커)            | ✅ (AppIdVoice·마이크 권한 확인 필요) |
+| 인게임 보이스 상태 UI (좌하단 게이지)        | ✅                           |
+| Western/CityMap 스폰·터미널 위치 (PR#15) | ✅ (추가 미세 조정 가능)             |
+| 술래·생존자 스킬창 (설명 UI)                | ✅                           |
+| 술래·생존자 아이템 효과                     | ✅ (밸런스·연출 미세 조정 가능)         |
+| BGM (`Happy.wav`) 자동 재생           | ⏳ 에셋만 추가, 씬 연결 미완           |
 
 
 ---
@@ -254,10 +268,10 @@ UI YAML 동기화 과정에서 반복되던 오류와 해결:
 | 터미널/탈출 스폰   | `ObjectiveSpawnPoints` 하위 Transform 위치를 맵에 맞게 이동            |
 | Western 스킨  | `RandomSkin` WesternScene 목록 + Synty `SM_Chr_`* 프리팹 (파란 큐브) |
 | 터미널 해킹 테스트  | 생존자로 터미널 6m 이내 접근 → `Press [E] to Hack` → 프로그레스 바 확인        |
-| 역할 배너 테스트    | 게임 시작 시 화면 중앙 상단 배너 3초 표시 확인 (월드스페이스 말풍선 X)              |
-| 스킬창 테스트      | 술래 Q/R 설명·쿨타임, 생존자 F 슬롯·연막탄 술래 시야 차단 확인                    |
-| Voice 테스트     | TitleScene→방 입장→인게임: 마이크 권한, `V` PTT, 상대 음성 수신 확인            |
-| BGM 연결        | `Happy.wav`를 TitleScene 또는 인게임 AudioSource에 드래그·Loop 설정         |
+| 역할 배너 테스트   | 게임 시작 시 화면 중앙 상단 배너 3초 표시 확인 (월드스페이스 말풍선 X)                 |
+| 스킬창 테스트     | 술래 Q/R 설명·쿨타임, 생존자 F 슬롯·연막탄 술래 시야 차단 확인                     |
+| Voice 테스트   | TitleScene→방 입장→인게임: 좌하단 보이스 HUD, 말할 때 게이지·`송신 중` 확인, 상대 음성 수신 |
+| BGM 연결      | `Happy.wav`를 TitleScene 또는 인게임 AudioSource에 드래그·Loop 설정     |
 | UI 재동기화     | `FTRO → Sync Game UI From CityScene`                        |
 | 씬 외부 편집 후   | Unity **Reload** (`.unity` 디스크 변경 반영)                       |
 
@@ -282,6 +296,7 @@ Assets/
 │   ├── TitleManager.cs              # 로비, Photon 콜백, 로비 복구
 │   ├── WaitingRoomController.cs     # 대기방, 술래 선택, 방 생성
 │   ├── VoiceManager.cs              # Photon Voice 2, PTT, Recorder 바인딩
+│   ├── VoiceStatusUI.cs             # 인게임 보이스 상태 HUD (좌하단, Overlay Canvas)
 │   ├── RandomSkin.cs                # 맵별 캐릭터 스킨, 외부 프리팹 Instantiate
 │   ├── ObjectivePoint.cs            # 터미널 해킹 진행·완료·아이템 지급
 │   ├── ChatManager.cs               # 로비/인게임 채팅 레이아웃
@@ -322,6 +337,8 @@ tools/
 - `ObjectiveSpawnPoints` 기본 좌표는 임시 그리드 — PR #15로 Western/CityMap 위치 조정됨, 추가 미세 조정은 에디터에서
 - 역할 배너가 캐릭터 위 말풍선처럼 보이면 → Overlay Canvas 미탐지. `FindOverlayCanvas()` 확인
 - Photon Voice: `AppIdVoice` 미설정·마이크 권한 거부 시 음성 불가 — Photon 대시보드·Windows 마이크 설정 확인
+- 보이스 HUD 게이지는 **로컬 마이크 입력** 기준 — 바가 안 움직이면 Windows 마이크 장치·권한 확인
+- Synty Package Helper 팝업(Shader Graph): `manifest.json`에 이미 포함됨 — **Install** 한 번 또는 `ShaderGraph.asset`의 `hasPromptedUser`를 1로 설정
 - GitHub PR #16/#17은 로컬 fast-forward 머지 후 푸시됨 — 웹에서 open으로 남아 있으면 Close 처리
 
 ---
@@ -332,10 +349,10 @@ tools/
 
 ```text
 브랜치: main (= origin/main)
-최근:   스킬창 UI 통일 + 연막탄 시야차단 강화
+최근:   인게임 보이스 상태 UI (좌하단 HUD)
+        bdc7f60  스킬창 UI 통일 + 연막탄 시야차단 강화
         1ec2b7d  development-progress (PR handoff)
         b6a182a  role reveal banner + BGM
-        d169753  보이스 수정 (PR #17)
 ```
 
 데스크탑에서 시작:
@@ -346,18 +363,20 @@ git pull origin main
 
 ### 9.2 최근 머지 요약
 
-| PR | 브랜치 | 내용 |
-| --- | --- | --- |
-| #15 | `bsm` | Western/CityMap 스폰·터미널·탈출구 위치 |
-| #16 | `voice-test` | Photon Voice 2 통합 |
+
+| PR  | 브랜치               | 내용                                        |
+| --- | ----------------- | ----------------------------------------- |
+| #15 | `bsm`             | Western/CityMap 스폰·터미널·탈출구 위치             |
+| #16 | `voice-test`      | Photon Voice 2 통합                         |
 | #17 | `voice-last-test` | playerPrefab Voice 컴포넌트·TitleScene 보이스 UI |
+
 
 ### 9.3 우선 확인할 것 (Unity 플레이 테스트)
 
 1. **역할 배너** — 게임 시작 3초, 화면 중앙 상단, 술래/생존자 문구
 2. **10분 타이머** — 즉시 `10:00` 시작
 3. **터미널 E** — 생존자 6m 이내 해킹
-4. **Voice** — 2인 이상, 마이크·`V` PTT
+4. **Voice** — 좌하단 HUD, 말할 때 게이지·`송신 중`, 2인 이상 상대 음성 수신
 5. **Western 스킨** — 캐릭터 투명 여부
 6. **스킬창** — 술래 Q/R·생존자 F 설명, 연막탄 술래 시야 차단
 

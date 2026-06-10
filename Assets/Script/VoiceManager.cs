@@ -21,6 +21,28 @@ public class VoiceManager : MonoBehaviour
 #if USE_PHOTON_VOICE
     static VoiceManager _instance;
 
+    public static VoiceManager Instance => _instance;
+
+    public bool IsInVoiceGameplay =>
+        PhotonNetwork.InRoom && IsVoiceGameplayScene(SceneManager.GetActiveScene().name);
+
+    public bool HasRecorder => _recorder != null;
+    public bool IsPushToTalkEnabled => pushToTalk;
+    public KeyCode PushToTalkKeyCode => pushToTalkKey;
+    public bool IsTransmitAllowed => _recorder != null && _recorder.TransmitEnabled;
+    public bool IsTransmitting => _recorder != null && _recorder.IsCurrentlyTransmitting;
+    public bool IsRecordingEnabled => _recorder != null && _recorder.RecordingEnabled;
+
+    public float MicPeakLevel
+    {
+        get
+        {
+            if (_recorder?.LevelMeter == null)
+                return 0f;
+            return _recorder.LevelMeter.CurrentPeakAmp;
+        }
+    }
+
     [Header("씬 전환")]
     [Tooltip("타이틀 씬이 내려가도 음성 클라이언트를 유지합니다.")]
     [SerializeField] bool persistAcrossScenes = true;
@@ -58,6 +80,9 @@ public class VoiceManager : MonoBehaviour
             gameObject.AddComponent<PunVoiceClient>();
 
         ApplyPunVoiceClientSettings();
+
+        if (GetComponent<VoiceStatusUI>() == null)
+            gameObject.AddComponent<VoiceStatusUI>();
     }
 
     void OnEnable()
