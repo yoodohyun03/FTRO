@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
-using Photon.Pun.UtilityComponents;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.Collections;

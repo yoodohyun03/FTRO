@@ -6,6 +6,9 @@ public enum GameModeType
     Normal = 0,
     BombPass = 1,
     SeekerMultiply = 2,
+    ChangeMode = 3,
+    SightNightMode = 4,
+    magneticfield = 5
 }
 
 public static class GameModeTypeHelper
@@ -17,6 +20,9 @@ public static class GameModeTypeHelper
         "일반모드",
         "폭탄 돌리기 모드",
         "술래 증식 모드",
+        "사물 변신 모드",
+        "시야 제한 모드",
+        "자기장 모드"
     };
 
     public static int Count => DisplayNames.Length;
