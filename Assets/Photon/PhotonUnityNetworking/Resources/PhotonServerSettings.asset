@@ -76,6 +76,7 @@ MonoBehaviour:
   - SyncRoleMessage
   - SyncState
   - SyncTimer
+  - SyncSurvivorStatus
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

@@ -16,6 +16,7 @@ private const string RoleKey = "Role";
     public GameState currentState = GameState.Ready;
 
     public static GameManager instance;
+    public static GameModeType CurrentGameMode { get; private set; } = GameModeType.Normal;
 
     [Header("탈출 목표 설정")]
     public int totalObjectives = 3;
@@ -45,22 +46,29 @@ private const string RoleKey = "Role";
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI objectiveStatusText;
     public TextMeshProUGUI roleIndicatorText;
+    public TextMeshProUGUI survivorStatusText;
 
     [Header("게임 설정")]
     public float playTime = 600f;
 
     [Header("승리 조건 설정")]
     public int survivorCount = -1; // -1 = 미초기화 (게임 시작 전 검거 오판 방지)
+    private int initialSurvivorCount = -1;
 
     private double gameStartNetworkTime = 0;
 
     void Start()
     {
+        CurrentGameMode = GameModeTypeHelper.FromRoom(PhotonNetwork.CurrentRoom);
+        Debug.Log("[GameManager] 게임 모드: " + GameModeTypeHelper.GetDisplayName(CurrentGameMode));
+
         completedObjectives = 0;
         UpdateObjectiveStatusUI();
         EnsureRoleIndicator();
         if (centerText != null) centerText.text = "";
         if (timerText != null) timerText.text = FormatTime(playTime);
+
+        StartCoroutine(SetupHudLayoutRoutine());
 
         if (PhotonNetwork.IsMasterClient)
 {
@@ -195,7 +203,9 @@ private const string RoleKey = "Role";
             }
         }
         survivorCount = count;
+        initialSurvivorCount = count;
         Debug.Log("초기 생존자 수: " + survivorCount);
+        photonView.RPC("SyncSurvivorStatus", RpcTarget.All, survivorCount, initialSurvivorCount);
     }
 
     IEnumerator GameFlowRoutine()
@@ -322,6 +332,7 @@ private const string RoleKey = "Role";
 
         survivorCount--;
         Debug.Log("생존자 검거! 남은 수: " + survivorCount);
+        photonView.RPC("SyncSurvivorStatus", RpcTarget.All, survivorCount, initialSurvivorCount);
 
         if (survivorCount <= 0 && currentState == GameState.Playing)
         {
@@ -394,6 +405,127 @@ private const string RoleKey = "Role";
     public void SyncTimer(string timeMsg)
     {
         if (timerText != null) timerText.text = timeMsg;
+    }
+
+    [PunRPC]
+    public void SyncSurvivorStatus(int alive, int total)
+    {
+        survivorCount = alive;
+        initialSurvivorCount = total;
+        UpdateSurvivorStatusUI();
+    }
+
+    IEnumerator SetupHudLayoutRoutine()
+    {
+        for (int i = 0; i < 12; i++)
+        {
+            if (GameObject.Find("MinimapUI_Runtime") != null)
+                break;
+            yield return null;
+        }
+
+        LayoutHudUnderMinimap();
+    }
+
+    void LayoutHudUnderMinimap()
+    {
+        const float defaultLeft = 20f;
+        const float defaultTop = 20f;
+        const float defaultSize = 310f;
+        const float rowGap = 8f;
+        const float timerHeight = 48f;
+        const float survivorHeight = 34f;
+
+        float left = defaultLeft;
+        float topInset = defaultTop;
+        float minimapSize = defaultSize;
+
+        GameObject minimapUi = GameObject.Find("MinimapUI_Runtime");
+        if (minimapUi != null)
+        {
+            RectTransform miniRect = minimapUi.GetComponent<RectTransform>();
+            if (miniRect != null)
+            {
+                left = miniRect.anchoredPosition.x;
+                topInset = -miniRect.anchoredPosition.y;
+                minimapSize = miniRect.sizeDelta.y;
+            }
+        }
+
+        float y = -(topInset + minimapSize + rowGap);
+        float centerX = left + minimapSize * 0.5f;
+        Canvas canvas = FindOverlayCanvas();
+        if (canvas == null) return;
+
+        if (timerText != null)
+        {
+            RectTransform timerRect = timerText.rectTransform;
+            if (timerRect.parent != canvas.transform)
+                timerRect.SetParent(canvas.transform, false);
+
+            timerRect.anchorMin = new Vector2(0f, 1f);
+            timerRect.anchorMax = new Vector2(0f, 1f);
+            timerRect.pivot = new Vector2(0.5f, 1f);
+            timerRect.anchoredPosition = new Vector2(centerX, y);
+            timerRect.sizeDelta = new Vector2(minimapSize, timerHeight);
+            timerText.fontSize = 42f;
+            timerText.fontStyle = FontStyles.Bold;
+            timerText.alignment = TextAlignmentOptions.Center;
+            timerText.raycastTarget = false;
+            y -= timerHeight + rowGap;
+        }
+
+        EnsureSurvivorStatusText(canvas.transform, centerX, y, minimapSize, survivorHeight);
+        UpdateSurvivorStatusUI();
+
+        if (timerText != null) timerText.transform.SetAsLastSibling();
+        if (survivorStatusText != null) survivorStatusText.transform.SetAsLastSibling();
+    }
+
+    void EnsureSurvivorStatusText(Transform parent, float centerX, float y, float width, float height)
+    {
+        if (survivorStatusText == null)
+        {
+            Transform existing = parent.Find("SurvivorStatusText");
+            if (existing != null)
+                survivorStatusText = existing.GetComponent<TextMeshProUGUI>();
+        }
+
+        if (survivorStatusText == null)
+        {
+            GameObject obj = new GameObject("SurvivorStatusText");
+            obj.transform.SetParent(parent, false);
+            survivorStatusText = obj.AddComponent<TextMeshProUGUI>();
+        }
+
+        RectTransform rect = survivorStatusText.rectTransform;
+        rect.anchorMin = new Vector2(0f, 1f);
+        rect.anchorMax = new Vector2(0f, 1f);
+        rect.pivot = new Vector2(0.5f, 1f);
+        rect.anchoredPosition = new Vector2(centerX, y);
+        rect.sizeDelta = new Vector2(width, height);
+
+        survivorStatusText.fontSize = 28f;
+        survivorStatusText.fontStyle = FontStyles.Bold;
+        survivorStatusText.alignment = TextAlignmentOptions.Center;
+        survivorStatusText.color = new Color(0.92f, 0.96f, 1f, 1f);
+        survivorStatusText.raycastTarget = false;
+
+        if (timerText != null && timerText.font != null)
+            survivorStatusText.font = timerText.font;
+    }
+
+    void UpdateSurvivorStatusUI()
+    {
+        if (survivorStatusText == null) return;
+        if (initialSurvivorCount < 0)
+        {
+            survivorStatusText.text = string.Empty;
+            return;
+        }
+
+        int alive = Mathf.Max(0, survivorCount);
+        survivorStatusText.text = $"생존자 : ({alive} / {initialSurvivorCount})";
     }
 
     static string FormatTime(float seconds)

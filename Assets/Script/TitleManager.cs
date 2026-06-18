@@ -38,6 +38,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
     public GameObject playerSlotPrefab;
     public TextMeshProUGUI waitingRoomNameText;
     public TextMeshProUGUI selectedMapText;
+    public TextMeshProUGUI selectedGameModeText;
     public Button startButton;
     public Button readyButton;
     public Button leaveButton;
@@ -53,6 +54,9 @@ public class TitleManager : MonoBehaviourPunCallbacks
 
     [Header("6. 맵 선택 (캐러셀: city→0, west→1, citymap→2, random→3)")]
     public MapCarouselSelector mapCarouselSelector;
+
+    [Header("7. 게임 모드 선택 (일반 / 폭탄 돌리기 / 술래 증식)")]
+    public ModeCarouselSelector modeCarouselSelector;
     [HideInInspector] public Toggle cityMapToggle;
     [HideInInspector] public Toggle japanMapToggle;
     [HideInInspector] public Toggle forestMapToggle;
@@ -83,9 +87,11 @@ public class TitleManager : MonoBehaviourPunCallbacks
         if (leaveButton != null) leaveButton.onClick.AddListener(OnLeaveButtonClicked);
         WireQuickJoinButton();
 
+        EnsureWaitingRoomModeText();
         EnsureWaitingRoomController();
         selectedMap = EnsureRoomCreationController().SelectedMap;
         EnsureMapCarouselSelector();
+        EnsureModeCarouselSelector();
         if (PhotonNetwork.InRoom)
         {
             ShowWaitingRoom();
@@ -155,6 +161,27 @@ public class TitleManager : MonoBehaviourPunCallbacks
         }
     }
 
+    void EnsureModeCarouselSelector()
+    {
+        if (modeCarouselSelector == null && createRoomPanel != null)
+        {
+            modeCarouselSelector = createRoomPanel.GetComponent<ModeCarouselSelector>();
+            if (modeCarouselSelector == null)
+                modeCarouselSelector = createRoomPanel.AddComponent<ModeCarouselSelector>();
+        }
+
+        if (modeCarouselSelector == null) return;
+
+        modeCarouselSelector.OnIndexChanged -= OnModeCarouselIndexChanged;
+        modeCarouselSelector.OnIndexChanged += OnModeCarouselIndexChanged;
+        OnModeCarouselIndexChanged(modeCarouselSelector.CurrentIndex);
+    }
+
+    void OnModeCarouselIndexChanged(int index)
+    {
+        EnsureRoomCreationController().SelectGameMode(index);
+    }
+
     // 로그인/방 목록
     public void ClickPlay()
     {
@@ -168,6 +195,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
         roomListPanel.SetActive(false);
         createRoomPanel.SetActive(true);
         EnsureMapCarouselSelector();
+        EnsureModeCarouselSelector();
     }
 
     public void CloseCreateRoomPanel()
@@ -272,6 +300,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
     void ShowWaitingRoom()
     {
         SetPanelState(showLogin: false, showRoomList: false, showCreateRoom: false, showPasswordPopup: false, showWaitingRoom: true);
+        EnsureWaitingRoomModeText();
         EnsureWaitingRoomController().InitializeWaitingRoom();
     }
 
@@ -431,6 +460,7 @@ public class TitleManager : MonoBehaviourPunCallbacks
                 playerSlotPrefab,
                 waitingRoomNameText,
                 selectedMapText,
+                selectedGameModeText,
                 startButton,
                 readyButton,
                 IsReadyKey,
@@ -438,6 +468,56 @@ public class TitleManager : MonoBehaviourPunCallbacks
         }
 
         return waitingRoomController;
+    }
+
+    void EnsureWaitingRoomModeText()
+    {
+        if (waitingRoomPanel == null || selectedMapText == null) return;
+
+        if (selectedGameModeText == null)
+        {
+            Transform existing = waitingRoomPanel.transform.Find("SelectedModeText");
+            if (existing != null)
+                selectedGameModeText = existing.GetComponent<TextMeshProUGUI>();
+        }
+
+        if (selectedGameModeText == null)
+        {
+            GameObject modeObj = new GameObject("SelectedModeText", typeof(RectTransform));
+            modeObj.layer = waitingRoomPanel.layer;
+            modeObj.transform.SetParent(waitingRoomPanel.transform, false);
+            selectedGameModeText = modeObj.AddComponent<TextMeshProUGUI>();
+            selectedGameModeText.raycastTarget = false;
+        }
+
+        selectedGameModeText.font = selectedMapText.font;
+        selectedGameModeText.fontSize = selectedMapText.fontSize;
+        selectedGameModeText.color = selectedMapText.color;
+        selectedGameModeText.alignment = selectedMapText.alignment;
+        selectedGameModeText.enableWordWrapping = false;
+
+        AlignModeTextBelowMap();
+    }
+
+    void AlignModeTextBelowMap()
+    {
+        if (selectedMapText == null || selectedGameModeText == null) return;
+
+        RectTransform mapRect = selectedMapText.rectTransform;
+        RectTransform modeRect = selectedGameModeText.rectTransform;
+
+        modeRect.anchorMin = mapRect.anchorMin;
+        modeRect.anchorMax = mapRect.anchorMax;
+        modeRect.pivot = mapRect.pivot;
+        modeRect.sizeDelta = mapRect.sizeDelta;
+
+        float mapHalfH = mapRect.rect.height > 0f ? mapRect.rect.height * 0.5f : mapRect.sizeDelta.y * 0.5f;
+        float modeHalfH = modeRect.sizeDelta.y * 0.5f;
+        const float spacing = 6f;
+
+        modeRect.anchoredPosition = new Vector2(
+            mapRect.anchoredPosition.x,
+            mapRect.anchoredPosition.y - mapHalfH - modeHalfH - spacing);
     }
 
     RoomCreationController EnsureRoomCreationController()
