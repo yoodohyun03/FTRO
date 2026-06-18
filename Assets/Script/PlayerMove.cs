@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Photon.Pun.UtilityComponents;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.Collections;
@@ -40,6 +41,10 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
     [Header("관전 모드 설정")]
     public bool isDead = false;
+    private bool deadStateApplied;
+    private Vector3 frozenDeathPosition;
+    private Quaternion frozenDeathRotation;
+    private PhotonTransformView photonTransformView;
     private List<Transform> aliveSurvivors = new List<Transform>();
     private int spectateIndex = 0;
 
@@ -110,7 +115,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             if (isDead != deadState)
             {
                 isDead = deadState;
-                if (isDead) SyncDeadState();
+                if (isDead) ApplyDeadState();
             }
         }
     }
@@ -119,6 +124,8 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+        photonTransformView = GetComponent<PhotonTransformView>();
+        if (anim != null) anim.applyRootMotion = false;
         if (anim == null) Debug.LogError($"[{gameObject.name}] Animator 컴포넌트를 찾을 수 없습니다!");
         if (rb == null) Debug.LogError($"[{gameObject.name}] Rigidbody 컴포넌트를 찾을 수 없습니다!");
 
@@ -332,12 +339,21 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     {
         if (!photonView.IsMine)
         {
-            if (isDead) SyncDeadState();
+            if (isDead)
+            {
+                if (!deadStateApplied) ApplyDeadState();
+                else EnforceDeadFreeze();
+            }
             UpdateAnimation();
             return;
         }
 
-        if (isDead) { SpectateUpdate(); return; }
+        if (isDead)
+        {
+            EnforceDeadFreeze();
+            SpectateUpdate();
+            return;
+        }
 
         EnsureRoleAssigned();
 
@@ -411,6 +427,12 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         UpdateAnimation();
 
         wasGrounded = isGrounded; // 마지막에 업데이트해야 착지 판정이 정확함
+    }
+
+    void FixedUpdate()
+    {
+        if (isDead && deadStateApplied)
+            EnforceDeadFreeze();
     }
 
     void EnsureRoleAssigned()
@@ -834,20 +856,63 @@ void RPC_PlayPunchAnimation()
     { 
         if (isDead) return; 
         isDead = true; 
-        SyncDeadState();
+        ApplyDeadState();
         if (PhotonNetwork.IsMasterClient && GameManager.instance != null) GameManager.instance.photonView.RPC("OnSurvivorCaught", RpcTarget.MasterClient); 
         UpdateSurvivorList(); 
     }
 
-    void SyncDeadState()
+    void ApplyDeadState()
     {
-        // 콜라이더는 즉시 비활성화 (중복 피격 방지)
-        Collider c = GetComponent<Collider>();
-        if (c != null) c.enabled = false;
+        if (deadStateApplied) return;
+        deadStateApplied = true;
 
-        // 사망 애니메이션 재생 후 캐릭터 숨김
-        if (anim != null) anim.SetBool("IsDead", true);
+        frozenDeathPosition = transform.position;
+        frozenDeathRotation = transform.rotation;
+
+        foreach (Collider col in GetComponentsInChildren<Collider>())
+            col.enabled = false;
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.useGravity = false;
+            rb.isKinematic = true;
+            rb.position = frozenDeathPosition;
+            rb.rotation = frozenDeathRotation;
+        }
+
+        if (anim != null)
+        {
+            anim.applyRootMotion = false;
+            anim.SetBool("IsDead", true);
+        }
+
+        if (photonTransformView != null)
+            photonTransformView.enabled = false;
+
+        EnforceDeadFreeze();
         StartCoroutine(HideAfterDeathAnimation());
+    }
+
+    void EnforceDeadFreeze()
+    {
+        if (!deadStateApplied) return;
+
+        transform.SetPositionAndRotation(frozenDeathPosition, frozenDeathRotation);
+
+        if (rb != null)
+        {
+            if (!rb.isKinematic)
+            {
+                rb.isKinematic = true;
+                rb.useGravity = false;
+            }
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.position = frozenDeathPosition;
+            rb.rotation = frozenDeathRotation;
+        }
     }
 
     IEnumerator HideAfterDeathAnimation()
@@ -858,7 +923,30 @@ void RPC_PlayPunchAnimation()
         foreach (Renderer r in rs) r.enabled = false;
     }
 void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject.FindGameObjectsWithTag("Player"); foreach (GameObject p in ps) { Renderer r = p.GetComponentInChildren<Renderer>(); if (p != this.gameObject && r != null && r.enabled) aliveSurvivors.Add(p.transform); } }
-    void SpectateUpdate() { if (aliveSurvivors.Count == 0) return; if (Input.GetMouseButtonDown(0)) { spectateIndex = (spectateIndex + 1) % aliveSurvivors.Count; UpdateSurvivorList(); } if (spectateIndex < aliveSurvivors.Count) { Transform t = aliveSurvivors[spectateIndex]; if (t != null) transform.position = t.position + new Vector3(0, 2f, 0); else UpdateSurvivorList(); } }
+    void SpectateUpdate()
+    {
+        if (aliveSurvivors.Count == 0) return;
+        if (Input.GetMouseButtonDown(0))
+        {
+            spectateIndex = (spectateIndex + 1) % aliveSurvivors.Count;
+            UpdateSurvivorList();
+        }
+        if (spectateIndex >= aliveSurvivors.Count) return;
+
+        Transform target = aliveSurvivors[spectateIndex];
+        if (target == null)
+        {
+            UpdateSurvivorList();
+            return;
+        }
+
+        // 시체 Transform은 고정하고 카메라만 관전 대상을 따라감 (Photon 위치 동기화 충돌 방지)
+        if (vcam != null)
+        {
+            vcam.Follow = target;
+            vcam.LookAt = target;
+        }
+    }
     void CheckGrounded()
     {
         if (groundedIgnoreTimer > 0f)
