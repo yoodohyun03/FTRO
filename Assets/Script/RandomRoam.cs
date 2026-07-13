@@ -132,6 +132,7 @@ public class RandomRoam : MonoBehaviourPun
                         agent.isStopped = false;
                         agent.SetDestination(currentSwarmTarget.position);
                         agent.speed = runSpeed;
+                        photonView.RPC(nameof(RPC_SetDestination), RpcTarget.Others, currentSwarmTarget.position);
                     }
                     timer = 0f;
                 }

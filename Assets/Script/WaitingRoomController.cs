@@ -582,12 +582,12 @@ public sealed class MatchStartController
         foreach (var p in players) if (p.ActorNumber == selectedSeekerActor) { validSelection = true; break; }
         if (!validSelection) selectedSeekerActor = players[Random.Range(0, players.Length)].ActorNumber;
 
-        for (int i = 0; i < players.Length; i++)
+        Hashtable roomProps = new Hashtable
         {
-            Hashtable props = new Hashtable();
-            props.Add(roleKey, players[i].ActorNumber == selectedSeekerActor ? "Seeker" : "Survivor");
-            players[i].SetCustomProperties(props);
-        }
+            { RoleAssignmentHelper.AssignedSeekerKey, selectedSeekerActor }
+        };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
+        RoleAssignmentHelper.TryApplyLocalRole(PhotonNetwork.CurrentRoom);
 
         yield return new WaitForSeconds(0.5f);
 

@@ -77,6 +77,18 @@ MonoBehaviour:
   - SyncState
   - SyncTimer
   - SyncSurvivorStatus
+  - RPC_SyncDisguise
+  - RPC_ApplyRole
+  - RPC_EliminateByBomb
+  - RPC_PlayExplosionFx
+  - RPC_RequestBombTransfer
+  - RPC_SyncBombFuse
+  - RPC_SyncBombHolder
+  - RPC_SyncBombMessage
+  - RPC_EndBombPassGame
+  - RPC_ShowBombHolderAlert
+  - RPC_ShowTransientCenterMessage
+  - RPC_SyncFinalPhase
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

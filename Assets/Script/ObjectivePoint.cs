@@ -82,7 +82,8 @@ public class ObjectivePoint : MonoBehaviourPunCallbacks, IPunObservable
             if (minimapIcon != null) minimapIcon.color = Color.gray;
             Debug.Log("[Objective] Terminal Completed!");
 
-            if (PhotonNetwork.IsMasterClient && GameManager.instance != null)
+            if (PhotonNetwork.IsMasterClient && GameManager.instance != null &&
+                GameModeTypeHelper.UsesObjectives(GameManager.CurrentGameMode))
             {
                 GameManager.instance.NotifyTerminalCompleted();
 

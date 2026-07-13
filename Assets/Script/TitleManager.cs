@@ -322,9 +322,11 @@ public class TitleManager : MonoBehaviourPunCallbacks
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
     {
-        // 술래 선택 변경 시 플레이어 목록 갱신
         if (propertiesThatChanged.ContainsKey(WaitingRoomController.SeekerSelectionKey))
             EnsureWaitingRoomController().RefreshPlayerList();
+
+        if (propertiesThatChanged.ContainsKey(RoleAssignmentHelper.AssignedSeekerKey))
+            RoleAssignmentHelper.TryApplyLocalRole(PhotonNetwork.CurrentRoom);
     }
 
     void UpdatePlayerList()

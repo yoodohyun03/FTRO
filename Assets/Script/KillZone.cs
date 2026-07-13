@@ -5,18 +5,16 @@ public class KillZone : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            PhotonView pv = other.GetComponent<PhotonView>();
-            if (pv != null && pv.IsMine)
-            {
-                PlayerMove pm = other.GetComponent<PlayerMove>();
-                if (pm != null && !pm.isDead)
-                {
-                    Debug.Log("[KillZone] Player fell! Catching them.");
-                    pv.RPC("GetCaught", RpcTarget.All);
-                }
-            }
-        }
+        if (!other.CompareTag("Player")) return;
+
+        PhotonView pv = other.GetComponent<PhotonView>() ?? other.GetComponentInParent<PhotonView>();
+        if (pv == null || !pv.IsMine) return;
+
+        PlayerMove pm = other.GetComponent<PlayerMove>() ?? other.GetComponentInParent<PlayerMove>();
+        if (pm == null || pm.isDead) return;
+        if (!RoleAssignmentHelper.IsAliveSurvivor(pm)) return;
+
+        Debug.Log("[KillZone] Survivor fell! Catching them.");
+        pv.RPC("GetCaught", RpcTarget.All);
     }
 }

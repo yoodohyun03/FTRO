@@ -20,15 +20,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.SendRate = 30;
         PhotonNetwork.SerializationRate = 15;
 
+        StartCoroutine(BootstrapSpawnRoutine());
+    }
+
+    IEnumerator BootstrapSpawnRoutine()
+    {
+        yield return RoleAssignmentHelper.EnsureLocalRoleRoutine();
+
         if (PhotonNetwork.InRoom)
-        {
             SpawnPlayer();
-        }
         else
-        {
-            // 씬 로드 직후 InRoom이 잠깐 false일 수 있으므로 재시도
-            StartCoroutine(WaitAndSpawn());
-        }
+            yield return WaitAndSpawn();
     }
 
     IEnumerator WaitAndSpawn()
@@ -62,8 +64,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        // WaitAndSpawn 보다 OnJoinedRoom이 먼저 오는 경우 대비
-        SpawnPlayer();
+        if (!hasSpawned)
+            StartCoroutine(BootstrapSpawnRoutine());
     }
 
     void SpawnPlayer()
@@ -160,4 +162,4 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         return false;
     }
-    }
+}

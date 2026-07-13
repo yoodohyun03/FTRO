@@ -49,4 +49,7 @@ public static class GameModeTypeHelper
     public static string GetDisplayName(GameModeType mode) => DisplayNames[(int)mode];
 
     public static string GetDisplayName(int index) => GetDisplayName(FromIndex(index));
+
+    /// <summary>일반 모드만 터미널·탈출구 목표를 사용합니다.</summary>
+    public static bool UsesObjectives(GameModeType mode) => mode == GameModeType.Normal;
 }
