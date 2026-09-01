@@ -14,7 +14,6 @@ public class EscapePoint : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        // Find Minimap Camera to match rotation
         MinimapFollow mf = Object.FindFirstObjectByType<MinimapFollow>();
         if (mf != null) minimapCamTransform = mf.transform;
 
@@ -28,19 +27,18 @@ public class EscapePoint : MonoBehaviourPunCallbacks
     {
         GameObject iconObj = new GameObject("MinimapIcon");
         iconObj.transform.SetParent(transform, false);
-        iconObj.transform.localPosition = Vector3.up * 20f; // Higher up
+        iconObj.transform.localPosition = Vector3.up * 20f;
         iconObj.transform.rotation = Quaternion.Euler(90, 0, 0);
-        iconObj.layer = 7; 
+        iconObj.layer = 7;
 
         minimapIcon = iconObj.AddComponent<SpriteRenderer>();
         minimapIcon.sprite = Resources.Load<Sprite>("EscapeIcon");
-        minimapIcon.color = new Color(0.3f, 0.3f, 0.3f, 0.5f); 
-        iconObj.transform.localScale = Vector3.one * 35f; 
+        minimapIcon.color = new Color(0.3f, 0.3f, 0.3f, 0.5f);
+        iconObj.transform.localScale = Vector3.one * 35f;
     }
 
     void Update()
-{
-        // Sync rotation with Minimap Camera
+    {
         if (minimapCamTransform != null && minimapIcon != null)
         {
             float camY = minimapCamTransform.eulerAngles.y;
@@ -48,47 +46,67 @@ public class EscapePoint : MonoBehaviourPunCallbacks
         }
 
         if (!isActive || !PhotonNetwork.IsMasterClient) return;
+        if (!GameModeTypeHelper.UsesObjectives(GameManager.CurrentGameMode)) return;
 
-        int aliveSurvivors = 0;
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach (var p in players)
-        {
-            PlayerMove pm = p.GetComponent<PlayerMove>();
-            if (pm != null && !pm.isDead && pm.myRole != "Seeker")
-            {
-                aliveSurvivors++;
-            }
-        }
+        PruneSurvivorsInZone();
 
+        int aliveSurvivors = CountAliveSurvivors();
         if (!hasTriggeredWin && aliveSurvivors > 0 && survivorsInZone.Count >= aliveSurvivors)
         {
             hasTriggeredWin = true;
             if (GameManager.instance != null)
-                GameManager.instance.photonView.RPC("RPC_GameOver", RpcTarget.All, "Survivors Escaped!");
+                GameManager.instance.photonView.RPC("RPC_GameOver", RpcTarget.All, "Survivors Escaped!\nSurvivor Victory!");
         }
-}
+    }
+
+    int CountAliveSurvivors()
+    {
+        int alive = 0;
+        foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            PlayerMove pm = p.GetComponent<PlayerMove>();
+            if (RoleAssignmentHelper.IsAliveSurvivor(pm))
+                alive++;
+        }
+        return alive;
+    }
+
+    void PruneSurvivorsInZone()
+    {
+        for (int i = survivorsInZone.Count - 1; i >= 0; i--)
+        {
+            PhotonView pv = survivorsInZone[i];
+            if (pv == null)
+            {
+                survivorsInZone.RemoveAt(i);
+                continue;
+            }
+
+            PlayerMove pm = pv.GetComponent<PlayerMove>();
+            if (!RoleAssignmentHelper.IsAliveSurvivor(pm))
+                survivorsInZone.RemoveAt(i);
+        }
+    }
 
     void OnTriggerEnter(Collider other)
     {
-        if (!isActive) return;
-        if (other.CompareTag("Player"))
-        {
-            PlayerMove pm = other.GetComponent<PlayerMove>();
-            if (pm != null && !pm.isDead && pm.myRole != "Seeker")
-            {
-                PhotonView pv = other.GetComponent<PhotonView>();
-                if (!survivorsInZone.Contains(pv)) survivorsInZone.Add(pv);
-            }
-        }
+        if (!isActive || !other.CompareTag("Player")) return;
+
+        PlayerMove pm = other.GetComponent<PlayerMove>() ?? other.GetComponentInParent<PlayerMove>();
+        if (!RoleAssignmentHelper.IsAliveSurvivor(pm)) return;
+
+        PhotonView pv = other.GetComponent<PhotonView>() ?? other.GetComponentInParent<PhotonView>();
+        if (pv != null && !survivorsInZone.Contains(pv))
+            survivorsInZone.Add(pv);
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            PhotonView pv = other.GetComponent<PhotonView>();
-            if (survivorsInZone.Contains(pv)) survivorsInZone.Remove(pv);
-        }
+        if (!other.CompareTag("Player")) return;
+
+        PhotonView pv = other.GetComponent<PhotonView>() ?? other.GetComponentInParent<PhotonView>();
+        if (pv != null && survivorsInZone.Contains(pv))
+            survivorsInZone.Remove(pv);
     }
 
     [PunRPC]

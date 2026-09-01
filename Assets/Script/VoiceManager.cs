@@ -86,14 +86,16 @@ public class VoiceManager : MonoBehaviour
             gameObject.AddComponent<VoiceStatusUI>();
     }
 
-    void OnEnable()
+    public override void OnEnable()
     {
+        base.OnEnable();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void OnDisable()
+    public override void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        base.OnDisable();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)

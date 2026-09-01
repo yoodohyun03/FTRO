@@ -16,6 +16,7 @@ private const string RoleKey = "Role";
     public GameState currentState = GameState.Ready;
 
     public static GameManager instance;
+    public static GameModeType CurrentGameMode { get; private set; } = GameModeType.Normal;
 
     [Header("탈출 목표 설정")]
     public int totalObjectives = 3;
@@ -45,46 +46,227 @@ private const string RoleKey = "Role";
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI objectiveStatusText;
     public TextMeshProUGUI roleIndicatorText;
+    public TextMeshProUGUI survivorStatusText;
 
     [Header("게임 설정")]
     public float playTime = 600f;
+    public float bombPassPlayTime = 300f;
+
+    public float ActivePlayTime =>
+        BombPassManager.IsModeActive ? bombPassPlayTime : playTime;
 
     [Header("승리 조건 설정")]
     public int survivorCount = -1; // -1 = 미초기화 (게임 시작 전 검거 오판 방지)
+    private int initialSurvivorCount = -1;
 
     private double gameStartNetworkTime = 0;
+    private Coroutine masterTimerRoutine;
+    private bool spawnRoutineStarted;
 
     void Start()
     {
+        survivorCount = -1;
+        initialSurvivorCount = -1;
+
+        CurrentGameMode = GameModeTypeHelper.FromRoom(PhotonNetwork.CurrentRoom);
+        Debug.Log("[GameManager] 게임 모드: " + GameModeTypeHelper.GetDisplayName(CurrentGameMode));
+
+        if (PropDisguiseController.IsModeActive)
+            Debug.Log("[GameManager] 사물 변신 모드 — 생존자 [G] 변신 / [R] 회전");
+        if (BombPassManager.IsModeActive)
+            Debug.Log("[GameManager] 폭탄 돌리기 모드 — 5분 내 폭탄을 넘기세요. 종료 시 보유자 패배");
+
+        EnsureModeManager();
+
         completedObjectives = 0;
         UpdateObjectiveStatusUI();
         EnsureRoleIndicator();
         if (centerText != null) centerText.text = "";
-        if (timerText != null) timerText.text = FormatTime(playTime);
+        if (timerText != null) timerText.text = FormatTime(ActivePlayTime);
+        if (!GameModeTypeHelper.UsesObjectives(CurrentGameMode) && objectiveStatusText != null)
+            objectiveStatusText.gameObject.SetActive(false);
+
+        StartCoroutine(SetupHudLayoutRoutine());
 
         if (PhotonNetwork.IsMasterClient)
-{
+        {
+            StartCoroutine(EnsureSurvivorCountWhenReady());
             StartCoroutine(SafeSpawnRoutine());
         }
     }
 
+    void EnsureModeManager()
+    {
+        if (!BombPassManager.IsModeActive) return;
+
+        if (GetComponent<BombPassManager>() == null)
+            gameObject.AddComponent<BombPassManager>();
+
+        PhotonView pv = GetComponent<PhotonView>();
+        if (pv != null)
+            pv.RefreshRpcMonoBehaviourCache();
+    }
+
+    IEnumerator StartBombPassWhenReady()
+    {
+        float timeout = 3f;
+        while (timeout > 0f &&
+               RoleAssignmentHelper.ResolveBombHolderActorNumber(PhotonNetwork.CurrentRoom) < 0)
+        {
+            timeout -= Time.deltaTime;
+            yield return null;
+        }
+
+        float stateTimeout = 2f;
+        while (stateTimeout > 0f && currentState != GameState.Playing)
+        {
+            stateTimeout -= Time.deltaTime;
+            yield return null;
+        }
+
+        if (!BombPassManager.IsModeActive || currentState != GameState.Playing) yield break;
+
+        BombPassManager mgr = GetComponent<BombPassManager>();
+        if (mgr == null) mgr = gameObject.AddComponent<BombPassManager>();
+        GetComponent<PhotonView>()?.RefreshRpcMonoBehaviourCache();
+        mgr.EnsureBombTimerUi();
+        mgr.StartBombMode();
+    }
+
+    IEnumerator EnsureSurvivorCountWhenReady()
+    {
+        float timeout = 6f;
+        while (timeout > 0f && survivorCount < 0)
+        {
+            if (AllPlayersHaveRole())
+            {
+                InitializeSurvivorCount();
+                yield break;
+            }
+
+            timeout -= 0.2f;
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        if (survivorCount < 0 && PhotonNetwork.IsMasterClient)
+            InitializeSurvivorCount();
+    }
+
+    static bool AllPlayersHaveRole()
+    {
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (!player.CustomProperties.ContainsKey(RoleKey))
+                return false;
+        }
+        return PhotonNetwork.PlayerList.Length > 0;
+    }
+
     IEnumerator SafeSpawnRoutine()
     {
+        if (spawnRoutineStarted) yield break;
+        spawnRoutineStarted = true;
+
+        InitializeSurvivorCount();
         yield return new WaitForSeconds(0.5f);
         
         try 
         {
-            SpawnObjectives();
+            if (GameModeTypeHelper.UsesObjectives(CurrentGameMode))
+                SpawnObjectives();
+            else
+                Debug.Log($"[GameManager] {GameModeTypeHelper.GetDisplayName(CurrentGameMode)} — 터미널/탈출구 스폰 생략");
         } 
         catch (System.Exception e) 
         {
             Debug.LogError($"[GameManager] SpawnObjectives 에러: {e.Message}\n{e.StackTrace}");
         }
 
-        // GameFlowRoutine 시작 전 미리 초기화 → Setup 중 검거돼도 카운트 오류 방지
-        InitializeSurvivorCount();
+        // GameFlowRoutine 시작 전 재확인
+        if (survivorCount < 0)
+            InitializeSurvivorCount();
 
-        StartCoroutine(GameFlowRoutine());
+        StartMasterTimer(ActivePlayTime);
+    }
+
+    void StartMasterTimer(float remainingSeconds)
+    {
+        StopMasterTimer();
+        if (!PhotonNetwork.IsMasterClient) return;
+        masterTimerRoutine = StartCoroutine(MasterTimerRoutine(remainingSeconds));
+    }
+
+    void StopMasterTimer()
+    {
+        if (masterTimerRoutine != null)
+        {
+            StopCoroutine(masterTimerRoutine);
+            masterTimerRoutine = null;
+        }
+    }
+
+    IEnumerator MasterTimerRoutine(float remainingSeconds)
+    {
+        if (currentState != GameState.Playing)
+        {
+            SetState(GameState.Playing);
+            photonView.RPC("SyncRoleIndicator", RpcTarget.All);
+
+            gameStartNetworkTime = PhotonNetwork.Time;
+            if (PhotonNetwork.CurrentRoom != null)
+            {
+                PhotonNetwork.CurrentRoom.SetCustomProperties(
+                    new ExitGames.Client.Photon.Hashtable { { "GST", gameStartNetworkTime } });
+            }
+
+            photonView.RPC("SyncMessage", RpcTarget.All, "");
+            if (BombPassManager.IsModeActive)
+                StartCoroutine(StartBombPassWhenReady());
+        }
+
+        float currentTime = remainingSeconds;
+        photonView.RPC("SyncTimer", RpcTarget.All, FormatTime(currentTime));
+
+        bool finalPhaseTriggered = false;
+        if (BombPassManager.IsModeActive && currentTime <= BombPassManager.FinalPhaseThresholdSeconds)
+        {
+            finalPhaseTriggered = true;
+            if (BombPassManager.instance != null)
+                BombPassManager.instance.TryActivateFinalPhase();
+        }
+
+        while (currentState == GameState.Playing && currentTime > 0f)
+        {
+            yield return new WaitForSeconds(1f);
+            if (!PhotonNetwork.IsMasterClient) yield break;
+
+            currentTime -= 1f;
+            photonView.RPC("SyncTimer", RpcTarget.All, FormatTime(currentTime));
+
+            if (BombPassManager.IsModeActive && !finalPhaseTriggered && currentTime <= BombPassManager.FinalPhaseThresholdSeconds)
+            {
+                finalPhaseTriggered = true;
+                if (BombPassManager.instance != null)
+                    BombPassManager.instance.TryActivateFinalPhase();
+            }
+        }
+
+        if (!PhotonNetwork.IsMasterClient) yield break;
+
+        if (currentState == GameState.Playing && currentTime <= 0f)
+        {
+            if (BombPassManager.IsModeActive && BombPassManager.instance != null)
+                BombPassManager.instance.HandleGameTimeExpired();
+            else
+                EndWithMessage("Time Out!\nSurvivor Victory!");
+        }
+    }
+
+    public void EndWithMessage(string message)
+    {
+        StopMasterTimer();
+        SetState(GameState.End);
+        photonView.RPC("SyncMessage", RpcTarget.All, message);
     }
 
     void SpawnObjectives()
@@ -195,37 +377,16 @@ private const string RoleKey = "Role";
             }
         }
         survivorCount = count;
+        initialSurvivorCount = count;
         Debug.Log("초기 생존자 수: " + survivorCount);
+        photonView.RPC("SyncSurvivorStatus", RpcTarget.All, survivorCount, initialSurvivorCount);
     }
 
     IEnumerator GameFlowRoutine()
     {
-        // 본 게임 즉시 시작 — 10분 타이머 바로 표시
-        SetState(GameState.Playing);
-        photonView.RPC("SyncRoleIndicator", RpcTarget.All);
-
-        gameStartNetworkTime = PhotonNetwork.Time;
-        PhotonNetwork.CurrentRoom.SetCustomProperties(
-            new ExitGames.Client.Photon.Hashtable { { "GST", gameStartNetworkTime } });
-
-        photonView.RPC("SyncMessage", RpcTarget.All, "");
-        photonView.RPC("SyncTimer", RpcTarget.All, FormatTime(playTime));
-
-        float currentTime = playTime;
-
-        while (currentState == GameState.Playing && currentTime > 0)
-        {
-            yield return new WaitForSeconds(1f);
-            currentTime -= 1f;
-            photonView.RPC("SyncTimer", RpcTarget.All, FormatTime(currentTime));
-        }
-
-        // 4. 게임 끝!
-        if (currentState == GameState.Playing && currentTime <= 0)
-        {
-            SetState(GameState.End);
-            photonView.RPC("SyncMessage", RpcTarget.All, "Time Out!\nSurvivor Victory!");
-        }
+        // Legacy entry — MasterTimerRoutine 사용
+        StartMasterTimer(ActivePlayTime);
+        yield break;
     }
 
     public void SetState(GameState newState)
@@ -237,6 +398,7 @@ private const string RoleKey = "Role";
     public void NotifyTerminalCompleted()
     {
         if (!PhotonNetwork.IsMasterClient) return;
+        if (!GameModeTypeHelper.UsesObjectives(CurrentGameMode)) return;
 
         completedObjectives++;
         UpdateObjectiveStatusUI();
@@ -279,13 +441,20 @@ private const string RoleKey = "Role";
     [PunRPC]
     public void OnObjectiveCompleted()
     {
-        // 구버전 호환용 — 실제 처리는 NotifyTerminalCompleted에서만 수행
         if (!PhotonNetwork.IsMasterClient) return;
+        if (!GameModeTypeHelper.UsesObjectives(GameManager.CurrentGameMode)) return;
         NotifyTerminalCompleted();
     }
 
     void UpdateObjectiveStatusUI()
     {
+        if (!GameModeTypeHelper.UsesObjectives(CurrentGameMode))
+        {
+            if (objectiveStatusText != null)
+                objectiveStatusText.gameObject.SetActive(false);
+            return;
+        }
+
         if (objectiveStatusText == null)
         {
             GameObject obj = GameObject.Find("ObjectiveStatusText");
@@ -307,65 +476,108 @@ private const string RoleKey = "Role";
     [PunRPC]
     public void RPC_GameOver(string message)
     {
+        StopMasterTimer();
         StopAllCoroutines();
         SetState(GameState.End);
-        photonView.RPC("SyncMessage", RpcTarget.All, message);
+        ShowGameOver(message);
     }
 
     [PunRPC]
     public void OnSurvivorCaught()
     {
         if (!PhotonNetwork.IsMasterClient) return;
-
-        // 아직 초기화 전이면(Setup 단계) 무시
         if (survivorCount < 0) return;
 
-        survivorCount--;
+        survivorCount = CountAliveSurvivorsInRoom();
         Debug.Log("생존자 검거! 남은 수: " + survivorCount);
+        photonView.RPC("SyncSurvivorStatus", RpcTarget.All, survivorCount, initialSurvivorCount);
 
-        if (survivorCount <= 0 && currentState == GameState.Playing)
-        {
-            StopAllCoroutines();
-            SetState(GameState.End);
-            photonView.RPC("SyncMessage", RpcTarget.All, "All Caught!\nSeeker Victory!");
-        }
+        if (survivorCount <= 0 && currentState == GameState.Playing && !BombPassManager.IsModeActive)
+            EndWithMessage("All Caught!\nSeeker Victory!");
     }
 
-    // 마스터 클라이언트 교체 시 게임 진행 인계
+    public void RefreshSurvivorCount()
+    {
+        if (!PhotonNetwork.IsMasterClient || survivorCount < 0) return;
+
+        survivorCount = CountAliveSurvivorsInRoom();
+        photonView.RPC("SyncSurvivorStatus", RpcTarget.All, survivorCount, initialSurvivorCount);
+    }
+
+    int CountAliveSurvivorsInRoom()
+    {
+        int alive = 0;
+        foreach (PlayerMove pm in Object.FindObjectsByType<PlayerMove>(FindObjectsSortMode.None))
+        {
+            if (RoleAssignmentHelper.IsAliveSurvivor(pm))
+                alive++;
+        }
+        return alive;
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        if (!PhotonNetwork.IsMasterClient || survivorCount < 0) return;
+
+        if (!RoleAssignmentHelper.IsSurvivor(otherPlayer)) return;
+
+        bool wasAlive = true;
+        foreach (PlayerMove pm in Object.FindObjectsByType<PlayerMove>(FindObjectsSortMode.None))
+        {
+            if (pm.photonView != null && pm.photonView.Owner == otherPlayer)
+            {
+                wasAlive = !pm.isDead;
+                break;
+            }
+        }
+
+        if (!wasAlive) return;
+
+        survivorCount = CountAliveSurvivorsInRoom();
+        photonView.RPC("SyncSurvivorStatus", RpcTarget.All, survivorCount, initialSurvivorCount);
+
+        if (survivorCount <= 0 && currentState == GameState.Playing && !BombPassManager.IsModeActive)
+            EndWithMessage("All Caught!\nSeeker Victory!");
+    }
+
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
+        StopMasterTimer();
+
         if (!PhotonNetwork.IsMasterClient) return;
         Debug.Log("[GameManager] 마스터 교체됨 — 게임 진행 인계");
 
         if (currentState == GameState.Playing)
-            StartCoroutine(TakeoverTimerCoroutine());
+        {
+            float remaining = ActivePlayTime;
+            if (PhotonNetwork.CurrentRoom != null &&
+                PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("GST", out object startObj))
+            {
+                double elapsed = PhotonNetwork.Time - (double)startObj;
+                remaining = Mathf.Max(0f, ActivePlayTime - (float)elapsed);
+            }
+
+            StartMasterTimer(remaining);
+
+            if (BombPassManager.IsModeActive)
+            {
+                EnsureModeManager();
+                BombPassManager mgr = GetComponent<BombPassManager>();
+                if (mgr != null && !mgr.IsInitialized)
+                    StartCoroutine(StartBombPassWhenReady());
+            }
+        }
         else if (currentState == GameState.Ready || currentState == GameState.Setup)
-            StartCoroutine(SafeSpawnRoutine());
+        {
+            if (survivorCount < 0 && !spawnRoutineStarted)
+                StartCoroutine(SafeSpawnRoutine());
+        }
     }
 
     IEnumerator TakeoverTimerCoroutine()
     {
-        float remaining = playTime;
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("GST", out object startObj))
-        {
-            double elapsed = PhotonNetwork.Time - (double)startObj;
-            remaining = Mathf.Max(0, playTime - (float)elapsed);
-        }
-
-        photonView.RPC("SyncTimer", RpcTarget.All, FormatTime(remaining));
-
-        while (currentState == GameState.Playing && remaining > 0)
-        {
-            yield return new WaitForSeconds(1f);
-            remaining -= 1f;
-            photonView.RPC("SyncTimer", RpcTarget.All, FormatTime(remaining));
-        }
-
-        if (currentState == GameState.Playing && remaining <= 0)
-        {
-            SetState(GameState.End);
-            photonView.RPC("SyncMessage", RpcTarget.All, "Time Out!\nSurvivor Victory!");
-        }
+        // Legacy — MasterTimerRoutine으로 대체
+        yield break;
     }
 
     [PunRPC]
@@ -379,14 +591,25 @@ private const string RoleKey = "Role";
     public void SyncMessage(string msg)
     {
         if (centerText != null) centerText.text = msg;
-        if (msg.Contains("Victory") || msg.Contains("Time Out"))
+        if (ShouldShowGameOverPanel(msg))
+            ShowGameOver(msg);
+    }
+
+    static bool ShouldShowGameOverPanel(string msg)
+    {
+        if (string.IsNullOrEmpty(msg)) return false;
+        return msg.Contains("Victory") || msg.Contains("Time Out") || msg.Contains("Escaped")
+            || msg.Contains("All Caught") || msg.Contains("패배") || msg.Contains("승리");
+    }
+
+    void ShowGameOver(string msg)
+    {
+        if (centerText != null) centerText.text = msg;
+        if (gameOverPanel != null)
         {
-            if (gameOverPanel != null)
-            {
-                gameOverPanel.SetActive(true);
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
+            gameOverPanel.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 
@@ -394,6 +617,127 @@ private const string RoleKey = "Role";
     public void SyncTimer(string timeMsg)
     {
         if (timerText != null) timerText.text = timeMsg;
+    }
+
+    [PunRPC]
+    public void SyncSurvivorStatus(int alive, int total)
+    {
+        survivorCount = alive;
+        initialSurvivorCount = total;
+        UpdateSurvivorStatusUI();
+    }
+
+    IEnumerator SetupHudLayoutRoutine()
+    {
+        for (int i = 0; i < 12; i++)
+        {
+            if (GameObject.Find("MinimapUI_Runtime") != null)
+                break;
+            yield return null;
+        }
+
+        LayoutHudUnderMinimap();
+    }
+
+    void LayoutHudUnderMinimap()
+    {
+        const float defaultLeft = 20f;
+        const float defaultTop = 20f;
+        const float defaultSize = 310f;
+        const float rowGap = 8f;
+        const float timerHeight = 48f;
+        const float survivorHeight = 34f;
+
+        float left = defaultLeft;
+        float topInset = defaultTop;
+        float minimapSize = defaultSize;
+
+        GameObject minimapUi = GameObject.Find("MinimapUI_Runtime");
+        if (minimapUi != null)
+        {
+            RectTransform miniRect = minimapUi.GetComponent<RectTransform>();
+            if (miniRect != null)
+            {
+                left = miniRect.anchoredPosition.x;
+                topInset = -miniRect.anchoredPosition.y;
+                minimapSize = miniRect.sizeDelta.y;
+            }
+        }
+
+        float y = -(topInset + minimapSize + rowGap);
+        float centerX = left + minimapSize * 0.5f;
+        Canvas canvas = FindOverlayCanvas();
+        if (canvas == null) return;
+
+        if (timerText != null)
+        {
+            RectTransform timerRect = timerText.rectTransform;
+            if (timerRect.parent != canvas.transform)
+                timerRect.SetParent(canvas.transform, false);
+
+            timerRect.anchorMin = new Vector2(0f, 1f);
+            timerRect.anchorMax = new Vector2(0f, 1f);
+            timerRect.pivot = new Vector2(0.5f, 1f);
+            timerRect.anchoredPosition = new Vector2(centerX, y);
+            timerRect.sizeDelta = new Vector2(minimapSize, timerHeight);
+            timerText.fontSize = 42f;
+            timerText.fontStyle = FontStyles.Bold;
+            timerText.alignment = TextAlignmentOptions.Center;
+            timerText.raycastTarget = false;
+            y -= timerHeight + rowGap;
+        }
+
+        EnsureSurvivorStatusText(canvas.transform, centerX, y, minimapSize, survivorHeight);
+        UpdateSurvivorStatusUI();
+
+        if (timerText != null) timerText.transform.SetAsLastSibling();
+        if (survivorStatusText != null) survivorStatusText.transform.SetAsLastSibling();
+    }
+
+    void EnsureSurvivorStatusText(Transform parent, float centerX, float y, float width, float height)
+    {
+        if (survivorStatusText == null)
+        {
+            Transform existing = parent.Find("SurvivorStatusText");
+            if (existing != null)
+                survivorStatusText = existing.GetComponent<TextMeshProUGUI>();
+        }
+
+        if (survivorStatusText == null)
+        {
+            GameObject obj = new GameObject("SurvivorStatusText");
+            obj.transform.SetParent(parent, false);
+            survivorStatusText = obj.AddComponent<TextMeshProUGUI>();
+        }
+
+        RectTransform rect = survivorStatusText.rectTransform;
+        rect.anchorMin = new Vector2(0f, 1f);
+        rect.anchorMax = new Vector2(0f, 1f);
+        rect.pivot = new Vector2(0.5f, 1f);
+        rect.anchoredPosition = new Vector2(centerX, y);
+        rect.sizeDelta = new Vector2(width, height);
+
+        survivorStatusText.fontSize = 28f;
+        survivorStatusText.fontStyle = FontStyles.Bold;
+        survivorStatusText.alignment = TextAlignmentOptions.Center;
+        survivorStatusText.color = new Color(0.92f, 0.96f, 1f, 1f);
+        survivorStatusText.raycastTarget = false;
+
+        if (timerText != null && timerText.font != null)
+            survivorStatusText.font = timerText.font;
+    }
+
+    void UpdateSurvivorStatusUI()
+    {
+        if (survivorStatusText == null) return;
+        if (initialSurvivorCount < 0)
+        {
+            survivorStatusText.text = string.Empty;
+            return;
+        }
+
+        int alive = Mathf.Max(0, survivorCount);
+        survivorStatusText.text = $"생존자 : ({alive} / {initialSurvivorCount})";
     }
 
     static string FormatTime(float seconds)
@@ -439,8 +783,6 @@ private const string RoleKey = "Role";
     [PunRPC]
     public void SyncRoleIndicator()
     {
-        if (centerText != null) centerText.text = "";
-
         if (!PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(RoleKey))
         {
             StartCoroutine(ApplyRoleIndicatorWhenReady());
@@ -503,9 +845,16 @@ private const string RoleKey = "Role";
         }
 
         string myRole = (string)PhotonNetwork.LocalPlayer.CustomProperties[RoleKey];
-        roleIndicatorText.text = myRole == SeekerRole
-            ? "<color=#FF6B6B>술래</color>"
-            : "<color=#66CCFF>생존자</color>";
+        bool hasBomb = BombPassManager.IsModeActive &&
+                       BombPassManager.instance != null &&
+                       PhotonNetwork.LocalPlayer.ActorNumber == BombPassManager.instance.BombHolderActor;
+
+        if (BombPassManager.IsModeActive && hasBomb)
+            roleIndicatorText.text = "<color=#FF6B6B>폭탄 💣</color>";
+        else if (myRole == SeekerRole)
+            roleIndicatorText.text = "<color=#FF6B6B>술래</color>";
+        else
+            roleIndicatorText.text = "<color=#66CCFF>생존자</color>";
     }
 
     static Canvas FindOverlayCanvas()

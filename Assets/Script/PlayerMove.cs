@@ -40,6 +40,10 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
 
     [Header("관전 모드 설정")]
     public bool isDead = false;
+    private bool deadStateApplied;
+    private Vector3 frozenDeathPosition;
+    private Quaternion frozenDeathRotation;
+    private PhotonTransformView photonTransformView;
     private List<Transform> aliveSurvivors = new List<Transform>();
     private int spectateIndex = 0;
 
@@ -110,7 +114,13 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             if (isDead != deadState)
             {
                 isDead = deadState;
-                if (isDead) SyncDeadState();
+                if (isDead)
+                {
+                    PropDisguiseController disguise = GetComponent<PropDisguiseController>();
+                    if (disguise != null)
+                        disguise.ReleaseDisguiseOnDeath();
+                    ApplyDeadState();
+                }
             }
         }
     }
@@ -119,6 +129,8 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+        photonTransformView = GetComponent<PhotonTransformView>();
+        if (anim != null) anim.applyRootMotion = false;
         if (anim == null) Debug.LogError($"[{gameObject.name}] Animator 컴포넌트를 찾을 수 없습니다!");
         if (rb == null) Debug.LogError($"[{gameObject.name}] Rigidbody 컴포넌트를 찾을 수 없습니다!");
 
@@ -136,12 +148,38 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             photonView.RefreshRpcMonoBehaviourCache();
         }
 
+        EnsureModeComponents();
+
         if (photonView.IsMine)
         {
-            StartCoroutine(ShowRoleSequence());
+            if (!BombPassManager.IsModeActive)
+                StartCoroutine(ShowRoleSequence());
             StartCoroutine(InitializeCameraWithDelay());
             CreateInteractionUI();
         }
+    }
+
+    void EnsureModeComponents()
+    {
+        PropDisguiseController disguise = GetComponent<PropDisguiseController>();
+
+        if (PropDisguiseController.IsModeActive && myRole == RoleAssignmentHelper.SurvivorRole)
+        {
+            if (disguise == null)
+            {
+                gameObject.AddComponent<PropDisguiseController>();
+                photonView.RefreshRpcMonoBehaviourCache();
+            }
+        }
+        else if (disguise != null)
+        {
+            disguise.ReleaseDisguiseOnDeath();
+            Destroy(disguise);
+            photonView.RefreshRpcMonoBehaviourCache();
+        }
+
+        if (BombPassManager.IsModeActive && GetComponent<BombPassBombVisual>() == null)
+            gameObject.AddComponent<BombPassBombVisual>();
     }
 
     void CreateInteractionUI()
@@ -332,12 +370,21 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     {
         if (!photonView.IsMine)
         {
-            if (isDead) SyncDeadState();
+            if (isDead)
+            {
+                if (!deadStateApplied) ApplyDeadState();
+                else EnforceDeadFreeze();
+            }
             UpdateAnimation();
             return;
         }
 
-        if (isDead) { SpectateUpdate(); return; }
+        if (isDead)
+        {
+            EnforceDeadFreeze();
+            SpectateUpdate();
+            return;
+        }
 
         EnsureRoleAssigned();
 
@@ -413,6 +460,12 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         wasGrounded = isGrounded; // 마지막에 업데이트해야 착지 판정이 정확함
     }
 
+    void FixedUpdate()
+    {
+        if (isDead && deadStateApplied)
+            EnforceDeadFreeze();
+    }
+
     void EnsureRoleAssigned()
     {
         if (!string.IsNullOrEmpty(myRole) || photonView.Owner == null) return;
@@ -424,10 +477,71 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         else
             gameObject.AddComponent<SurvivorItemHandler>();
         photonView.RefreshRpcMonoBehaviourCache();
+        EnsureModeComponents();
+    }
+
+    [PunRPC]
+    public void RPC_ApplyRole(string newRole)
+    {
+        ApplyRoleInternal(newRole);
+    }
+
+    [PunRPC]
+    public void RPC_EliminateByBomb()
+    {
+        if (isDead) return;
+
+        PropDisguiseController disguise = GetComponent<PropDisguiseController>();
+        if (disguise != null)
+            disguise.ReleaseDisguiseOnDeath();
+
+        isDead = true;
+        ApplyDeadState();
+        UpdateSurvivorList();
+    }
+
+    void ApplyRoleInternal(string newRole)
+    {
+        if (string.IsNullOrEmpty(newRole)) return;
+
+        myRole = newRole;
+
+        if (photonView.IsMine)
+        {
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+            {
+                { RoleKey, newRole }
+            };
+            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+        }
+
+        SeekerItemHandler seekerHandler = GetComponent<SeekerItemHandler>();
+        SurvivorItemHandler survivorHandler = GetComponent<SurvivorItemHandler>();
+
+        if (myRole == SeekerRole)
+        {
+            if (survivorHandler != null) Destroy(survivorHandler);
+            if (seekerHandler == null) gameObject.AddComponent<SeekerItemHandler>();
+        }
+        else
+        {
+            if (seekerHandler != null) Destroy(seekerHandler);
+            if (survivorHandler == null) gameObject.AddComponent<SurvivorItemHandler>();
+        }
+
+        photonView.RefreshRpcMonoBehaviourCache();
+        EnsureModeComponents();
+
+        BombPassBombVisual bombVisual = GetComponent<BombPassBombVisual>();
+        if (bombVisual != null) bombVisual.Refresh();
+
+        if (photonView.IsMine && GameManager.instance != null)
+            GameManager.instance.photonView.RPC("SyncRoleIndicator", RpcTarget.All);
     }
 
     bool CanInteractWithObjectives()
     {
+        if (!GameModeTypeHelper.UsesObjectives(GameManager.CurrentGameMode)) return false;
         if (myRole == SeekerRole || isDead || !photonView.IsMine) return false;
         if (GameManager.instance != null && GameManager.instance.currentState != GameManager.GameState.Playing)
             return false;
@@ -511,6 +625,9 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     void HandleNoiseDetection()
     {
         if (myRole == SeekerRole || isDead) return;
+
+        PropDisguiseController disguise = GetComponent<PropDisguiseController>();
+        if (disguise != null && disguise.IsDisguised) return;
 
         bool isRun = Input.GetKey(KeyCode.LeftShift);
         bool hasInput = (currentH != 0 || currentV != 0);
@@ -657,7 +774,11 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             
             if (!isAlt && moveDir != Vector3.zero) transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 540f);
             
-            float speed = isRun ? (myRole == SeekerRole ? seekerRunSpeed : survivorRunSpeed) : walkSpeed; 
+            float speed = isRun ? (myRole == SeekerRole ? seekerRunSpeed : survivorRunSpeed) : walkSpeed;
+            if (BombPassManager.ShouldBoostSeekerSpeed && myRole == SeekerRole)
+                speed *= BombPassManager.instance != null
+                    ? BombPassManager.instance.finalPhaseSpeedMultiplier
+                    : 1.45f;
             Vector3 targetVel = moveDir * speed;
             
             if (rb != null)
@@ -761,10 +882,16 @@ float curH = anim.GetFloat("Horizontal");
             // 생존자(플레이어) 적중
             if (hit.collider.CompareTag("Player"))
             {
-                PhotonView tv = hit.collider.GetComponent<PhotonView>();
-                PlayerMove tp = hit.collider.GetComponent<PlayerMove>();
-                if (tv != null && !tv.IsMine && tp != null && !tp.isDead)
+                PhotonView tv = hit.collider.GetComponent<PhotonView>() ?? hit.collider.GetComponentInParent<PhotonView>();
+                PlayerMove tp = hit.collider.GetComponent<PlayerMove>() ?? hit.collider.GetComponentInParent<PlayerMove>();
+                if (tv != null && !tv.IsMine && tp != null && RoleAssignmentHelper.IsAliveSurvivor(tp))
                 {
+                    if (BombPassManager.IsModeActive && BombPassManager.instance != null)
+                    {
+                        BombPassManager.instance.RequestBombTransfer(tv.ViewID, photonView.ViewID);
+                        return true;
+                    }
+
                     tv.RPC("GetCaught", RpcTarget.All);
                     return true;
                 }
@@ -832,22 +959,75 @@ void RPC_PlayPunchAnimation()
     [PunRPC] 
     public void GetCaught() 
     { 
-        if (isDead) return; 
+        if (isDead) return;
+        if (BombPassManager.IsModeActive) return;
+        EnsureRoleAssigned();
+        if (myRole == SeekerRole) return;
+
+        PropDisguiseController disguise = GetComponent<PropDisguiseController>();
+        if (disguise != null)
+            disguise.ReleaseDisguiseOnDeath();
+
         isDead = true; 
-        SyncDeadState();
-        if (PhotonNetwork.IsMasterClient && GameManager.instance != null) GameManager.instance.photonView.RPC("OnSurvivorCaught", RpcTarget.MasterClient); 
+        ApplyDeadState();
+
+        if (PhotonNetwork.IsMasterClient && GameManager.instance != null)
+            GameManager.instance.photonView.RPC("OnSurvivorCaught", RpcTarget.MasterClient); 
         UpdateSurvivorList(); 
     }
 
-    void SyncDeadState()
+    void ApplyDeadState()
     {
-        // 콜라이더는 즉시 비활성화 (중복 피격 방지)
-        Collider c = GetComponent<Collider>();
-        if (c != null) c.enabled = false;
+        if (deadStateApplied) return;
+        deadStateApplied = true;
 
-        // 사망 애니메이션 재생 후 캐릭터 숨김
-        if (anim != null) anim.SetBool("IsDead", true);
+        frozenDeathPosition = transform.position;
+        frozenDeathRotation = transform.rotation;
+
+        foreach (Collider col in GetComponentsInChildren<Collider>())
+            col.enabled = false;
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.useGravity = false;
+            rb.isKinematic = true;
+            rb.position = frozenDeathPosition;
+            rb.rotation = frozenDeathRotation;
+        }
+
+        if (anim != null)
+        {
+            anim.applyRootMotion = false;
+            anim.SetBool("IsDead", true);
+        }
+
+        if (photonTransformView != null)
+            photonTransformView.enabled = false;
+
+        EnforceDeadFreeze();
         StartCoroutine(HideAfterDeathAnimation());
+    }
+
+    void EnforceDeadFreeze()
+    {
+        if (!deadStateApplied) return;
+
+        transform.SetPositionAndRotation(frozenDeathPosition, frozenDeathRotation);
+
+        if (rb != null)
+        {
+            if (!rb.isKinematic)
+            {
+                rb.isKinematic = true;
+                rb.useGravity = false;
+            }
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.position = frozenDeathPosition;
+            rb.rotation = frozenDeathRotation;
+        }
     }
 
     IEnumerator HideAfterDeathAnimation()
@@ -857,8 +1037,41 @@ void RPC_PlayPunchAnimation()
         Renderer[] rs = GetComponentsInChildren<Renderer>();
         foreach (Renderer r in rs) r.enabled = false;
     }
-void UpdateSurvivorList() { aliveSurvivors.Clear(); GameObject[] ps = GameObject.FindGameObjectsWithTag("Player"); foreach (GameObject p in ps) { Renderer r = p.GetComponentInChildren<Renderer>(); if (p != this.gameObject && r != null && r.enabled) aliveSurvivors.Add(p.transform); } }
-    void SpectateUpdate() { if (aliveSurvivors.Count == 0) return; if (Input.GetMouseButtonDown(0)) { spectateIndex = (spectateIndex + 1) % aliveSurvivors.Count; UpdateSurvivorList(); } if (spectateIndex < aliveSurvivors.Count) { Transform t = aliveSurvivors[spectateIndex]; if (t != null) transform.position = t.position + new Vector3(0, 2f, 0); else UpdateSurvivorList(); } }
+void UpdateSurvivorList()
+{
+    aliveSurvivors.Clear();
+    foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
+    {
+        if (p == gameObject) continue;
+        PlayerMove pm = p.GetComponent<PlayerMove>();
+        if (RoleAssignmentHelper.IsAliveSurvivor(pm))
+            aliveSurvivors.Add(p.transform);
+    }
+}
+    void SpectateUpdate()
+    {
+        if (aliveSurvivors.Count == 0) return;
+        if (Input.GetMouseButtonDown(0))
+        {
+            spectateIndex = (spectateIndex + 1) % aliveSurvivors.Count;
+            UpdateSurvivorList();
+        }
+        if (spectateIndex >= aliveSurvivors.Count) return;
+
+        Transform target = aliveSurvivors[spectateIndex];
+        if (target == null)
+        {
+            UpdateSurvivorList();
+            return;
+        }
+
+        // 시체 Transform은 고정하고 카메라만 관전 대상을 따라감 (Photon 위치 동기화 충돌 방지)
+        if (vcam != null)
+        {
+            vcam.Follow = target;
+            vcam.LookAt = target;
+        }
+    }
     void CheckGrounded()
     {
         if (groundedIgnoreTimer > 0f)

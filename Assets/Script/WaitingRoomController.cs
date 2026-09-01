@@ -12,6 +12,7 @@ public sealed class WaitingRoomController
     private readonly GameObject playerSlotPrefab;
     private readonly TextMeshProUGUI waitingRoomNameText;
     private readonly TextMeshProUGUI selectedMapText;
+    private readonly TextMeshProUGUI selectedGameModeText;
     private readonly Button startButton;
     private readonly Button readyButton;
     private readonly string isReadyKey;
@@ -26,6 +27,7 @@ public sealed class WaitingRoomController
         GameObject playerSlotPrefab,
         TextMeshProUGUI waitingRoomNameText,
         TextMeshProUGUI selectedMapText,
+        TextMeshProUGUI selectedGameModeText,
         Button startButton,
         Button readyButton,
         string isReadyKey,
@@ -35,6 +37,7 @@ public sealed class WaitingRoomController
         this.playerSlotPrefab = playerSlotPrefab;
         this.waitingRoomNameText = waitingRoomNameText;
         this.selectedMapText = selectedMapText;
+        this.selectedGameModeText = selectedGameModeText;
         this.startButton = startButton;
         this.readyButton = readyButton;
         this.isReadyKey = isReadyKey;
@@ -48,11 +51,7 @@ public sealed class WaitingRoomController
             waitingRoomNameText.text = PhotonNetwork.CurrentRoom.Name;
         }
 
-        if (selectedMapText != null && PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(selectedMapKey))
-        {
-            string mapName = (string)PhotonNetwork.CurrentRoom.CustomProperties[selectedMapKey];
-            selectedMapText.text = "맵: " + mapName;
-        }
+        RefreshRoomInfoLabels();
 
         Hashtable props = new Hashtable { { isReadyKey, false } };
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);
@@ -69,6 +68,25 @@ public sealed class WaitingRoomController
 
         RefreshPlayerList();
         RefreshActionButtons();
+    }
+
+    void RefreshRoomInfoLabels()
+    {
+        if (PhotonNetwork.CurrentRoom == null) return;
+
+        if (selectedMapText != null)
+        {
+            if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(selectedMapKey))
+                selectedMapText.text = "맵: " + (string)PhotonNetwork.CurrentRoom.CustomProperties[selectedMapKey];
+            else
+                selectedMapText.text = "";
+        }
+
+        if (selectedGameModeText != null)
+        {
+            GameModeType mode = GameModeTypeHelper.FromRoom(PhotonNetwork.CurrentRoom);
+            selectedGameModeText.text = "모드: " + GameModeTypeHelper.GetDisplayName(mode);
+        }
     }
 
     public void HandlePlayerPropertiesUpdate(Hashtable changedProps)
@@ -287,8 +305,10 @@ public sealed class RoomCreationController
     private readonly string selectedMapKey;
 
     private string selectedMap;
+    private GameModeType selectedGameMode = GameModeType.Normal;
 
     public string SelectedMap => selectedMap;
+    public GameModeType SelectedGameMode => selectedGameMode;
 
     public RoomCreationController(
         TMP_InputField roomNameInput,
@@ -306,6 +326,12 @@ public sealed class RoomCreationController
         this.passwordKey = passwordKey;
         this.selectedMapKey = selectedMapKey;
         selectedMap = string.IsNullOrEmpty(initialSelectedMap) ? "CityScene" : initialSelectedMap;
+    }
+
+    public void SelectGameMode(int index)
+    {
+        selectedGameMode = GameModeTypeHelper.FromIndex(index);
+        Debug.Log("게임 모드 선택: " + GameModeTypeHelper.GetDisplayName(selectedGameMode));
     }
 
     public void SelectCityMap()
@@ -348,7 +374,7 @@ public sealed class RoomCreationController
         }
 
         RoomOptions options = new RoomOptions { MaxPlayers = 8 };
-        options.CustomRoomPropertiesForLobby = new[] { passwordKey, selectedMapKey };
+        options.CustomRoomPropertiesForLobby = new[] { passwordKey, selectedMapKey, GameModeTypeHelper.RoomPropertyKey };
 
         Hashtable roomProps = new Hashtable();
         bool isPublic = isPublicToggle != null && isPublicToggle.isOn;
@@ -356,6 +382,7 @@ public sealed class RoomCreationController
 
         roomProps.Add(passwordKey, password);
         roomProps.Add(selectedMapKey, selectedMap);
+        roomProps.Add(GameModeTypeHelper.RoomPropertyKey, (int)selectedGameMode);
 
         options.CustomRoomProperties = roomProps;
         PhotonNetwork.CreateRoom(roomNameInput.text, options);
@@ -555,12 +582,12 @@ public sealed class MatchStartController
         foreach (var p in players) if (p.ActorNumber == selectedSeekerActor) { validSelection = true; break; }
         if (!validSelection) selectedSeekerActor = players[Random.Range(0, players.Length)].ActorNumber;
 
-        for (int i = 0; i < players.Length; i++)
+        Hashtable roomProps = new Hashtable
         {
-            Hashtable props = new Hashtable();
-            props.Add(roleKey, players[i].ActorNumber == selectedSeekerActor ? "Seeker" : "Survivor");
-            players[i].SetCustomProperties(props);
-        }
+            { RoleAssignmentHelper.AssignedSeekerKey, selectedSeekerActor }
+        };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
+        RoleAssignmentHelper.TryApplyLocalRole(PhotonNetwork.CurrentRoom);
 
         yield return new WaitForSeconds(0.5f);
 

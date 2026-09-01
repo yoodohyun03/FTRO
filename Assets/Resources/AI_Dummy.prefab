@@ -159,7 +159,7 @@ MonoBehaviour:
   roamRadius: 30
   waitTime: 2
   maxWalkTime: 5
-  walkSpeed: 3.5
+  walkSpeed: 3
   runSpeed: 6
   runChance: 0.3
   jumpPower: 5
