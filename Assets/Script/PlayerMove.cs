@@ -33,6 +33,12 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
     private Rigidbody rb;
     private Camera cachedMainCam;
 
+    [Header("1인칭 카메라 설정")]
+    public Transform fpCameraTarget;        // 눈 위치 빈 오브젝트 (Inspector에서 연결)
+    public float mouseSensitivity = 2f;
+    private float xRotation = 0f;           // 카메라 상하 회전 누적값
+    private Renderer[] bodyRenderers;       // 자신의 메시 렌더러 (1인칭 시 숨김)
+
     public string myRole = "";
     private bool isGrounded = true;
     private bool wasGrounded = true;
@@ -206,8 +212,29 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             if (vcam == null) vcam = FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>(FindObjectsInactive.Include);
             if (vcam == null) { elapsed += 0.2f; yield return new WaitForSeconds(0.2f); }
         }
-        if (vcam != null) { vcam.Follow = this.transform; vcam.LookAt = this.transform; orbitalRig = vcam.GetComponent<Unity.Cinemachine.CinemachineOrbitalFollow>(); }
+        if (vcam != null)
+        {
+            // fpCameraTarget이 없으면 자동으로 눈 위치 오브젝트를 생성
+            if (fpCameraTarget == null)
+            {
+                GameObject fpObj = new GameObject("FP_CameraTarget");
+                fpObj.transform.SetParent(this.transform);
+                fpObj.transform.localPosition = new Vector3(0f, 1.65f, 0.1f); // 눈 높이
+                fpObj.transform.localRotation = Quaternion.identity;
+                fpCameraTarget = fpObj.transform;
+            }
+
+            orbitalRig = vcam.GetComponent<Unity.Cinemachine.CinemachineOrbitalFollow>();
+            if (orbitalRig != null) orbitalRig.enabled = false; // 3인칭 궤도 비활성화
+
+            vcam.Follow = fpCameraTarget;
+            vcam.LookAt = null; // 1인칭은 LookAt 불필요 (마우스로 직접 회전)
+        }
         if (cachedMainCam == null) cachedMainCam = Camera.main ?? FindFirstObjectByType<Camera>();
+
+        // 자신의 메시 렌더러 수집 후 숨김 (1인칭에서 몸통이 화면을 가리지 않도록)
+        bodyRenderers = GetComponentsInChildren<Renderer>();
+
         Cursor.lockState = CursorLockMode.Locked; Cursor.visible = false;
     }
 
@@ -407,6 +434,7 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         if (Input.GetMouseButtonDown(0)) { var _es = UnityEngine.EventSystems.EventSystem.current; if ((_es == null || !_es.IsPointerOverGameObject()) && myRole == SeekerRole && !isAttacking) StartCoroutine(PerformAttack()); }
         
         HandleNoiseDetection();
+        FirstPersonLook();  // 1인칭 마우스 회전
         MoveUpdate();
         UpdateAnimation();
 
@@ -528,6 +556,27 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
         {
             sprintNoiseTimer = 0f;
         }
+    }
+
+    void FirstPersonLook()
+    {
+        if (fpCameraTarget == null || !photonView.IsMine) return;
+
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+
+        // 플레이어 몸체 좌우 회전
+        transform.Rotate(Vector3.up * mouseX);
+
+        // 카메라(눈) 상하 회전 — 과도한 꺾임 방지
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -80f, 80f);
+        fpCameraTarget.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+
+        // 자신의 메시 숨김 (자신에게만 적용, 다른 플레이어 눈에는 정상 표시)
+        if (bodyRenderers != null)
+            foreach (Renderer r in bodyRenderers)
+                if (r != null) r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
     }
 
     void TriggerNoise()
@@ -655,7 +704,9 @@ public class PlayerMove : MonoBehaviourPun, IPunObservable
             }
             else moveDir = new Vector3(currentH, 0, currentV).normalized;
             
-            if (!isAlt && moveDir != Vector3.zero) transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 540f);
+            // 1인칭 모드에서는 마우스 좌우가 몸 회전을 담당하므로 자동 회전 비활성화
+            if (!isAlt && moveDir != Vector3.zero && fpCameraTarget == null)
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 540f);
             
             float speed = isRun ? (myRole == SeekerRole ? seekerRunSpeed : survivorRunSpeed) : walkSpeed; 
             Vector3 targetVel = moveDir * speed;
